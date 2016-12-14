@@ -267,7 +267,7 @@ public class MonitorFragment extends BaseFragment implements View.OnClickListene
         if (mChartsContainer.getChildAt(2) != null)
             mChartsContainer.removeView(mChartsContainer.getChildAt(2));
 
-        mTimer = new CountDownTimer(999999999, 5000) {
+        mTimer = new CountDownTimer(999999999, 15000) {
             @Override
             public void onTick(long millisUntilFinished) {
                 mRealTimes.clear();
@@ -335,6 +335,23 @@ public class MonitorFragment extends BaseFragment implements View.OnClickListene
                             }
 
                             @Override
+                            public void onError(Throwable e) {
+                                super.onError(e);
+
+                                if (!paramsGeted) {
+                                    paramsGeted = true;
+                                    getParamInfo();
+                                }
+
+                                for (int i = 0; i < mChartsContainer.getChildCount(); i++) {
+                                    View v = mChartsContainer.getChildAt(i);
+                                    v.invalidate();
+                                }
+
+
+                            }
+
+                            @Override
                             public void onCompleted() {
                                 if (getView()!=null) {// logout getview is null
                                     if (getView().findViewById(R.id.empty) != null) {
@@ -367,7 +384,7 @@ public class MonitorFragment extends BaseFragment implements View.OnClickListene
     }
     //获得条件请求数据
     private void getLocation(int groupPosition, int childPosition) {
-        getMessage(getHttpService().getPositions(filterTreeAdapter.mGroups.get(groupPosition).getList().get(childPosition).getId(), MyApplication.getMyApplication().getSharedPreference().getString("gid", "")), new MySubscriber<List<MonitorPosition>>() {
+        getMessage(getHttpService().getPositions(filterTreeAdapter.mGroups.get(groupPosition).getList().get(childPosition).getId(), MyApplication.getMyApplication().getSharedPreference().getString("stationId", "")), new MySubscriber<List<MonitorPosition>>() {
             @Override
             protected void onMyNext(List<MonitorPosition> monitorPositions) {
                 mListLeft.clear();
