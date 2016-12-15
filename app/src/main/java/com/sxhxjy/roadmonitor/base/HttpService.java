@@ -4,6 +4,7 @@ package com.sxhxjy.roadmonitor.base;
 
 import com.sxhxjy.roadmonitor.entity.AlertData;
 import com.sxhxjy.roadmonitor.entity.AlertTree;
+import com.sxhxjy.roadmonitor.entity.ComplexData;
 import com.sxhxjy.roadmonitor.entity.GroupTree;
 import com.sxhxjy.roadmonitor.entity.LoginData;
 import com.sxhxjy.roadmonitor.entity.Monitor;
@@ -71,7 +72,7 @@ public interface HttpService {
     Observable<HttpResponse<LoginData>> login(@Query("account") String username, @Query("password") String password);
 
     @GET("sensorData/dataList")
-    Observable<HttpResponse<List<RealTimeData>>> getRealTimeData(@Query("code") String positionID, @Query("beforeTime") long start, @Query("afterTime") long end, @Query("timeState") int timeState);
+    Observable<HttpResponse<ComplexData>> getRealTimeData(@Query("code") String positionID, @Query("beforeTime") long start, @Query("afterTime") long end, @Query("timeState") int timeState);
 
 
     @GET("points/pointDetail")
