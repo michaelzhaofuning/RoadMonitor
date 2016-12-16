@@ -23,6 +23,7 @@ import com.sxhxjy.roadmonitor.R;
 import com.sxhxjy.roadmonitor.base.BaseActivity;
 import com.sxhxjy.roadmonitor.base.CacheManager;
 import com.sxhxjy.roadmonitor.base.MyApplication;
+import com.sxhxjy.roadmonitor.base.UpdateUtil;
 import com.sxhxjy.roadmonitor.util.ActivityUtil;
 import com.sxhxjy.roadmonitor.view.MyLinearLayout;
 import com.sxhxjy.roadmonitor.view.NumDrawable;
@@ -68,6 +69,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_activity);
+        UpdateUtil.update(this, MyApplication.BASE_URL + "user/changeVersion");
 
         String stationName = getIntent().getStringExtra("stationName");
         String stationId = getIntent().getStringExtra("stationId");
