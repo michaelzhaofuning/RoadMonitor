@@ -162,7 +162,7 @@ public class LineChartView extends View {
                     offset = 0;
                 if (offset > myLines.get(0).points.size() - pointCount) offset = myLines.get(0).points.size() - pointCount;
 
-                pointCount = (int) (pointCount + (1 - detector.getScaleFactor()) * 5);
+                pointCount = (int) (pointCount + (1 - detector.getScaleFactor()) * 50);
                 if (pointCount < 10) pointCount = 10;
                 if (pointCount > myLines.get(0).points.size()) pointCount = myLines.get(0).points.size();
                 Log.e("test", "p count: " + pointCount + "factor: " + detector.getScaleFactor());
@@ -221,6 +221,15 @@ public class LineChartView extends View {
         xEnd = 0; // init !!!!!!!!
         yStart = 0;
         yEnd = -10000f;
+
+        float sampleY = myLines.get(0).points.get(mRandom.nextInt(myLines.get(0).points.size())).value;
+        if (sampleY < 1) {
+            yStart = -5;
+            yEnd = 5;
+        } else if (sampleY < 10) {
+            yStart = -10;
+            yEnd = 10;
+        }
 
         for (MyLine line : myLines) {
             if (line.points.size() - offset - pointCount < 0) continue;
@@ -633,6 +642,7 @@ public class LineChartView extends View {
             myLinesRight.add(new MyLine(s, points, color)); // TODO cost memory
 
         pointCount = myLines.get(0).points.size() / 2; // point count
+        if (pointCount > 200) pointCount = 200;
         invalidate();
     }
 
@@ -724,8 +734,8 @@ public class LineChartView extends View {
             this.value = value;
         }
 
-        long time;
-        float value;
+        public long time;
+        public float value;
 
     }
 
@@ -736,8 +746,8 @@ public class LineChartView extends View {
             this.color = color;
         }
 
-        String name;
-        int color;
-        ArrayList<MyPoint> points;
+        public String name;
+        public int color;
+        public ArrayList<MyPoint> points;
     }
 }

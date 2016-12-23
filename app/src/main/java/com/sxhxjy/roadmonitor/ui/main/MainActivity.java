@@ -296,7 +296,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,
     }
 
     public void changeIp(final View view) {
-        /*final String[] ips = {"124.163.206.250:8080", "192.168.1.172:8088", "124.163.206.251:8080"};
+        final String[] ips = {"124.163.206.250:8080", "192.168.1.172:8088", "124.163.206.251:8088"};
         new AlertDialog.Builder(this).setSingleChoiceItems(ips, 0, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -304,6 +304,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,
                 ((MyLinearLayout) view).setContent(ips[which]);
                 dialog.dismiss();
             }
-        }).show();*/
+        }).show();
     }
 }
