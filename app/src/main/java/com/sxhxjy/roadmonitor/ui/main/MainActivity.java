@@ -25,6 +25,7 @@ import com.sxhxjy.roadmonitor.base.CacheManager;
 import com.sxhxjy.roadmonitor.base.MyApplication;
 import com.sxhxjy.roadmonitor.base.UpdateUtil;
 import com.sxhxjy.roadmonitor.util.ActivityUtil;
+import com.sxhxjy.roadmonitor.util.MyCountDownTimer;
 import com.sxhxjy.roadmonitor.view.MyLinearLayout;
 import com.sxhxjy.roadmonitor.view.NumDrawable;
 
@@ -226,7 +227,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,
                 firstTimeOfExit = currentTime;
             } else {
                 finish();
-                CountDownTimer t = ((MonitorFragment) fragments.get(1)).mTimer;
+                MyCountDownTimer t = ((MonitorFragment) fragments.get(1)).mTimer;
                 if (t != null) t.cancel();
                 System.gc();
             }

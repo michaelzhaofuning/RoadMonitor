@@ -13,6 +13,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -40,6 +41,7 @@ import com.sxhxjy.roadmonitor.entity.MonitorTypeTree;
 import com.sxhxjy.roadmonitor.entity.RealTimeData;
 import com.sxhxjy.roadmonitor.entity.SimpleItem;
 import com.sxhxjy.roadmonitor.util.ActivityUtil;
+import com.sxhxjy.roadmonitor.util.MyCountDownTimer;
 import com.sxhxjy.roadmonitor.view.LineChartView;
 import com.sxhxjy.roadmonitor.view.MyPopupWindow;
 
@@ -63,7 +65,7 @@ public class MonitorFragment extends BaseFragment implements View.OnClickListene
      * 检测项目fragment
      */
     public List<FilterTreeAdapter.Group> groupsOfFilterTree = new ArrayList<>();
-    public CountDownTimer mTimer;
+    public MyCountDownTimer mTimer;
     public ArrayList<RealTimeData> mRealTimes = new ArrayList<>();
     public int startDay; //
     private String stationId;
@@ -274,7 +276,7 @@ public class MonitorFragment extends BaseFragment implements View.OnClickListene
         if (mChartsContainer.getChildAt(1) != null)
             mChartsContainer.removeView(mChartsContainer.getChildAt(1));
 
-        mTimer = new CountDownTimer(999999999, interval) {
+        mTimer = new MyCountDownTimer(999999999, interval) {
             @Override
             public void onTick(long millisUntilFinished) {
 
@@ -295,8 +297,8 @@ public class MonitorFragment extends BaseFragment implements View.OnClickListene
                             LineChartView v = (LineChartView) mChartsContainer.getChildAt(0).findViewById(R.id.chart);
                             if (v != null && !v.getLines().isEmpty()) {
                                 LineChartView.MyLine line = v.getLines().get(0);
-                                start = line.points.get(0).time;
-                                end = start + interval;
+                                start = line.points.get(line.points.size() - 1).time;
+                                end = System.currentTimeMillis();
                             }
                             if (!timeId.equals("3")) timeId = "3";
                         }
@@ -435,7 +437,8 @@ public class MonitorFragment extends BaseFragment implements View.OnClickListene
                             }
                         });
 
-                        // we sent the request that get the full data !
+                        // we sent the request to get the full data !
+                        // then get the differ
                         simpleItem.setShouldGetDiffer(true);
                     }
                 }
@@ -443,7 +446,7 @@ public class MonitorFragment extends BaseFragment implements View.OnClickListene
 
             @Override
             public void onFinish() {
-
+                Log.e("monitorTimer", "onFinish called !");
             }
         };
         mTimer.start();

@@ -61,7 +61,7 @@ public class LineChartView extends View {
     private float firstPointX, nextPointX, firstPointY, nextPointY;
 
     private long BASE_TIME = System.currentTimeMillis();
-    private SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.CHINA);
+    private SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.CHINA);
     private Date date = new Date();
 
     private Paint mPaint;
@@ -222,13 +222,15 @@ public class LineChartView extends View {
         yStart = 0;
         yEnd = -10000f;
 
-        float sampleY = myLines.get(0).points.get(mRandom.nextInt(myLines.get(0).points.size())).value;
+        float sampleY = myLines.get(0).points.get(myLines.get(0).points.size() / 2).value;
+        if (sampleY < 10) {
+            yStart = -10;
+            yEnd = 10;
+        }
+
         if (sampleY < 1) {
             yStart = -5;
             yEnd = 5;
-        } else if (sampleY < 10) {
-            yStart = -10;
-            yEnd = 10;
         }
 
         for (MyLine line : myLines) {
@@ -376,7 +378,7 @@ public class LineChartView extends View {
             }
             canvas.drawPoint(x, y, mPaint);
 
-            mPaint.setTextSize(24);
+            mPaint.setTextSize(30);
             mPaint.setColor(Color.MAGENTA);
             mPaint.setStrokeWidth(1);
             int offsetX = 50;
@@ -642,13 +644,13 @@ public class LineChartView extends View {
             myLinesRight.add(new MyLine(s, points, color)); // TODO cost memory
 
         pointCount = myLines.get(0).points.size() / 2; // point count
-        if (pointCount > 200) pointCount = 200;
+        if (pointCount > 800) pointCount = 800;
         invalidate();
     }
 
     public ArrayList<MyPoint> convert(List<RealTimeData> list, boolean isRight) {
 
-        ArrayList<MyPoint> points = new ArrayList<>();
+        ArrayList<MyPoint> points = new ArrayList<>(list.size());
         for (RealTimeData realTimeData : list) {
             points.add(0, new MyPoint(realTimeData.getSaveTime(), (float) realTimeData.getX()));
         }
