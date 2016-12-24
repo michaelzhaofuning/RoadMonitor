@@ -9,4 +9,6 @@
     <color name="default_color">#dddddd</color>
     <color name="default_color_light">#eeeeee</color>
     <color name="white">#fff</color>
+    <color name="color1">#ffd900</color>
+    <color name="color2">#ff0004</color>
 </resources>

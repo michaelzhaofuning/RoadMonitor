@@ -59,6 +59,7 @@ public class HomelistAdapter extends BaseAdapter {
             convertView=inflater.inflate(resource,null);
             vh.name=(TextView)convertView.findViewById(R.id.tv_home_item);
             vh.home_list_item= (LinearLayout) convertView.findViewById(R.id.home_list_item);
+
             WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
             int width = wm.getDefaultDisplay().getWidth();
             vh.home_list_item.setMinimumWidth(width/3);

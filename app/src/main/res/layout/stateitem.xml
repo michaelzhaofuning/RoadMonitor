@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/gray_white_selector"
+    android:layout_marginTop="15dp"
+    >
+
+    <TextView
+        android:id="@+id/unit_Name"
+        android:text="16dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <TextView
+            android:id="@+id/unit_State"
+            android:layout_margin="7dp"
+            android:padding="2dp"
+            android:textSize="12dp"
+            android:textColor="@color/white"
+            android:layout_marginLeft="50dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:id="@+id/stateTime"
+            android:text="时间"
+            android:layout_margin="7dp"
+            android:padding="2dp"
+            android:textSize="10dp"
+            android:layout_alignParentRight="true"
+            android:gravity="bottom"
+            android:textColor="@color/default_text_color"
+            android:layout_marginLeft="50dp"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"/>
+    </RelativeLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:id="@+id/divider"
+        android:background="@color/default_color"
+        android:layout_alignParentBottom="false"
+        android:layout_below="@+id/titleOfMy"
+         />
+</LinearLayout>

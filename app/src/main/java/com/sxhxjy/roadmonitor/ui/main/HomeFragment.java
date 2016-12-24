@@ -109,6 +109,7 @@ public class HomeFragment extends BaseFragment{
     public void json(String s){
         final HomeTheme theme= JSON.parseObject(s,HomeTheme.class);
         List<HomeTheme.DataBean> list=theme.getData();
+        Log.i("aaaaaa",list.size()+"");
             HomelistAdapter adapter=new HomelistAdapter(getActivity(),list,R.layout.home_list_item);
             lv_home.setAdapter(adapter);
             lv_home.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -116,7 +117,6 @@ public class HomeFragment extends BaseFragment{
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     ((MonitorFragment) ((MainActivity)getActivity()).fragments.get(1)).changeMonitor(position);
                     ((MainActivity)getActivity()).selectedBar(1);
-
                 }
             });
     }

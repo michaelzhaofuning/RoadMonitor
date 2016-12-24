@@ -10,6 +10,7 @@ import com.sxhxjy.roadmonitor.entity.LoginData;
 import com.sxhxjy.roadmonitor.entity.Monitor;
 import com.sxhxjy.roadmonitor.entity.MonitorTypeTree;
 import com.sxhxjy.roadmonitor.entity.RealTimeData;
+import com.sxhxjy.roadmonitor.entity.States;
 import com.sxhxjy.roadmonitor.entity.Station;
 
 import java.util.List;
@@ -57,6 +58,12 @@ public interface HttpService {
 
 //    @FormUrlEncoded
 //    @POST("stations/findPointByStationId")
+
+
+    @GET("sensorData/stationStateList")
+//    ?orgId=4028812c57b6993b0157b6ab181f0002
+    Call<States> getGong1(@Query("orgId") String gid);
+
 @GET("stations/findPointByStationId")
     Observable<HttpResponse<List<Monitor>>> getMonitors(@Query("stationId") String stationId);
 
