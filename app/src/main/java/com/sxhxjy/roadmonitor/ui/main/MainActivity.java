@@ -23,7 +23,9 @@ import com.sxhxjy.roadmonitor.R;
 import com.sxhxjy.roadmonitor.base.BaseActivity;
 import com.sxhxjy.roadmonitor.base.CacheManager;
 import com.sxhxjy.roadmonitor.base.MyApplication;
+import com.sxhxjy.roadmonitor.base.UpdateUtil;
 import com.sxhxjy.roadmonitor.util.ActivityUtil;
+import com.sxhxjy.roadmonitor.util.MyCountDownTimer;
 import com.sxhxjy.roadmonitor.view.MyLinearLayout;
 import com.sxhxjy.roadmonitor.view.NumDrawable;
 
@@ -68,6 +70,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_activity);
+        UpdateUtil.update(this, MyApplication.BASE_URL + "user/changeVersion");
 
         String stationName = getIntent().getStringExtra("stationName");
         String stationId = getIntent().getStringExtra("stationId");
@@ -224,7 +227,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,
                 firstTimeOfExit = currentTime;
             } else {
                 finish();
-                CountDownTimer t = ((MonitorFragment) fragments.get(1)).mTimer;
+                MyCountDownTimer t = ((MonitorFragment) fragments.get(1)).mTimer;
                 if (t != null) t.cancel();
                 System.gc();
             }
@@ -294,7 +297,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,
     }
 
     public void changeIp(final View view) {
-        /*final String[] ips = {"124.163.206.250:8080", "192.168.1.172:8088", "124.163.206.251:8080"};
+        final String[] ips = {"124.163.206.250:8080", "192.168.1.172:8088", "124.163.206.251:8088"};
         new AlertDialog.Builder(this).setSingleChoiceItems(ips, 0, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -302,6 +305,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,
                 ((MyLinearLayout) view).setContent(ips[which]);
                 dialog.dismiss();
             }
-        }).show();*/
+        }).show();
     }
 }

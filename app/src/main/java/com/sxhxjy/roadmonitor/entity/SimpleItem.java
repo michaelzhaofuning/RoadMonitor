@@ -19,6 +19,16 @@ public class SimpleItem implements Serializable {
 
     String code; // position
 
+    // TRUE we got the full data, then get the differ !
+    boolean shouldGetDiffer;
+
+    public boolean isShouldGetDiffer() {
+        return shouldGetDiffer;
+    }
+
+    public void setShouldGetDiffer(boolean shouldGetDiffer) {
+        this.shouldGetDiffer = shouldGetDiffer;
+    }
 
     public int getColor() {
         return color;

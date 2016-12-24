@@ -41,6 +41,7 @@ import com.sxhxjy.roadmonitor.entity.MonitorTypeTree;
 import com.sxhxjy.roadmonitor.entity.RealTimeData;
 import com.sxhxjy.roadmonitor.entity.SimpleItem;
 import com.sxhxjy.roadmonitor.util.ActivityUtil;
+import com.sxhxjy.roadmonitor.util.MyCountDownTimer;
 import com.sxhxjy.roadmonitor.view.LineChartView;
 import com.sxhxjy.roadmonitor.view.MyPopupWindow;
 
@@ -59,10 +60,14 @@ import java.util.Random;
  */
 
 public class MonitorFragment extends BaseFragment implements View.OnClickListener {
+    public static MonitorFragment monitorFragment;
     /**
      * 检测项目fragment
      */
     public List<FilterTreeAdapter.Group> groupsOfFilterTree = new ArrayList<>();
+    public MyCountDownTimer mTimer;
+    public ArrayList<RealTimeData> mRealTimes = new ArrayList<>();
+    public int startDay; //
     private String stationId;
     private TextView mTextViewCenter;
     private ImageView mImageViewLeft;
@@ -73,20 +78,16 @@ public class MonitorFragment extends BaseFragment implements View.OnClickListene
     private RecyclerView mFilterList;
     private MyPopupWindow myPopupWindow;
     private FilterTreeAdapter filterTreeAdapter;
-    public CountDownTimer mTimer;
     private Random random = new Random(47);
     private String codeId;
     private String timeId = "0";
     private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.CHINA);
-
-
-    public ArrayList<RealTimeData> mRealTimes = new ArrayList<>();
-    public static MonitorFragment monitorFragment;
     private ProgressDialog progressDialog;
-
-    public int startDay; //
-
-
+    private LinearLayout mChartsContainer;
+    private String positionId;
+    private boolean paramsGeted;
+    private boolean isFirstProgressDialog = true;
+    private long interval = 30000;
     // filter item clicked
     private View.OnClickListener simpleListListener = new View.OnClickListener() {
         @Override
@@ -138,10 +139,6 @@ public class MonitorFragment extends BaseFragment implements View.OnClickListene
             mAdapter.notifyDataSetChanged();
         }
     };
-    private LinearLayout mChartsContainer;
-    private String positionId;
-    private boolean paramsGeted;
-    private boolean isFirstProgressDialog = true;
 
     @Nullable
     @Override
@@ -254,29 +251,35 @@ public class MonitorFragment extends BaseFragment implements View.OnClickListene
     }
 
     private void getChartData() {
+        isFirstProgressDialog = true;
+        paramsGeted = false;
+        mRealTimes.clear();
 
         if (mTimer != null)
             mTimer.cancel();
 
         for (SimpleItem simpleItem : mListLeft) {
             simpleItem.setColor(Color.argb(255, random.nextInt(256), random.nextInt(256), random.nextInt(256)));
+            simpleItem.setShouldGetDiffer(false);
+        }
+
+        if (!mListRight.get(3).isChecked()) // 不是'其它'时间段
+            timeId = "0"; // to get the full data
+
+        for (int j = 0; j < mChartsContainer.getChildCount(); j++) {
+            ((LineChartView) mChartsContainer.getChildAt(j).findViewById(R.id.chart)).getLines().clear();
         }
 
         if (mChartsContainer.getChildAt(1) != null)
             mChartsContainer.removeView(mChartsContainer.getChildAt(1));
 
-        if (mChartsContainer.getChildAt(2) != null)
-            mChartsContainer.removeView(mChartsContainer.getChildAt(2));
+        if (mChartsContainer.getChildAt(1) != null)
+            mChartsContainer.removeView(mChartsContainer.getChildAt(1));
 
-        mTimer = new CountDownTimer(999999999, 15000) {
+        mTimer = new MyCountDownTimer(999999999, interval) {
             @Override
             public void onTick(long millisUntilFinished) {
-                mRealTimes.clear();
-                paramsGeted = false;
 
-                for (int j = 0; j < mChartsContainer.getChildCount(); j++) {
-                    ((LineChartView) mChartsContainer.getChildAt(j).findViewById(R.id.chart)).getLines().clear();
-                }
                 for (final SimpleItem simpleItem : mListLeft) {
                     if (simpleItem.isChecked()) {
                         codeId = simpleItem.getId();
@@ -284,19 +287,28 @@ public class MonitorFragment extends BaseFragment implements View.OnClickListene
                         long start = System.currentTimeMillis();
                         long end = System.currentTimeMillis() + 1000 * 3600 * 24;
 
-                        if (timeId.equals("3")) {
+                        if (timeId.equals("3") && mListRight.get(3).isChecked()) {
                             strings = mListRight.get(3).getTitle().split("  ---- \n ");
                             start = sdf.parse(strings[0], new ParsePosition(0)).getTime();
                             end = sdf.parse(strings[1], new ParsePosition(0)).getTime();
                         }
 
+                        if (simpleItem.isShouldGetDiffer() && mChartsContainer.getChildAt(0) != null) {
+                            LineChartView v = (LineChartView) mChartsContainer.getChildAt(0).findViewById(R.id.chart);
+                            if (v != null && !v.getLines().isEmpty()) {
+                                LineChartView.MyLine line = v.getLines().get(0);
+                                start = line.points.get(line.points.size() - 1).time;
+                                end = System.currentTimeMillis();
+                            }
+                            if (!timeId.equals("3")) timeId = "3";
+                        }
 
 
                         getMessage(getHttpService().getRealTimeData(simpleItem.getCode(), start, end, Integer.parseInt(timeId)), new MySubscriber<ComplexData>() {
                             @Override
                             public void onStart() {
                                 super.onStart();
-                                if (progressDialog == null && isFirstProgressDialog && getActivity()!=null) {
+                                if (progressDialog == null && isFirstProgressDialog && getActivity() != null) {
                                     progressDialog = new ProgressDialog(getActivity());
                                     progressDialog.setMessage("正在获取数据...");
                                     progressDialog.show();
@@ -309,10 +321,25 @@ public class MonitorFragment extends BaseFragment implements View.OnClickListene
                                 List<RealTimeData> realTimeDatas = complexData.getContent();
                                 mRealTimes.addAll(realTimeDatas);
 
-                                    if (mChartsContainer.getChildAt(0) == null)
-                                        getActivity().getLayoutInflater().inflate(R.layout.chart_layout, mChartsContainer);
-                                    LineChartView lineChartView0 = (LineChartView) mChartsContainer.getChildAt(0).findViewById(R.id.chart);
+                                if (mChartsContainer.getChildAt(0) == null)
+                                    getActivity().getLayoutInflater().inflate(R.layout.chart_layout, mChartsContainer);
+                                LineChartView lineChartView0 = (LineChartView) mChartsContainer.getChildAt(0).findViewById(R.id.chart);
+
+                                // true we appended data to line,
+                                // false we NOT found the line to add then we add a new line
+                                boolean handled = false;
+
+                                for (LineChartView.MyLine myLine : lineChartView0.getLines()) {
+                                    if (realTimeDatas.get(0).getName().equals(myLine.name)) {
+                                        // we found the line to add
+                                        myLine.points.addAll(lineChartView0.convert(realTimeDatas, false));
+                                        handled = true;
+                                    }
+                                }
+
+                                if (!handled)
                                     lineChartView0.addPoints(lineChartView0.convert(realTimeDatas, false), simpleItem.getTitle(), simpleItem.getColor(), false);
+
                                 ((TextView) mChartsContainer.getChildAt(0).findViewById(R.id.min)).setText(complexData.getXmin() + "");
                                 ((TextView) mChartsContainer.getChildAt(0).findViewById(R.id.max)).setText(complexData.getXmax() + "");
 
@@ -321,7 +348,22 @@ public class MonitorFragment extends BaseFragment implements View.OnClickListene
                                     if (mChartsContainer.getChildAt(1) == null)
                                         getActivity().getLayoutInflater().inflate(R.layout.chart_layout, mChartsContainer);
                                     LineChartView lineChartView1 = (LineChartView) mChartsContainer.getChildAt(1).findViewById(R.id.chart);
+
+
+                                    handled = false;
+
+                                    for (LineChartView.MyLine myLine : lineChartView1.getLines()) {
+                                        if (realTimeDatas.get(0).getName().equals(myLine.name)) {
+                                            // we found the line to add
+                                            myLine.points.addAll(lineChartView1.convertY(realTimeDatas, false));
+                                            handled = true;
+                                        }
+                                    }
+
+                                    if (!handled)
                                     lineChartView1.addPoints(lineChartView1.convertY(realTimeDatas, false), simpleItem.getTitle(), simpleItem.getColor(), false);
+
+
                                     ((TextView) mChartsContainer.getChildAt(1).findViewById(R.id.min)).setText(complexData.getYmin() + "");
                                     ((TextView) mChartsContainer.getChildAt(1).findViewById(R.id.max)).setText(complexData.getYmax() + "");
 
@@ -330,7 +372,22 @@ public class MonitorFragment extends BaseFragment implements View.OnClickListene
                                     if (mChartsContainer.getChildAt(2) == null)
                                         getActivity().getLayoutInflater().inflate(R.layout.chart_layout, mChartsContainer);
                                     LineChartView lineChartView2 = (LineChartView) mChartsContainer.getChildAt(2).findViewById(R.id.chart);
+
+
+                                    handled = false;
+
+                                    for (LineChartView.MyLine myLine : lineChartView2.getLines()) {
+                                        if (realTimeDatas.get(0).getName().equals(myLine.name)) {
+                                            // we found the line to add
+                                            myLine.points.addAll(lineChartView2.convertZ(realTimeDatas, false));
+                                            handled = true;
+                                        }
+                                    }
+
+                                    if (!handled)
                                     lineChartView2.addPoints(lineChartView2.convertZ(realTimeDatas, false), simpleItem.getTitle(), simpleItem.getColor(), false);
+
+
                                     ((TextView) mChartsContainer.getChildAt(2).findViewById(R.id.min)).setText(complexData.getZmin() + "");
                                     ((TextView) mChartsContainer.getChildAt(2).findViewById(R.id.max)).setText(complexData.getZmax() + "");
                                 }
@@ -355,12 +412,15 @@ public class MonitorFragment extends BaseFragment implements View.OnClickListene
                                     v.invalidate();
                                 }
 
+                                // error occurred,
+//                                simpleItem.setShouldGetDiffer(true);
+
 
                             }
 
                             @Override
                             public void onCompleted() {
-                                if (getView()!=null) {// logout getview is null
+                                if (getView() != null) {// logout getview is null
                                     if (getView().findViewById(R.id.empty) != null) {
                                         if (mChartsContainer.getChildCount() == 0) {
                                             getView().findViewById(R.id.empty).setVisibility(View.VISIBLE);
@@ -376,19 +436,22 @@ public class MonitorFragment extends BaseFragment implements View.OnClickListene
                                 }
                             }
                         });
+
+                        // we sent the request to get the full data !
+                        // then get the differ
+                        simpleItem.setShouldGetDiffer(true);
                     }
                 }
-
-
             }
 
             @Override
             public void onFinish() {
-
+                Log.e("monitorTimer", "onFinish called !");
             }
         };
         mTimer.start();
     }
+
     //获得条件请求数据
     private void getLocation(int groupPosition, int childPosition) {
         getMessage(getHttpService().getPositions(filterTreeAdapter.mGroups.get(groupPosition).getList().get(childPosition).getId(), MyApplication.getMyApplication().getSharedPreference().getString("stationId", "")), new MySubscriber<List<MonitorPosition>>() {
@@ -409,8 +472,8 @@ public class MonitorFragment extends BaseFragment implements View.OnClickListene
         });
     }
 
-    private void getTypeTree(){
-        getMessage(getHttpService().getMonitorTypeTree(MyApplication.getMyApplication().getSharedPreference().getString("stationId","")), new MySubscriber<List<MonitorTypeTree>>() {
+    private void getTypeTree() {
+        getMessage(getHttpService().getMonitorTypeTree(MyApplication.getMyApplication().getSharedPreference().getString("stationId", "")), new MySubscriber<List<MonitorTypeTree>>() {
             @Override
             protected void onMyNext(List<MonitorTypeTree> monitorTypeTrees) {
                 int i = 0;
@@ -436,38 +499,39 @@ public class MonitorFragment extends BaseFragment implements View.OnClickListene
                 }
 
 
-
             }
         });
     }
+
     //首页点击修改主题
-    public void changeMonitor(int position){
+    public void changeMonitor(int position) {
         for (FilterTreeAdapter.Group group : filterTreeAdapter.mGroups) {
             for (SimpleItem simpleItem : group.getList()) {
                 simpleItem.setChecked(false);
             }
         }
-            if (groupsOfFilterTree.get(position).getList().size()>0){
-                groupsOfFilterTree.get(position).getList().get(0).setChecked(true);
-                getLocation(position, 0);
-                mAdapter.notifyDataSetChanged();
-            }
+        if (groupsOfFilterTree.get(position).getList().size() > 0) {
+            groupsOfFilterTree.get(position).getList().get(0).setChecked(true);
+            getLocation(position, 0);
+            mAdapter.notifyDataSetChanged();
+        }
     }
+
     private void getParamInfo() {
         getMessage(getHttpService().getParamInfo(codeId), new MySubscriber<ParamInfo>() {
             @Override
             protected void onMyNext(ParamInfo paramInfo) {
 
 
-                 if (mChartsContainer.getChildAt(0) != null) {
-                     View view = mChartsContainer.getChildAt(0);
-                     ((TextView) view.findViewById(R.id.position)).setText(paramInfo.getCode());
+                if (mChartsContainer.getChildAt(0) != null) {
+                    View view = mChartsContainer.getChildAt(0);
+                    ((TextView) view.findViewById(R.id.position)).setText(paramInfo.getCode());
 
-                     ((TextView) view.findViewById(R.id.threshold1)).setText(paramInfo.getxOneThreshold());
-                     ((TextView) view.findViewById(R.id.threshold2)).setText(paramInfo.getxTwoThreshold());
-                     ((TextView) view.findViewById(R.id.threshold3)).setText(paramInfo.getxThreeThreshold());
-                     ((TextView) view.findViewById(R.id.threshold4)).setText(paramInfo.getxFourThreshold());
-                 }
+                    ((TextView) view.findViewById(R.id.threshold1)).setText(paramInfo.getxOneThreshold());
+                    ((TextView) view.findViewById(R.id.threshold2)).setText(paramInfo.getxTwoThreshold());
+                    ((TextView) view.findViewById(R.id.threshold3)).setText(paramInfo.getxThreeThreshold());
+                    ((TextView) view.findViewById(R.id.threshold4)).setText(paramInfo.getxFourThreshold());
+                }
 
                 if (mChartsContainer.getChildAt(1) != null) {
                     View view = mChartsContainer.getChildAt(1);

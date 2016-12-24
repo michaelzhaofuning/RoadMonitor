@@ -61,7 +61,7 @@ public class LineChartView extends View {
     private float firstPointX, nextPointX, firstPointY, nextPointY;
 
     private long BASE_TIME = System.currentTimeMillis();
-    private SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.CHINA);
+    private SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.CHINA);
     private Date date = new Date();
 
     private Paint mPaint;
@@ -162,7 +162,7 @@ public class LineChartView extends View {
                     offset = 0;
                 if (offset > myLines.get(0).points.size() - pointCount) offset = myLines.get(0).points.size() - pointCount;
 
-                pointCount = (int) (pointCount + (1 - detector.getScaleFactor()) * 5);
+                pointCount = (int) (pointCount + (1 - detector.getScaleFactor()) * 50);
                 if (pointCount < 10) pointCount = 10;
                 if (pointCount > myLines.get(0).points.size()) pointCount = myLines.get(0).points.size();
                 Log.e("test", "p count: " + pointCount + "factor: " + detector.getScaleFactor());
@@ -221,6 +221,17 @@ public class LineChartView extends View {
         xEnd = 0; // init !!!!!!!!
         yStart = 0;
         yEnd = -10000f;
+
+        float sampleY = myLines.get(0).points.get(myLines.get(0).points.size() / 2).value;
+        if (sampleY < 10) {
+            yStart = -10;
+            yEnd = 10;
+        }
+
+        if (sampleY < 1) {
+            yStart = -5;
+            yEnd = 5;
+        }
 
         for (MyLine line : myLines) {
             if (line.points.size() - offset - pointCount < 0) continue;
@@ -367,7 +378,7 @@ public class LineChartView extends View {
             }
             canvas.drawPoint(x, y, mPaint);
 
-            mPaint.setTextSize(24);
+            mPaint.setTextSize(30);
             mPaint.setColor(Color.MAGENTA);
             mPaint.setStrokeWidth(1);
             int offsetX = 50;
@@ -633,12 +644,13 @@ public class LineChartView extends View {
             myLinesRight.add(new MyLine(s, points, color)); // TODO cost memory
 
         pointCount = myLines.get(0).points.size() / 2; // point count
+        if (pointCount > 800) pointCount = 800;
         invalidate();
     }
 
     public ArrayList<MyPoint> convert(List<RealTimeData> list, boolean isRight) {
 
-        ArrayList<MyPoint> points = new ArrayList<>();
+        ArrayList<MyPoint> points = new ArrayList<>(list.size());
         for (RealTimeData realTimeData : list) {
             points.add(0, new MyPoint(realTimeData.getSaveTime(), (float) realTimeData.getX()));
         }
@@ -724,8 +736,8 @@ public class LineChartView extends View {
             this.value = value;
         }
 
-        long time;
-        float value;
+        public long time;
+        public float value;
 
     }
 
@@ -736,8 +748,8 @@ public class LineChartView extends View {
             this.color = color;
         }
 
-        String name;
-        int color;
-        ArrayList<MyPoint> points;
+        public String name;
+        public int color;
+        public ArrayList<MyPoint> points;
     }
 }
