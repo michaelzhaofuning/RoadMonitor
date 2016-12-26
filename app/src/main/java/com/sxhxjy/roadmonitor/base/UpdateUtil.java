@@ -66,7 +66,7 @@ public class UpdateUtil {
                         @Override
                         public void run() {
                             new AlertDialog.Builder(context)
-                                    .setMessage("检测到新的版本")
+                                    .setMessage("检测到新的版本 v" + version)
                                     .setNegativeButton("以后再说", null)
                                     .setPositiveButton("现在更新", new DialogInterface.OnClickListener() {
                                         @Override

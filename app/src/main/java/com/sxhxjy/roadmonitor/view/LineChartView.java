@@ -130,9 +130,9 @@ public class LineChartView extends View {
                 if (!isBeingTouched) {
                     if (++globalIndex % 2 == 0) { // reduce called times
                         if (distanceX > 5)
-                            distanceX = 1;
+                            distanceX = 1 * pointCount / 20;
                         else if (distanceX < -5)
-                            distanceX = -1;
+                            distanceX = -1 * pointCount / 20;
                         else distanceX = 0;
 
                         offset = offset - (int) distanceX;
@@ -226,6 +226,12 @@ public class LineChartView extends View {
         yEnd = -10000f;
 
         float sampleY = myLines.get(0).points.get(myLines.get(0).points.size() / 2).value;
+        if (sampleY > 10) {
+            int i = Math.round(sampleY);
+            yStart = i - 5;
+            yEnd = i + 5;
+        }
+
         if (sampleY < 10) {
             yStart = -10;
             yEnd = 10;
@@ -235,6 +241,7 @@ public class LineChartView extends View {
             yStart = -5;
             yEnd = 5;
         }
+
 
         for (MyLine line : myLines) {
             if (line.points.size() - offset - pointCount < 0) continue;
@@ -268,6 +275,8 @@ public class LineChartView extends View {
         mPaint.setStyle(Paint.Style.FILL_AND_STROKE);
 
         float minDistance = getMeasuredWidth();
+        float minDistanceY = getMeasuredHeight();
+        MyLine minLine = null;
         MyPoint minPoint = null;
         float simpleMinX = 0;
         boolean isRight = false;
@@ -311,8 +320,19 @@ public class LineChartView extends View {
                 // calculate min
                 if (isBeingTouched) {
                     float d = Math.abs(touchedX - nextPointX);
-                    float dy = Math.abs(touchedY - nextPointX);
-                    if (d < minDistance) {
+                    float dy = Math.abs(touchedY - nextPointY);
+
+                    Log.e("yyout", dy+"   " + minDistanceY);
+                    if (dy < minDistanceY) {
+                        minDistanceY = dy;
+                        minDistance = getMeasuredWidth();
+                        minLine = line;
+                        Log.e("yyiny", "in "+dy+"");
+                    }
+
+                    if (minLine == line && d < minDistance) {
+                        Log.e("yyinx", "find x "+d+"");
+
                         minDistance = d;
                         minPoint = myPoint;
                         if (mIsSimpleDraw) simpleMinX = nextPointX;
@@ -413,7 +433,39 @@ public class LineChartView extends View {
         long xEndNew = 0;
         int drawBy = 0;
 
-        if ((xEnd - xStart) <= 1000 * 3600 * 48) { // draw hour
+        if ((xEnd - xStart) <= 1000 * 3600) { // draw minute
+            drawBy = 2;
+
+            date.setTime(xStart);
+            int startMinute = date.getMinutes();
+            date.setMinutes(startMinute / 10 * 10);
+            date.setSeconds(0);
+            xStartNew = date.getTime();
+            startMinute = date.getMinutes();
+
+            date.setTime(xEnd);
+            date.setMinutes((date.getMinutes() / 10 + 1) * 10);
+            date.setSeconds(0);
+            xEndNew = date.getTime();
+
+            xSplitTo = date.getMinutes() - startMinute;
+            int dx = date.getMinutes() - startMinute;
+
+            Log.e("test", startMinute  + "    " + date.getMinutes());
+
+            if (xSplitTo <= 0) {
+                xSplitTo = 60;
+                dx += 60;
+            }
+
+            if (xSplitTo > 10) {
+                xSplitTo = 5;
+                while (dx % xSplitTo != 0)
+                    xSplitTo++;
+            }
+
+
+        } else if ((xEnd - xStart) <= 1000 * 3600 * 48) { // draw hour
             date.setTime(xStart);
             date.setHours(date.getHours() + 1);
             int startHour = date.getHours();
@@ -429,7 +481,7 @@ public class LineChartView extends View {
 
             xSplitTo = date.getHours() - startHour;
             int dx = date.getHours() - startHour;
-            if (xSplitTo < 0) {
+            if (xSplitTo <= 0) {
                 xSplitTo += 24;
                 dx += 24;
             }
@@ -439,9 +491,6 @@ public class LineChartView extends View {
                 while (dx % xSplitTo != 0)
                     xSplitTo++;
             }
-
-            if ((xEnd - xStart) <= 1000 * 3600)
-                xSplitTo = 1;
 
         } else  { // draw day
             drawBy = 1;
@@ -462,7 +511,7 @@ public class LineChartView extends View {
 
             xSplitTo = date.getDate() - startDay;
             int dx = date.getDate() - startDay;
-            if (xSplitTo < 0) {
+            if (xSplitTo <= 0) {
                 xSplitTo += 24;
                 dx += 24;
             }
@@ -488,8 +537,11 @@ public class LineChartView extends View {
             if (!mIsSimpleDraw) {
                 if (drawBy == 0)
                     canvas.drawText(date.getHours() + ": 00", xInView, OFFSET_SCALE * 4, mPaint);
-                else
+                else if (drawBy == 2) {
+                    canvas.drawText(date.getHours() + ":" + (date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes()), xInView, OFFSET_SCALE * 4, mPaint);
+                } else {
                     canvas.drawText((date.getMonth() + 1) + "-" + date.getDate(), xInView, OFFSET_SCALE * 4, mPaint);
+                }
             }
             mPaint.setStrokeWidth(2);
             canvas.drawLine(xInView, 0, xInView, -OFFSET_SCALE, mPaint);
@@ -628,10 +680,12 @@ public class LineChartView extends View {
                 }
                 getParent().requestDisallowInterceptTouchEvent(true);
                 touchedX = event.getX() - OFFSET - 10; // in canvas
+                touchedY = event.getY() - OFFSET - OFFSET_LEGEND; // in canvas
                 break;
 
             case MotionEvent.ACTION_MOVE:
                 touchedX = event.getX() - OFFSET - 10; // in canvas
+                touchedY = event.getY() - OFFSET - OFFSET_LEGEND; // in canvas
                 break;
 
             default:

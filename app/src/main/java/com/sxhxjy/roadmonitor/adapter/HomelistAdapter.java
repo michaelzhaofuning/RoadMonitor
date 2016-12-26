@@ -29,7 +29,7 @@ public class HomelistAdapter extends BaseAdapter {
         this.context=context;
         this.list=list;
         this.resource=resource;
-        inflater=(LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        inflater=LayoutInflater.from(context);
     }
     @Override
     //获取集合大小

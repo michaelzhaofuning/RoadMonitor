@@ -219,7 +219,9 @@ public class MonitorFragment extends BaseFragment implements View.OnClickListene
 
         ExpandableListView expandableListView = (ExpandableListView) myPopupWindow.getContentView().findViewById(R.id.expandable_list_view);
         Button confirm = (Button) myPopupWindow.getContentView().findViewById(R.id.confirm);
+        Button reset = (Button) myPopupWindow.getContentView().findViewById(R.id.reset);
         confirm.setVisibility(View.GONE);
+        reset.setVisibility(View.GONE);
 
         filterTreeAdapter = new FilterTreeAdapter(groupsOfFilterTree);
         expandableListView.setAdapter(filterTreeAdapter);
@@ -314,6 +316,7 @@ public class MonitorFragment extends BaseFragment implements View.OnClickListene
                                 super.onStart();
                                 if (progressDialog == null && isFirstProgressDialog && getActivity() != null) {
                                     progressDialog = new ProgressDialog(getActivity());
+                                    progressDialog.setCanceledOnTouchOutside(false);
                                     progressDialog.setMessage("正在获取数据...");
                                     progressDialog.show();
                                     isFirstProgressDialog = false;
