@@ -297,7 +297,7 @@ public class MonitorFragment extends BaseFragment implements View.OnClickListene
                             LineChartView v = (LineChartView) mChartsContainer.getChildAt(0).findViewById(R.id.chart);
                             if (v != null && !v.getLines().isEmpty()) {
                                 LineChartView.MyLine line = v.getLines().get(0);
-                                start = line.points.get(line.points.size() - 1).time;
+                                start = line.points.get(line.points.size() - 1).time + 1000; // next second
                                 end = System.currentTimeMillis();
                             }
                             if (!timeId.equals("3")) timeId = "3";
