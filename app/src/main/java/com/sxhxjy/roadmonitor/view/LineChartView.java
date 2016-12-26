@@ -89,6 +89,7 @@ public class LineChartView extends View {
 
     private boolean isBeingTouched = false;
     private float touchedX = -1;
+    private float touchedY = -1;
     private GestureDetector gestureDetector;
     private ScaleGestureDetector scaleGestureDetector;
     private static boolean doubleTapHinted;
@@ -310,6 +311,7 @@ public class LineChartView extends View {
                 // calculate min
                 if (isBeingTouched) {
                     float d = Math.abs(touchedX - nextPointX);
+                    float dy = Math.abs(touchedY - nextPointX);
                     if (d < minDistance) {
                         minDistance = d;
                         minPoint = myPoint;

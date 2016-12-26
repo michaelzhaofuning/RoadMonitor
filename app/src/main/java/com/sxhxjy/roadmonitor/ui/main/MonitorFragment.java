@@ -289,8 +289,12 @@ public class MonitorFragment extends BaseFragment implements View.OnClickListene
 
                         if (timeId.equals("3") && mListRight.get(3).isChecked()) {
                             strings = mListRight.get(3).getTitle().split("  ---- \n ");
-                            start = sdf.parse(strings[0], new ParsePosition(0)).getTime();
-                            end = sdf.parse(strings[1], new ParsePosition(0)).getTime();
+                            if (strings.length != 2) {
+                                timeId = "0";
+                            } else {
+                                start = sdf.parse(strings[0], new ParsePosition(0)).getTime();
+                                end = sdf.parse(strings[1], new ParsePosition(0)).getTime();
+                            }
                         }
 
                         if (simpleItem.isShouldGetDiffer() && mChartsContainer.getChildAt(0) != null) {
@@ -338,11 +342,12 @@ public class MonitorFragment extends BaseFragment implements View.OnClickListene
                                     }
                                 }
 
-                                if (!handled)
+                                if (!handled) {
                                     lineChartView0.addPoints(lineChartView0.convert(realTimeDatas, false), simpleItem.getTitle(), simpleItem.getColor(), false);
 
-                                ((TextView) mChartsContainer.getChildAt(0).findViewById(R.id.min)).setText(complexData.getXmin() + "");
-                                ((TextView) mChartsContainer.getChildAt(0).findViewById(R.id.max)).setText(complexData.getXmax() + "");
+                                    ((TextView) mChartsContainer.getChildAt(0).findViewById(R.id.min)).setText(complexData.getXmin() + "");
+                                    ((TextView) mChartsContainer.getChildAt(0).findViewById(R.id.max)).setText(complexData.getXmax() + "");
+                                }
 
 
                                 if (realTimeDatas.get(0).getTypeCode() != 1) {
@@ -361,12 +366,13 @@ public class MonitorFragment extends BaseFragment implements View.OnClickListene
                                         }
                                     }
 
-                                    if (!handled)
-                                    lineChartView1.addPoints(lineChartView1.convertY(realTimeDatas, false), simpleItem.getTitle(), simpleItem.getColor(), false);
+                                    if (!handled) {
+                                        lineChartView1.addPoints(lineChartView1.convertY(realTimeDatas, false), simpleItem.getTitle(), simpleItem.getColor(), false);
 
 
-                                    ((TextView) mChartsContainer.getChildAt(1).findViewById(R.id.min)).setText(complexData.getYmin() + "");
-                                    ((TextView) mChartsContainer.getChildAt(1).findViewById(R.id.max)).setText(complexData.getYmax() + "");
+                                        ((TextView) mChartsContainer.getChildAt(1).findViewById(R.id.min)).setText(complexData.getYmin() + "");
+                                        ((TextView) mChartsContainer.getChildAt(1).findViewById(R.id.max)).setText(complexData.getYmax() + "");
+                                    }
 
                                 }
                                 if (realTimeDatas.get(0).getTypeCode() == 2) {
@@ -385,12 +391,13 @@ public class MonitorFragment extends BaseFragment implements View.OnClickListene
                                         }
                                     }
 
-                                    if (!handled)
-                                    lineChartView2.addPoints(lineChartView2.convertZ(realTimeDatas, false), simpleItem.getTitle(), simpleItem.getColor(), false);
+                                    if (!handled) {
+                                        lineChartView2.addPoints(lineChartView2.convertZ(realTimeDatas, false), simpleItem.getTitle(), simpleItem.getColor(), false);
 
 
-                                    ((TextView) mChartsContainer.getChildAt(2).findViewById(R.id.min)).setText(complexData.getZmin() + "");
-                                    ((TextView) mChartsContainer.getChildAt(2).findViewById(R.id.max)).setText(complexData.getZmax() + "");
+                                        ((TextView) mChartsContainer.getChildAt(2).findViewById(R.id.min)).setText(complexData.getZmin() + "");
+                                        ((TextView) mChartsContainer.getChildAt(2).findViewById(R.id.max)).setText(complexData.getZmax() + "");
+                                    }
                                 }
 
                                 if (!paramsGeted) {
@@ -406,11 +413,6 @@ public class MonitorFragment extends BaseFragment implements View.OnClickListene
                                 if (!paramsGeted) {
                                     paramsGeted = true;
                                     getParamInfo();
-                                }
-
-                                for (int i = 0; i < mChartsContainer.getChildCount(); i++) {
-                                    View v = mChartsContainer.getChildAt(i);
-                                    v.invalidate();
                                 }
 
                                 // error occurred,
@@ -434,6 +436,11 @@ public class MonitorFragment extends BaseFragment implements View.OnClickListene
                                         progressDialog.dismiss();
                                         progressDialog = null;
                                     }
+                                }
+
+                                for (int i = 0; i < mChartsContainer.getChildCount(); i++) {
+                                    View v = mChartsContainer.getChildAt(i).findViewById(R.id.chart);
+                                    v.invalidate();
                                 }
                             }
                         });
