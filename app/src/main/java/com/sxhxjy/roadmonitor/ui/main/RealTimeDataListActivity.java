@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 
@@ -39,40 +40,19 @@ public class RealTimeDataListActivity extends BaseActivity {
     }
 
     public static class RealTimeDataListFragment extends BaseListFragment<RealTimeData> {
-        private Timer t = new Timer();
-        private TimerTask task;
+        private CountDownTimer countDownTimer;
+
         @Override
         public Observable<HttpResponse<List<RealTimeData>>> getObservable() {
-            mList.addAll((MonitorFragment.monitorFragment.mRealTimes));
             mAdapter.notifyDataSetChanged();
             return null;
         }
 
-        @Override
-        public void onAttach(Context context) {
-            super.onAttach(context);
-
-            task = new TimerTask() {
-                @Override
-                public void run() {
-                    Activity activity = getActivity();
-                    if (activity != null) {
-                        activity.runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                if (mAdapter != null)
-                                    mAdapter.notifyDataSetChanged();
-                            }
-                        });
-                    }
-                }
-            };
-        }
 
         @Override
         public void onDetach() {
             super.onDetach();
-            t.cancel();
+            countDownTimer.cancel();
         }
 
         @Override
@@ -83,7 +63,20 @@ public class RealTimeDataListActivity extends BaseActivity {
         @Override
         protected void init() {
             mPullRefreshLoadLayout.enableRefresh(false);
-            t.scheduleAtFixedRate(task, 0, MonitorFragment.interval);
+            countDownTimer = new CountDownTimer(9999999999L, MonitorFragment.interval) {
+                @Override
+                public void onTick(long millisUntilFinished) {
+                    if (mAdapter != null)
+                        mAdapter.notifyDataSetChanged();
+                }
+
+                @Override
+                public void onFinish() {
+
+                }
+            };
+            mList = MonitorFragment.monitorFragment.mRealTimes;
+            countDownTimer.start();
         }
 
         @Override
