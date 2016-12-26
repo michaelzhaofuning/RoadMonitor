@@ -133,7 +133,7 @@ public class UpdateUtil {
         notificationManager.notify(103, notification);
     }
 
-    private static String getVersion(Context context) {
+    public static String getVersion(Context context) {
         try {
             PackageManager packageManager = context.getPackageManager();
             PackageInfo packageInfo = packageManager.getPackageInfo(context.getPackageName(), 0);

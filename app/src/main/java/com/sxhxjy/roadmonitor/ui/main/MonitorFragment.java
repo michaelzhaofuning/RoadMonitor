@@ -60,7 +60,7 @@ import java.util.Random;
  */
 
 public class MonitorFragment extends BaseFragment implements View.OnClickListener {
-    public static MonitorFragment monitorFragment;
+    public static MonitorFragment monitorFragment; // TODO
     /**
      * 检测项目fragment
      */
@@ -87,7 +87,7 @@ public class MonitorFragment extends BaseFragment implements View.OnClickListene
     private String positionId;
     private boolean paramsGeted;
     private boolean isFirstProgressDialog = true;
-    private long interval = 30000;
+    public static final long interval = 30000;
     // filter item clicked
     private View.OnClickListener simpleListListener = new View.OnClickListener() {
         @Override
@@ -319,7 +319,8 @@ public class MonitorFragment extends BaseFragment implements View.OnClickListene
                             @Override
                             protected void onMyNext(ComplexData complexData) {
                                 List<RealTimeData> realTimeDatas = complexData.getContent();
-                                mRealTimes.addAll(realTimeDatas);
+                                mRealTimes.addAll(0, realTimeDatas);
+
 
                                 if (mChartsContainer.getChildAt(0) == null)
                                     getActivity().getLayoutInflater().inflate(R.layout.chart_layout, mChartsContainer);

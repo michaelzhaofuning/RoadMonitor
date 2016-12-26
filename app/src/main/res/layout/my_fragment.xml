@@ -15,6 +15,7 @@
         android:layout_width="match_parent"
         app:titleOfMyLinearLayout="Change IP"
         android:onClick="changeIp"
+        android:visibility="gone"
         app:expandedOfMyLinearLayout="true"
         android:layout_height="wrap_content">
 
@@ -23,7 +24,16 @@
         android:layout_width="match_parent"
         app:titleOfMyLinearLayout="修改密码"
         android:onClick="changePassword"
+        android:visibility="gone"
         app:expandedOfMyLinearLayout="true"
+        android:layout_height="wrap_content">
+
+    </com.sxhxjy.roadmonitor.view.MyLinearLayout>
+
+    <com.sxhxjy.roadmonitor.view.MyLinearLayout
+        android:layout_width="match_parent"
+        android:id="@+id/version"
+        app:titleOfMyLinearLayout="版本"
         android:layout_height="wrap_content">
 
     </com.sxhxjy.roadmonitor.view.MyLinearLayout>

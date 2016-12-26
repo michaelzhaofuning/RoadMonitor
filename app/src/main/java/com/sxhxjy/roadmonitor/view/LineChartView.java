@@ -27,9 +27,11 @@ import java.io.Serializable;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
 import java.util.Random;
@@ -436,6 +438,8 @@ public class LineChartView extends View {
                     xSplitTo++;
             }
 
+            if ((xEnd - xStart) <= 1000 * 3600)
+                xSplitTo = 1;
 
         } else  { // draw day
             drawBy = 1;
@@ -466,6 +470,7 @@ public class LineChartView extends View {
                 while (dx % xSplitTo != 0)
                     xSplitTo++;
             }
+
 
         } /*else { // draw week
             drawBy = 2;

@@ -8,6 +8,10 @@ import android.view.ViewGroup;
 
 import com.sxhxjy.roadmonitor.R;
 import com.sxhxjy.roadmonitor.base.BaseFragment;
+import com.sxhxjy.roadmonitor.base.MyApplication;
+import com.sxhxjy.roadmonitor.base.UpdateUtil;
+import com.sxhxjy.roadmonitor.view.LineChartView;
+import com.sxhxjy.roadmonitor.view.MyLinearLayout;
 
 /**
  * 2016/9/26
@@ -29,5 +33,16 @@ public class MyFragment extends BaseFragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         initToolBar(view, "我的", false);
+
+        MyLinearLayout version = (MyLinearLayout) view.findViewById(R.id.version);
+        version.setContent(UpdateUtil.getVersion(getActivity()));
+        version.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                UpdateUtil.update(getActivity(), MyApplication.BASE_URL + "user/changeVersion");
+            }
+        });
     }
+
+
 }

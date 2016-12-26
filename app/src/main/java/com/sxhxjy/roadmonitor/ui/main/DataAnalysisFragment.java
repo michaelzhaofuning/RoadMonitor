@@ -194,7 +194,7 @@ public class DataAnalysisFragment extends BaseFragment {
                 mTimer.start();
             } else {//多时间
                 final ArrayList<String> times = (ArrayList<String>) data.getSerializableExtra("times");
-                mTimer = new CountDownTimer(20000, 10000) {
+                mTimer = new CountDownTimer(11000, 10000) {
                     @Override
                     public void onTick(long millisUntilFinished) {
                         for (int j = 0; j < mChartsContainer.getChildCount(); j++) {
@@ -282,7 +282,7 @@ public class DataAnalysisFragment extends BaseFragment {
             final ArrayList<SimpleItem> positionItemsCorrelation = (ArrayList<SimpleItem>) data.getSerializableExtra("positionItemsCorrelation");
             if (mTimer != null)
                 mTimer.cancel();
-            mTimer = new CountDownTimer(20000, 10000) {
+            mTimer = new CountDownTimer(11000, 10000) {
                 @Override
                 public void onTick(long millisUntilFinished) {
                     for (int j = 0; j < mChartsContainer.getChildCount(); j++) {
