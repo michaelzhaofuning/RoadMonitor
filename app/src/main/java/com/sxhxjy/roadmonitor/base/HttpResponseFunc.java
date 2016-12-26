@@ -31,7 +31,7 @@ public class HttpResponseFunc<T> implements Func1<HttpResponse<T>, T> {
                 mContext.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-//                        mContext.showToastMsg(tHttpResponse.getResultMessage());
+                        mContext.showToastMsg(tHttpResponse.getResultMessage());
                     }
                 });
                 Log.e("retrofit", "FAILURE ! msg:" + tHttpResponse.getResultMessage());
