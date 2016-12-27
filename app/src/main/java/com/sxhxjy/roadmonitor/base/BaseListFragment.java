@@ -176,6 +176,7 @@ public abstract class BaseListFragment<I> extends BaseFragment implements SwipeR
     @Override
     protected void loadOnce() {
         super.loadOnce();
+        showWaitingDialog(null);
         getMessage();
     }
 
@@ -190,18 +191,20 @@ public abstract class BaseListFragment<I> extends BaseFragment implements SwipeR
                     .subscribe(new Subscriber<List<I>>() {
                         @Override
                         public void onStart() {
+                            Log.e("base list", "onStart");
                         }
 
                         @Override
                         public void onCompleted() {
                             mPullRefreshLoadLayout.refreshEnd();
                             mPullRefreshLoadLayout.loadMoreEnd();
+                            dismissWaitingDialog();
                         }
 
                         @Override
                         public void onError(Throwable e) {
                             Log.e("retrofit", e.toString());
-
+                            dismissWaitingDialog();
                             showListViewOrEmptyView();
                         }
 
@@ -211,6 +214,8 @@ public abstract class BaseListFragment<I> extends BaseFragment implements SwipeR
                             mList.addAll(es);
                             showListViewOrEmptyView();
                             mAdapter.notifyDataSetChanged();
+                            onMyNext(es);
+
 
                         }
                     });
@@ -298,6 +303,10 @@ public abstract class BaseListFragment<I> extends BaseFragment implements SwipeR
                 }
             }
         });*/
+    }
+
+    protected void onMyNext(List<I> es) {
+
     }
 
     public void showListViewOrEmptyView() {

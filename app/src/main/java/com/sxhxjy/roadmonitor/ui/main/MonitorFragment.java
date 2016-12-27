@@ -148,6 +148,13 @@ public class MonitorFragment extends BaseFragment implements View.OnClickListene
     }
 
     @Override
+    protected void loadOnce() {
+        super.loadOnce();
+        // * entrance *
+        if (groupsOfFilterTree.isEmpty()) getTypeTree(); // getTypeTree
+    }
+
+    @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         initToolBar(getView(), getArguments().getString("stationName"), false);
@@ -209,7 +216,7 @@ public class MonitorFragment extends BaseFragment implements View.OnClickListene
             }
         });
 
-        if (groupsOfFilterTree.isEmpty()) getTypeTree(); // getTypeTree
+
 
 /**
  * 弹出窗口
@@ -416,6 +423,11 @@ public class MonitorFragment extends BaseFragment implements View.OnClickListene
                                 if (!paramsGeted) {
                                     paramsGeted = true;
                                     getParamInfo();
+                                }
+
+                                if (progressDialog != null) {
+                                    progressDialog.dismiss();
+                                    progressDialog = null;
                                 }
 
                                 // error occurred,

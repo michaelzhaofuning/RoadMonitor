@@ -3,6 +3,7 @@ package com.sxhxjy.roadmonitor.ui.main;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.util.Log;
 
 
 import com.sxhxjy.roadmonitor.R;
@@ -46,6 +47,7 @@ public class LookStateActivity extends BaseActivity {
             @Override
             public void onResponse(Call<States> call, retrofit2.Response<States> response) {
                 if (response.code() != 200) return;
+                Log.v("OkHttp", call.request().toString());
                 States states= response.body();
 
                 List<States.DataBean> sd=states.getData();

@@ -129,11 +129,13 @@ public class LineChartView extends View {
 
                 if (!isBeingTouched) {
                     if (++globalIndex % 2 == 0) { // reduce called times
-                        if (distanceX > 5)
+                        if (distanceX > 5) {
                             distanceX = 1 * pointCount / 20;
-                        else if (distanceX < -5)
+                            if (distanceX == 0) distanceX = 1;
+                        } else if (distanceX < -5) {
                             distanceX = -1 * pointCount / 20;
-                        else distanceX = 0;
+                            if (distanceX == 0) distanceX = -1;
+                        } else distanceX = 0;
 
                         offset = offset - (int) distanceX;
 //                        Log.e("test", "dx: " + distanceX + "offset:" + offset);
@@ -217,6 +219,7 @@ public class LineChartView extends View {
             return;
         }
 
+        // translate AXIS
         canvas.translate(OFFSET + 10, getMeasuredHeight() - OFFSET - OFFSET_LEGEND);
 
 
@@ -322,16 +325,13 @@ public class LineChartView extends View {
                     float d = Math.abs(touchedX - nextPointX);
                     float dy = Math.abs(touchedY - nextPointY);
 
-                    Log.e("yyout", dy+"   " + minDistanceY);
                     if (dy < minDistanceY) {
                         minDistanceY = dy;
                         minDistance = getMeasuredWidth();
                         minLine = line;
-                        Log.e("yyiny", "in "+dy+"");
                     }
 
                     if (minLine == line && d < minDistance) {
-                        Log.e("yyinx", "find x "+d+"");
 
                         minDistance = d;
                         minPoint = myPoint;
@@ -375,7 +375,16 @@ public class LineChartView extends View {
                 // calculate min
                 if (isBeingTouched) {
                     float d = Math.abs(touchedX - nextPointX);
-                    if (d < minDistance) {
+                    float dy = Math.abs(touchedY - nextPointY);
+
+                    if (dy < minDistanceY) {
+                        minDistanceY = dy;
+                        minDistance = getMeasuredWidth();
+                        minLine = line;
+                    }
+
+                    if (minLine == line && d < minDistance) {
+
                         minDistance = d;
                         minPoint = myPoint;
                         isRight = true;
@@ -484,6 +493,20 @@ public class LineChartView extends View {
             if (xSplitTo <= 0) {
                 xSplitTo += 24;
                 dx += 24;
+            }
+
+            int j = 2;
+            while (j < dx) {
+                if (dx % j == 0) {
+                    // not prime number, j < dx !
+                    Log.e("test", "prime number");
+                    break;
+                }
+                j++;
+            }
+            if (j == dx) {
+                // prime number
+                dx++;
             }
 
             if (xSplitTo > 10) {
@@ -680,12 +703,12 @@ public class LineChartView extends View {
                 }
                 getParent().requestDisallowInterceptTouchEvent(true);
                 touchedX = event.getX() - OFFSET - 10; // in canvas
-                touchedY = event.getY() - OFFSET - OFFSET_LEGEND; // in canvas
+                touchedY = (event.getY() - OFFSET) - (getMeasuredHeight() - OFFSET - OFFSET_LEGEND); // in canvas
                 break;
 
             case MotionEvent.ACTION_MOVE:
                 touchedX = event.getX() - OFFSET - 10; // in canvas
-                touchedY = event.getY() - OFFSET - OFFSET_LEGEND; // in canvas
+                touchedY = (event.getY() - OFFSET) - (getMeasuredHeight() - OFFSET - OFFSET_LEGEND); // in canvas
                 break;
 
             default:
