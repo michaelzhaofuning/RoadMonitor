@@ -75,7 +75,7 @@ public class RealTimeDataListActivity extends BaseActivity {
 
                 }
             };
-            mList = MonitorFragment.monitorFragment.mRealTimes;
+            mList = MonitorFragment.mRealTimes;
             countDownTimer.start();
         }
 

@@ -38,10 +38,7 @@ import java.util.concurrent.TimeUnit;
  */
 
 public class SocketService extends Service {
-//    private static final String ADDRESS = "192.168.1.172";
-//    private static final String ADDRESS = "124.163.206.250";
-    private static final String ADDRESS = "124.163.206.251";
-    private static final int PORT = 8000;
+
     private Socket socket;
 //    private PrintWriter out;
 //    private BufferedReader in;
@@ -52,7 +49,7 @@ public class SocketService extends Service {
         @Override
         public void run() {
             try {
-                socket = new Socket(ADDRESS, PORT);
+                socket = new Socket(MyApplication.ADDRESS, MyApplication.PORT);
 //                    out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(socket.getOutputStream())));
                 in = new DataInputStream(socket.getInputStream());
                 out = new DataOutputStream(socket.getOutputStream());

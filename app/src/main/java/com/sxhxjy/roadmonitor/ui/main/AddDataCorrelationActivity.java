@@ -1,5 +1,6 @@
 package com.sxhxjy.roadmonitor.ui.main;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
@@ -12,6 +13,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.DatePicker;
 import android.widget.TimePicker;
 
@@ -51,6 +53,8 @@ public class AddDataCorrelationActivity extends BaseActivity {
     private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.CHINA);
     private String title, titleCorrelation;
     private String startTime, endTime;
+    private String stationId;
+    private MyLinearLayout station;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -87,8 +91,9 @@ public class AddDataCorrelationActivity extends BaseActivity {
     }
 
     public void monitorType(final View view) {
+        if (stationId == null) return;
         if (mTypeList.isEmpty()) {
-            getMessage(getHttpService().getMonitorTypeTree(MyApplication.getMyApplication().getSharedPreference().getString("stationId","")), new MySubscriber<List<MonitorTypeTree>>() {
+            getMessage(getHttpService().getMonitorTypeTree(stationId), new MySubscriber<List<MonitorTypeTree>>() {
                 @Override
                 protected void onMyNext(List<MonitorTypeTree> monitorTypeTrees) {
                     for (MonitorTypeTree monitorTypeTree : monitorTypeTrees) {
@@ -226,5 +231,36 @@ public class AddDataCorrelationActivity extends BaseActivity {
             }
         }, 2016, date.getMonth(), date.getDate()).show();
 
+    }
+
+    public void chooseStation(View view) {
+        station = (MyLinearLayout) view;
+        Intent intent = new Intent(this, StationListActivity.class);
+        startActivityForResult(intent, StationListActivity.REQUEST_CODE);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == StationListActivity.REQUEST_CODE && resultCode == Activity.RESULT_OK) {
+            stationId = data.getStringExtra("stationId");
+            station.setContent(data.getStringExtra("stationName"));
+            mTypeList.clear();
+            mLocationList.clear();
+            positionItems.clear();
+            positionItemsCorrelation.clear();
+            ViewGroup v = (ViewGroup) findViewById(R.id.container);
+            for (int i = 0; i < v.getChildCount(); i++) {
+                if (v.getChildAt(i) instanceof MyLinearLayout) {
+                    MyLinearLayout linearLayout = (MyLinearLayout) v.getChildAt(i);
+                    if (linearLayout.getId() != R.id.station) {
+                        linearLayout.setContent("");
+                    }
+                }
+
+
+            }
+
+        }
     }
 }

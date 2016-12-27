@@ -22,6 +22,9 @@ import retrofit2.converter.gson.GsonConverterFactory;
  * Extends application to add some methods
  *
  * password: funing4510
+ *
+ * 1. IP !!!! 2.app name 3.flash.jpg
+ *
  * @author Michael Zhao
  */
 public class MyApplication extends Application {
@@ -29,15 +32,17 @@ public class MyApplication extends Application {
 
     // socket Hostname in socket service
 
+    //    private static final String ADDRESS = "192.168.1.172";
+//    private static final String ADDRESS = "124.163.206.250";
+    public static final String ADDRESS = "124.163.206.251";
+    public static final int PORT = 8000;
+
 //    public static String BASE_IP = "124.163.206.250:8080";
 //    public static String BASE_URL = "http://"+ BASE_IP + "/ClearPro/web/";
 
     public static String BASE_IP = "124.163.206.251:8088";
     public static String BASE_URL = "http://"+ BASE_IP + "/AirDefencePro/web/";
 //    public static final String BASE_URL = "http://192.168.1.172:8088/ClearPro/web/";
-//    public static final String BASE_URL = "http://192.168.1.123:8080/ClearPro/web/";
-//    public static final String BASE_URL = "http://192.168.1.241:8090/ClearPro/web/";
-//    public static final String BASE_URL = "http://192.168.1.131:8080/ClearPro/web/";
     private HttpService httpService;
 
     public static MyApplication getMyApplication() {

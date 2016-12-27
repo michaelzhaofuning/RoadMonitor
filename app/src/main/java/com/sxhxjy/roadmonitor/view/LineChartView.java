@@ -167,7 +167,7 @@ public class LineChartView extends View {
                     offset = 0;
                 if (offset > myLines.get(0).points.size() - pointCount) offset = myLines.get(0).points.size() - pointCount;
 
-                pointCount = (int) (pointCount + (1 - detector.getScaleFactor()) * 50);
+                pointCount = (int) (pointCount + (1 - detector.getScaleFactor()) * 55);
                 if (pointCount < 10) pointCount = 10;
                 if (pointCount > myLines.get(0).points.size()) pointCount = myLines.get(0).points.size();
                 Log.e("test", "p count: " + pointCount + "factor: " + detector.getScaleFactor());
@@ -277,14 +277,14 @@ public class LineChartView extends View {
         mPaint.setStrokeCap(Paint.Cap.ROUND);
         mPaint.setStyle(Paint.Style.FILL_AND_STROKE);
 
-        float minDistance = getMeasuredWidth();
-        float minDistanceY = getMeasuredHeight();
-        MyLine minLine = null;
         MyPoint minPoint = null;
         float simpleMinX = 0;
         boolean isRight = false;
 
         for (MyLine line : myLines) {
+            float minDistance = getMeasuredWidth();
+            MyPoint minPointInLine = null;
+
             for (MyPoint myPoint : line.points) {
                 if (line.points.indexOf(myPoint) > line.points.size() - offset || line.points.indexOf(myPoint) < line.points.size() - offset - pointCount)
                     continue;
@@ -323,26 +323,34 @@ public class LineChartView extends View {
                 // calculate min
                 if (isBeingTouched) {
                     float d = Math.abs(touchedX - nextPointX);
-                    float dy = Math.abs(touchedY - nextPointY);
 
-                    if (dy < minDistanceY) {
-                        minDistanceY = dy;
-                        minDistance = getMeasuredWidth();
-                        minLine = line;
-                    }
-
-                    if (minLine == line && d < minDistance) {
-
+                    if (d < minDistance) {
                         minDistance = d;
-                        minPoint = myPoint;
+                        minPointInLine = myPoint;
                         if (mIsSimpleDraw) simpleMinX = nextPointX;
                     }
+                }
+            }
+
+            if (minPoint == null) {
+                minPoint = minPointInLine;
+            } else {
+                float dy = Math.abs(touchedY + (float) (((double) (minPoint.value - yStart)) / (yEnd - yStart) * yAxisLength));
+                float dy1 = 10000;
+                if (minPointInLine != null) {
+                    dy1 = Math.abs(touchedY + (float) (((double) (minPointInLine.value - yStart)) / (yEnd - yStart) * yAxisLength));
+                }
+                if (dy1 <= dy) {
+                    minPoint = minPointInLine;
                 }
             }
         }
 
         //       *RIGHT*
         for (MyLine line : myLinesRight) {
+            float minDistance = getMeasuredWidth();
+            MyPoint minPointInLine = null;
+
             for (MyPoint myPoint : line.points) {
                 if (line.points.indexOf(myPoint) > line.points.size() - offset || line.points.indexOf(myPoint) < line.points.size() - offset - pointCount)
                     continue;
@@ -375,20 +383,25 @@ public class LineChartView extends View {
                 // calculate min
                 if (isBeingTouched) {
                     float d = Math.abs(touchedX - nextPointX);
-                    float dy = Math.abs(touchedY - nextPointY);
-
-                    if (dy < minDistanceY) {
-                        minDistanceY = dy;
-                        minDistance = getMeasuredWidth();
-                        minLine = line;
-                    }
-
-                    if (minLine == line && d < minDistance) {
-
+                    if (d < minDistance) {
                         minDistance = d;
-                        minPoint = myPoint;
-                        isRight = true;
+                        minPointInLine = myPoint;
+                        if (mIsSimpleDraw) simpleMinX = nextPointX;
                     }
+
+                }
+            }
+
+            if (minPoint == null) {
+                minPoint = minPointInLine;
+            } else {
+                float dy = Math.abs(touchedY + (float) (((double) (minPoint.value - yStart)) / (yEnd - yStart) * yAxisLength));
+                float dy1 = 10000;
+                if (minPointInLine != null) {
+                    dy1 = Math.abs(touchedY + (float) (((double) (minPointInLine.value - yStart)) / (yEnd - yStart) * yAxisLength));
+                }
+                if (dy1 <= dy) {
+                    minPoint = minPointInLine;
                 }
             }
         }
@@ -396,7 +409,7 @@ public class LineChartView extends View {
         // draw point info
         if (isBeingTouched && minPoint != null) {
             mPaint.setColor(getResources().getColor(R.color.colorPrimary));
-            mPaint.setStrokeWidth(14);
+            mPaint.setStrokeWidth(18);
             float x, y;
             if (!isRight) {
                 if (!mIsSimpleDraw)
@@ -460,8 +473,6 @@ public class LineChartView extends View {
             xSplitTo = date.getMinutes() - startMinute;
             int dx = date.getMinutes() - startMinute;
 
-            Log.e("test", startMinute  + "    " + date.getMinutes());
-
             if (xSplitTo <= 0) {
                 xSplitTo = 60;
                 dx += 60;
@@ -499,7 +510,6 @@ public class LineChartView extends View {
             while (j < dx) {
                 if (dx % j == 0) {
                     // not prime number, j < dx !
-                    Log.e("test", "prime number");
                     break;
                 }
                 j++;

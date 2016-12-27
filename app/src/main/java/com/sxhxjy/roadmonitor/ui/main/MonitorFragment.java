@@ -60,13 +60,12 @@ import java.util.Random;
  */
 
 public class MonitorFragment extends BaseFragment implements View.OnClickListener {
-    public static MonitorFragment monitorFragment; // TODO
     /**
      * 检测项目fragment
      */
     public List<FilterTreeAdapter.Group> groupsOfFilterTree = new ArrayList<>();
     public MyCountDownTimer mTimer;
-    public ArrayList<RealTimeData> mRealTimes = new ArrayList<>();
+    public static ArrayList<RealTimeData> mRealTimes = new ArrayList<>();
     public int startDay; //
     private String stationId;
     private TextView mTextViewCenter;
@@ -161,7 +160,6 @@ public class MonitorFragment extends BaseFragment implements View.OnClickListene
         stationId = getArguments().getString("stationId");
         cacheStation(stationId, getArguments().getString("stationName"));
 
-        monitorFragment = this; // *static*
 
         mTextViewCenter = (TextView) getView().findViewById(R.id.toolbar_title);
         mImageViewLeft = (ImageView) getView().findViewById(R.id.toolbar_left);
