@@ -99,6 +99,7 @@ public class LineChartView extends View {
     public static LineChartView lineChartView;
     private boolean mIsBeingDragged;
     public boolean mIsSimpleDraw = false;
+    private boolean isInitialDown = false;
 
 
     public LineChartView(final Context context, AttributeSet attrs) {
@@ -321,7 +322,7 @@ public class LineChartView extends View {
                 canvas.drawPoint(nextPointX, nextPointY, mPaint);
 
                 // calculate min
-                if (isBeingTouched) {
+                if (isBeingTouched || isInitialDown) {
                     float d = Math.abs(touchedX - nextPointX);
 
                     if (d < minDistance) {
@@ -381,7 +382,7 @@ public class LineChartView extends View {
                 canvas.drawPoint(nextPointX, nextPointY, mPaint);
 
                 // calculate min
-                if (isBeingTouched) {
+                if (isBeingTouched || isInitialDown) {
                     float d = Math.abs(touchedX - nextPointX);
                     if (d < minDistance) {
                         minDistance = d;
@@ -407,7 +408,7 @@ public class LineChartView extends View {
         }
 
         // draw point info
-        if (isBeingTouched && minPoint != null) {
+        if ((isBeingTouched || isInitialDown) && minPoint != null) {
             mPaint.setColor(getResources().getColor(R.color.colorPrimary));
             mPaint.setStrokeWidth(18);
             float x, y;
@@ -712,17 +713,20 @@ public class LineChartView extends View {
                     doubleTapHinted = true;
                 }
                 getParent().requestDisallowInterceptTouchEvent(true);
+                isInitialDown = true;
                 touchedX = event.getX() - OFFSET - 10; // in canvas
                 touchedY = (event.getY() - OFFSET) - (getMeasuredHeight() - OFFSET - OFFSET_LEGEND); // in canvas
                 break;
 
             case MotionEvent.ACTION_MOVE:
+//                isInitialDown = false;
                 touchedX = event.getX() - OFFSET - 10; // in canvas
                 touchedY = (event.getY() - OFFSET) - (getMeasuredHeight() - OFFSET - OFFSET_LEGEND); // in canvas
                 break;
 
             default:
                 isBeingTouched = false;
+                isInitialDown = false;
                 mIsBeingDragged = false;
 
                 break;

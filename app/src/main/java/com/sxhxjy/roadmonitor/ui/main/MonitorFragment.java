@@ -87,6 +87,7 @@ public class MonitorFragment extends BaseFragment implements View.OnClickListene
     private boolean paramsGeted;
     private boolean isFirstProgressDialog = true;
     public static final long interval = 30000;
+    private int test = 0;
     // filter item clicked
     private View.OnClickListener simpleListListener = new View.OnClickListener() {
         @Override
@@ -225,6 +226,19 @@ public class MonitorFragment extends BaseFragment implements View.OnClickListene
         ExpandableListView expandableListView = (ExpandableListView) myPopupWindow.getContentView().findViewById(R.id.expandable_list_view);
         Button confirm = (Button) myPopupWindow.getContentView().findViewById(R.id.confirm);
         Button reset = (Button) myPopupWindow.getContentView().findViewById(R.id.reset);
+        TextView pic = (TextView) myPopupWindow.getContentView().findViewById(R.id.pic);
+        pic.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // TODO
+                Log.e("test", "0 or 1"+test);
+
+//                ActivityUtil.startActivityForResult(getActivity(), RealTimeDataListActivity.class);
+            }
+        });
+        test = 1;
+        Log.e("test", ""+test);
+
         confirm.setVisibility(View.GONE);
         reset.setVisibility(View.GONE);
 

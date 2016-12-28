@@ -7,6 +7,22 @@
     android:background="@color/colorPrimary"
     android:layout_height="match_parent">
 <!--弹出窗口-->
+    <TextView
+        android:layout_width="match_parent"
+        android:text="图片主题"
+        android:textColor="#fff"
+        android:padding="15dp"
+        android:id="@+id/pic"
+        android:background="@drawable/color_primary_selector"
+
+        android:textSize="17sp"
+        android:layout_marginLeft="50dp"
+        android:layout_height="wrap_content"/>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/colorPrimaryDark"/>
+
 
     <ExpandableListView
         android:layout_weight="1"

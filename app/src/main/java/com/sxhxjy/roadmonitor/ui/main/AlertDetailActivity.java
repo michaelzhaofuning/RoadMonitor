@@ -61,6 +61,12 @@ public class AlertDetailActivity extends BaseActivity {
         }
 
         @Override
+        protected void afterInit() {
+            super.afterInit();
+            onRefresh();
+        }
+
+        @Override
         protected String getCacheKey() {
             return null;
         }

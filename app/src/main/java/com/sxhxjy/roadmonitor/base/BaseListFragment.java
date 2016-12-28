@@ -132,6 +132,11 @@ public abstract class BaseListFragment<I> extends BaseFragment implements SwipeR
 
         init();//初始化控件
         initRecyclerView();
+        afterInit();
+    }
+
+    protected void afterInit() {
+
     }
 
     private void initRecyclerView() {
