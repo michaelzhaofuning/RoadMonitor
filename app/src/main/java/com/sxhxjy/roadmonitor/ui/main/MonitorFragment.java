@@ -628,8 +628,6 @@ public class MonitorFragment extends BaseFragment implements View.OnClickListene
     public void addTime(final SimpleListAdapter adapter) {
         final StringBuilder sb = new StringBuilder();
         final Date date = new Date(System.currentTimeMillis());
-
-
         new DatePickerDialog(getActivity(), new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {

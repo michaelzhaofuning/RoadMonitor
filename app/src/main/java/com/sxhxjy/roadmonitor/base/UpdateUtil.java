@@ -54,6 +54,7 @@ public class UpdateUtil {
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
+                if(response.code()!=200) return;
                 final String result = response.body().string();
                 final JSONObject jsonObject = JSON.parseObject(result);
                 final String version = jsonObject.getString("version");

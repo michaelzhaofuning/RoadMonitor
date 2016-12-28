@@ -119,6 +119,7 @@ public class AlertFragment extends BaseListFragment<AlertData> {
         getActivity().getLayoutInflater().inflate(R.layout.filter_title_alert, mAboveList);
 
         mFilterTitleLeft = (TextView) getView().findViewById(R.id.filter_left);
+        mFilterTitleLeft.setText("等级");
         mFilterTitleRight = (TextView) getView().findViewById(R.id.filter_right);
         mFilterTitledefault = (TextView) getView().findViewById(R.id.filter_default);
 
