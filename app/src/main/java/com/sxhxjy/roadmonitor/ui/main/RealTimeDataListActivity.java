@@ -171,10 +171,10 @@ public class RealTimeDataListActivity extends BaseActivity {
                                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm");
                                 try {
                                     long millionSeconds = sdf.parse(sb.toString()).getTime();//毫秒
-                                    long time =mList.get(0).getSaveTime();
+                                    long time =rdlist.get(0).getSaveTime();
                                     if (millionSeconds>=time) return;
-                                for (int i=1;i<mList.size();i++){
-                                    if (millionSeconds>=mList.get(i).getSaveTime()){
+                                for (int i=1;i<rdlist.size();i++){
+                                    if (millionSeconds>=rdlist.get(i).getSaveTime()){
                                         mRecyclerView.scrollToPosition(i);
                                         break;
                                     }
