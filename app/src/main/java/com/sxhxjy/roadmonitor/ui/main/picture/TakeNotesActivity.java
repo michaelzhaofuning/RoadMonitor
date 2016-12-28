@@ -57,7 +57,7 @@ public class TakeNotesActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_take_notes);
-        initToolBar("比对记录", false);
+        initToolBar("比对记录", true);
         initView();
         getOkHttp();
 
@@ -81,6 +81,7 @@ public class TakeNotesActivity extends BaseActivity {
         });
     }
     private void getOkHttp() {
+        showWaitingDialog(null);
         new OkHttpClient().newCall(new Request.Builder()
 //                .post(new FormBody.Builder().build())
                 .url(getPath)
@@ -88,9 +89,11 @@ public class TakeNotesActivity extends BaseActivity {
             @Override//请求失败
             public void onFailure(Call call, IOException e) {
                 Log.e("take notes", call.toString() + e);
+                dismissWaitingDialog();
             }
             @Override//请求成功
             public void onResponse(Call call, Response response) throws IOException {
+                dismissWaitingDialog();
                 Log.i("aaaaaaaa",response.code()+"------code=pic");
                 String code=response.code()+"";
                 if (code.equals("200")){

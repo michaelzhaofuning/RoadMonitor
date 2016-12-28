@@ -290,9 +290,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,
     public void look_state(View view) {
         ActivityUtil.startActivityForResult(this, LookStateActivity.class);
     }
-    public void pic(View view) {
-        ActivityUtil.startActivityForResult(this, TakeNotesActivity.class);
-    }
+
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
         try {

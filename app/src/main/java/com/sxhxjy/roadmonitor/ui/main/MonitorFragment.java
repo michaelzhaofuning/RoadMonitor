@@ -40,6 +40,7 @@ import com.sxhxjy.roadmonitor.entity.ComplexData;
 import com.sxhxjy.roadmonitor.entity.MonitorTypeTree;
 import com.sxhxjy.roadmonitor.entity.RealTimeData;
 import com.sxhxjy.roadmonitor.entity.SimpleItem;
+import com.sxhxjy.roadmonitor.ui.main.picture.TakeNotesActivity;
 import com.sxhxjy.roadmonitor.util.ActivityUtil;
 import com.sxhxjy.roadmonitor.util.MyCountDownTimer;
 import com.sxhxjy.roadmonitor.view.LineChartView;
@@ -229,8 +230,8 @@ public class MonitorFragment extends BaseFragment implements View.OnClickListene
         pic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-//                ActivityUtil.startActivityForResult(getActivity(), RealTimeDataListActivity.class);
+                ActivityUtil.startActivityForResult(getActivity(), TakeNotesActivity.class);
+                myPopupWindow.dismiss();
             }
         });
 

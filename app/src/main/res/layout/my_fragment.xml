@@ -46,13 +46,6 @@
         android:layout_height="wrap_content">
 
     </com.sxhxjy.roadmonitor.view.MyLinearLayout>
-    <com.sxhxjy.roadmonitor.view.MyLinearLayout
-        android:layout_width="match_parent"
-        app:expandedOfMyLinearLayout="true"
-        app:titleOfMyLinearLayout="图片比对"
-        android:onClick="pic"
-        android:layout_height="wrap_content">
 
-    </com.sxhxjy.roadmonitor.view.MyLinearLayout>
 
 </LinearLayout>
