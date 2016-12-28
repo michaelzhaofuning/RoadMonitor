@@ -121,7 +121,7 @@ public class RealTimeDataListActivity extends BaseActivity {
                 }
                 if (!rd.getCode().equals("")&&rd.getCode()!=null){
                     if(ts.add(rd.getCode())){
-                        slist.add(rd.getCode());
+                        slist.add(rd.getName() + "   " + rd.getCode());
                     }
                     }
             }
@@ -235,7 +235,7 @@ public class RealTimeDataListActivity extends BaseActivity {
                                 String title=s.getTitle();
                                 rdlist.clear();
                                 for (int i=0;i<MonitorFragment.mRealTimes.size();i++){
-                                    if (title.equals(MonitorFragment.mRealTimes.get(i).getCode())){
+                                    if (title.equals(MonitorFragment.mRealTimes.get(i).getName() + "   " +MonitorFragment.mRealTimes.get(i).getCode())){
                                         rdlist.add(MonitorFragment.mRealTimes.get(i));
                                     }
                                 }

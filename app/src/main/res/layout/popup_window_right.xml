@@ -13,6 +13,7 @@
         android:textColor="#fff"
         android:padding="15dp"
         android:id="@+id/pic"
+        android:visibility="gone"
         android:textSize="17sp"
         android:layout_marginLeft="50dp"
         android:layout_height="wrap_content"/>

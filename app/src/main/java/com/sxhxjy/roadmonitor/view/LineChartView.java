@@ -84,7 +84,7 @@ public class LineChartView extends View {
     public String yAxisNameRight;
 
     private NumberFormat numberFormat = NumberFormat.getInstance();
-    private String emptyHint = "暂无数据";
+    public String emptyHint = "暂无数据";
 
 
     private boolean isBeingTouched = false;
@@ -743,6 +743,8 @@ public class LineChartView extends View {
 
         pointCount = myLines.get(0).points.size() / 2; // point count
         if (pointCount > 800) pointCount = 800;
+        if (pointCount < 10) pointCount = 10;
+        offset = 0;
         invalidate();
     }
 

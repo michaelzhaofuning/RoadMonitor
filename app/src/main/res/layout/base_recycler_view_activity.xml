@@ -73,7 +73,6 @@
                       android:textColor="@color/default_text_color"/>
         </FrameLayout>
 
-        <include layout="@layout/filter_list"/>
 
 
         <RelativeLayout
@@ -112,5 +111,9 @@
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="49dp"/>
         </RelativeLayout>
+
+        <include layout="@layout/filter_list"/>
+
+
     </FrameLayout>
 </LinearLayout>

@@ -88,6 +88,7 @@ public class MonitorFragment extends BaseFragment implements View.OnClickListene
     private boolean paramsGeted;
     private boolean isFirstProgressDialog = true;
     public static final long interval = 30000;
+    public static int[] colors;
     // filter item clicked
     private View.OnClickListener simpleListListener = new View.OnClickListener() {
         @Override
@@ -157,6 +158,19 @@ public class MonitorFragment extends BaseFragment implements View.OnClickListene
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        colors = new int[]{
+                Color.BLACK,
+                getResources().getColor(android.R.color.holo_red_light),
+                getResources().getColor(android.R.color.holo_blue_bright),
+                getResources().getColor(android.R.color.holo_orange_dark),
+                getResources().getColor(android.R.color.holo_green_dark),
+                getResources().getColor(android.R.color.holo_purple),
+                getResources().getColor(R.color.colorPrimaryDark),
+                Color.argb(255, random.nextInt(256), random.nextInt(256), random.nextInt(256))
+        };
+
+
+
         initToolBar(getView(), getArguments().getString("stationName"), false);
         stationId = getArguments().getString("stationId");
         cacheStation(stationId, getArguments().getString("stationName"));
@@ -215,7 +229,7 @@ public class MonitorFragment extends BaseFragment implements View.OnClickListene
             }
         });
 
-
+        getTypeTree(false);
 
 /**
  * 弹出窗口
@@ -227,6 +241,7 @@ public class MonitorFragment extends BaseFragment implements View.OnClickListene
         Button confirm = (Button) myPopupWindow.getContentView().findViewById(R.id.confirm);
         Button reset = (Button) myPopupWindow.getContentView().findViewById(R.id.reset);
         TextView pic = (TextView) myPopupWindow.getContentView().findViewById(R.id.pic);
+        pic.setVisibility(View.VISIBLE);
         pic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -276,8 +291,10 @@ public class MonitorFragment extends BaseFragment implements View.OnClickListene
         if (mTimer != null)
             mTimer.cancel();
 
+        int colorIndex = 0;
         for (SimpleItem simpleItem : mListLeft) {
-            simpleItem.setColor(Color.argb(255, random.nextInt(256), random.nextInt(256), random.nextInt(256)));
+            // COLOR
+            simpleItem.setColor(colors[colorIndex++ % colors.length]);
             simpleItem.setShouldGetDiffer(false);
         }
 
@@ -505,9 +522,18 @@ public class MonitorFragment extends BaseFragment implements View.OnClickListene
     }
 
     private void getTypeTree() {
+        getTypeTree(true);
+    }
+
+    private void getTypeTree(final boolean getLocation) {
+
+
         getMessage(getHttpService().getMonitorTypeTree(MyApplication.getMyApplication().getSharedPreference().getString("stationId", "")), new MySubscriber<List<MonitorTypeTree>>() {
             @Override
             protected void onMyNext(List<MonitorTypeTree> monitorTypeTrees) {
+
+                if (groupsOfFilterTree.size() != 0) groupsOfFilterTree.clear();
+
                 int i = 0;
 
                 for (MonitorTypeTree monitorTypeTree : monitorTypeTrees) {
@@ -521,6 +547,8 @@ public class MonitorFragment extends BaseFragment implements View.OnClickListene
                     groupsOfFilterTree.add(group);
                 }
                 filterTreeAdapter.notifyDataSetChanged();
+
+                if (!getLocation) return;
 
                 for (int j = 0; j < groupsOfFilterTree.size(); j++) {
                     for (int k = 0; k < groupsOfFilterTree.get(j).getList().size(); k++) {
@@ -537,12 +565,13 @@ public class MonitorFragment extends BaseFragment implements View.OnClickListene
 
     //首页点击修改主题
     public void changeMonitor(int position) {
+        if (groupsOfFilterTree != null && groupsOfFilterTree.size() == 0) return;
+
         for (FilterTreeAdapter.Group group : filterTreeAdapter.mGroups) {
             for (SimpleItem simpleItem : group.getList()) {
                 simpleItem.setChecked(false);
             }
         }
-        if (groupsOfFilterTree.size() == 0) return;
         if (groupsOfFilterTree.get(position).getList().size() > 0) {
             groupsOfFilterTree.get(position).getList().get(0).setChecked(true);
             getLocation(position, 0);

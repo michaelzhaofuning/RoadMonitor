@@ -87,6 +87,8 @@ public class DataAnalysisFragment extends BaseFragment {
 
         mChartsContainer = (LinearLayout) getView().findViewById(R.id.charts_container);
         mChartsContainer.getChildAt(0).findViewById(R.id.param_info).setVisibility(View.GONE);
+        LineChartView lineChartView = (LineChartView) mChartsContainer.getChildAt(0).findViewById(R.id.chart);
+        lineChartView.emptyHint = "请选择分析条件";
     }
 
     private void addToChart(List<RealTimeData> realTimeDatas, SimpleItem simpleItem, boolean isRight) {
@@ -126,8 +128,8 @@ public class DataAnalysisFragment extends BaseFragment {
         if (mChartsContainer.getChildAt(1) != null)
             mChartsContainer.removeView(mChartsContainer.getChildAt(1));
 
-        if (mChartsContainer.getChildAt(2) != null)
-            mChartsContainer.removeView(mChartsContainer.getChildAt(2));
+        if (mChartsContainer.getChildAt(1) != null)
+            mChartsContainer.removeView(mChartsContainer.getChildAt(1));
 
         final LineChartView lineChartView = (LineChartView) getView().findViewById(R.id.chart);
         lineChartView.getLines().clear();
