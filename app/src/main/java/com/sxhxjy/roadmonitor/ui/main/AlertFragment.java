@@ -311,6 +311,16 @@ public class AlertFragment extends BaseListFragment<AlertData> {
     }
 
     @Override
+    protected void onMyNext(List<AlertData> es) {
+        int num = 0;
+        for (AlertData alertData : es) {
+            if (alertData.getConfirmInfo() == null)
+                num++;
+        }
+        alertDrawable.setNum(num);
+    }
+
+    @Override
     protected String getCacheKey() {
         return null;
     }

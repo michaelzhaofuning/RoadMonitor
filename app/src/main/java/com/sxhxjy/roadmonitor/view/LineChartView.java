@@ -129,11 +129,13 @@ public class LineChartView extends View {
 
                 if (!isBeingTouched) {
                     if (++globalIndex % 2 == 0) { // reduce called times
-                        if (distanceX > 5)
-                            distanceX = 1;
-                        else if (distanceX < -5)
-                            distanceX = -1;
-                        else distanceX = 0;
+                        if (distanceX > 5) {
+                            distanceX = 1 * pointCount / 20;
+                            if (distanceX == 0) distanceX = 1;
+                        } else if (distanceX < -5) {
+                            distanceX = -1 * pointCount / 20;
+                            if (distanceX == 0) distanceX = -1;
+                        } else distanceX = 0;
 
                         offset = offset - (int) distanceX;
 //                        Log.e("test", "dx: " + distanceX + "offset:" + offset);
@@ -165,7 +167,7 @@ public class LineChartView extends View {
                     offset = 0;
                 if (offset > myLines.get(0).points.size() - pointCount) offset = myLines.get(0).points.size() - pointCount;
 
-                pointCount = (int) (pointCount + (1 - detector.getScaleFactor()) * 50);
+                pointCount = (int) (pointCount + (1 - detector.getScaleFactor()) * 55);
                 if (pointCount < 10) pointCount = 10;
                 if (pointCount > myLines.get(0).points.size()) pointCount = myLines.get(0).points.size();
                 Log.e("test", "p count: " + pointCount + "factor: " + detector.getScaleFactor());
@@ -217,6 +219,7 @@ public class LineChartView extends View {
             return;
         }
 
+        // translate AXIS
         canvas.translate(OFFSET + 10, getMeasuredHeight() - OFFSET - OFFSET_LEGEND);
 
 
@@ -226,6 +229,12 @@ public class LineChartView extends View {
         yEnd = -10000f;
 
         float sampleY = myLines.get(0).points.get(myLines.get(0).points.size() / 2).value;
+        if (sampleY > 10) {
+            int i = Math.round(sampleY);
+            yStart = i - 5;
+            yEnd = i + 5;
+        }
+
         if (sampleY < 10) {
             yStart = -10;
             yEnd = 10;
@@ -235,6 +244,7 @@ public class LineChartView extends View {
             yStart = -5;
             yEnd = 5;
         }
+
 
         for (MyLine line : myLines) {
             if (line.points.size() - offset - pointCount < 0) continue;
@@ -267,12 +277,14 @@ public class LineChartView extends View {
         mPaint.setStrokeCap(Paint.Cap.ROUND);
         mPaint.setStyle(Paint.Style.FILL_AND_STROKE);
 
-        float minDistance = getMeasuredWidth();
         MyPoint minPoint = null;
         float simpleMinX = 0;
         boolean isRight = false;
 
         for (MyLine line : myLines) {
+            float minDistance = getMeasuredWidth();
+            MyPoint minPointInLine = null;
+
             for (MyPoint myPoint : line.points) {
                 if (line.points.indexOf(myPoint) > line.points.size() - offset || line.points.indexOf(myPoint) < line.points.size() - offset - pointCount)
                     continue;
@@ -311,18 +323,34 @@ public class LineChartView extends View {
                 // calculate min
                 if (isBeingTouched) {
                     float d = Math.abs(touchedX - nextPointX);
-                    float dy = Math.abs(touchedY - nextPointX);
+
                     if (d < minDistance) {
                         minDistance = d;
-                        minPoint = myPoint;
+                        minPointInLine = myPoint;
                         if (mIsSimpleDraw) simpleMinX = nextPointX;
                     }
+                }
+            }
+
+            if (minPoint == null) {
+                minPoint = minPointInLine;
+            } else {
+                float dy = Math.abs(touchedY + (float) (((double) (minPoint.value - yStart)) / (yEnd - yStart) * yAxisLength));
+                float dy1 = 10000;
+                if (minPointInLine != null) {
+                    dy1 = Math.abs(touchedY + (float) (((double) (minPointInLine.value - yStart)) / (yEnd - yStart) * yAxisLength));
+                }
+                if (dy1 <= dy) {
+                    minPoint = minPointInLine;
                 }
             }
         }
 
         //       *RIGHT*
         for (MyLine line : myLinesRight) {
+            float minDistance = getMeasuredWidth();
+            MyPoint minPointInLine = null;
+
             for (MyPoint myPoint : line.points) {
                 if (line.points.indexOf(myPoint) > line.points.size() - offset || line.points.indexOf(myPoint) < line.points.size() - offset - pointCount)
                     continue;
@@ -357,9 +385,23 @@ public class LineChartView extends View {
                     float d = Math.abs(touchedX - nextPointX);
                     if (d < minDistance) {
                         minDistance = d;
-                        minPoint = myPoint;
-                        isRight = true;
+                        minPointInLine = myPoint;
+                        if (mIsSimpleDraw) simpleMinX = nextPointX;
                     }
+
+                }
+            }
+
+            if (minPoint == null) {
+                minPoint = minPointInLine;
+            } else {
+                float dy = Math.abs(touchedY + (float) (((double) (minPoint.value - yStart)) / (yEnd - yStart) * yAxisLength));
+                float dy1 = 10000;
+                if (minPointInLine != null) {
+                    dy1 = Math.abs(touchedY + (float) (((double) (minPointInLine.value - yStart)) / (yEnd - yStart) * yAxisLength));
+                }
+                if (dy1 <= dy) {
+                    minPoint = minPointInLine;
                 }
             }
         }
@@ -367,7 +409,7 @@ public class LineChartView extends View {
         // draw point info
         if (isBeingTouched && minPoint != null) {
             mPaint.setColor(getResources().getColor(R.color.colorPrimary));
-            mPaint.setStrokeWidth(14);
+            mPaint.setStrokeWidth(18);
             float x, y;
             if (!isRight) {
                 if (!mIsSimpleDraw)
@@ -413,7 +455,37 @@ public class LineChartView extends View {
         long xEndNew = 0;
         int drawBy = 0;
 
-        if ((xEnd - xStart) <= 1000 * 3600 * 48) { // draw hour
+        if ((xEnd - xStart) <= 1000 * 3600) { // draw minute
+            drawBy = 2;
+
+            date.setTime(xStart);
+            int startMinute = date.getMinutes();
+            date.setMinutes(startMinute / 10 * 10);
+            date.setSeconds(0);
+            xStartNew = date.getTime();
+            startMinute = date.getMinutes();
+
+            date.setTime(xEnd);
+            date.setMinutes((date.getMinutes() / 10 + 1) * 10);
+            date.setSeconds(0);
+            xEndNew = date.getTime();
+
+            xSplitTo = date.getMinutes() - startMinute;
+            int dx = date.getMinutes() - startMinute;
+
+            if (xSplitTo <= 0) {
+                xSplitTo = 60;
+                dx += 60;
+            }
+
+            if (xSplitTo > 10) {
+                xSplitTo = 5;
+                while (dx % xSplitTo != 0)
+                    xSplitTo++;
+            }
+
+
+        } else if ((xEnd - xStart) <= 1000 * 3600 * 48) { // draw hour
             date.setTime(xStart);
             date.setHours(date.getHours() + 1);
             int startHour = date.getHours();
@@ -429,9 +501,22 @@ public class LineChartView extends View {
 
             xSplitTo = date.getHours() - startHour;
             int dx = date.getHours() - startHour;
-            if (xSplitTo < 0) {
+            if (xSplitTo <= 0) {
                 xSplitTo += 24;
                 dx += 24;
+            }
+
+            int j = 2;
+            while (j < dx) {
+                if (dx % j == 0) {
+                    // not prime number, j < dx !
+                    break;
+                }
+                j++;
+            }
+            if (j == dx) {
+                // prime number
+                dx++;
             }
 
             if (xSplitTo > 10) {
@@ -439,9 +524,6 @@ public class LineChartView extends View {
                 while (dx % xSplitTo != 0)
                     xSplitTo++;
             }
-
-            if ((xEnd - xStart) <= 1000 * 3600)
-                xSplitTo = 1;
 
         } else  { // draw day
             drawBy = 1;
@@ -462,7 +544,7 @@ public class LineChartView extends View {
 
             xSplitTo = date.getDate() - startDay;
             int dx = date.getDate() - startDay;
-            if (xSplitTo < 0) {
+            if (xSplitTo <= 0) {
                 xSplitTo += 24;
                 dx += 24;
             }
@@ -488,8 +570,11 @@ public class LineChartView extends View {
             if (!mIsSimpleDraw) {
                 if (drawBy == 0)
                     canvas.drawText(date.getHours() + ": 00", xInView, OFFSET_SCALE * 4, mPaint);
-                else
+                else if (drawBy == 2) {
+                    canvas.drawText(date.getHours() + ":" + (date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes()), xInView, OFFSET_SCALE * 4, mPaint);
+                } else {
                     canvas.drawText((date.getMonth() + 1) + "-" + date.getDate(), xInView, OFFSET_SCALE * 4, mPaint);
+                }
             }
             mPaint.setStrokeWidth(2);
             canvas.drawLine(xInView, 0, xInView, -OFFSET_SCALE, mPaint);
@@ -628,10 +713,12 @@ public class LineChartView extends View {
                 }
                 getParent().requestDisallowInterceptTouchEvent(true);
                 touchedX = event.getX() - OFFSET - 10; // in canvas
+                touchedY = (event.getY() - OFFSET) - (getMeasuredHeight() - OFFSET - OFFSET_LEGEND); // in canvas
                 break;
 
             case MotionEvent.ACTION_MOVE:
                 touchedX = event.getX() - OFFSET - 10; // in canvas
+                touchedY = (event.getY() - OFFSET) - (getMeasuredHeight() - OFFSET - OFFSET_LEGEND); // in canvas
                 break;
 
             default:

@@ -1,5 +1,6 @@
 package com.sxhxjy.roadmonitor.ui.main;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
@@ -10,6 +11,7 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.DatePicker;
 import android.widget.LinearLayout;
 import android.widget.TimePicker;
@@ -58,6 +60,9 @@ public class AddDataContrastActivity extends BaseActivity {
     private String endTime;
     private Random random = new Random();
     public int startDay; //
+
+    private String stationId;
+    private MyLinearLayout station;
 
 
     @Override
@@ -118,8 +123,9 @@ public class AddDataContrastActivity extends BaseActivity {
     }
 
     public void monitorType(final View view) {
+        if (stationId == null) return;
         if (mTypeList.isEmpty()) {
-            getMessage(getHttpService().getMonitorTypeTree(MyApplication.getMyApplication().getSharedPreference().getString("stationId","")), new MySubscriber<List<MonitorTypeTree>>() {
+            getMessage(getHttpService().getMonitorTypeTree(stationId), new MySubscriber<List<MonitorTypeTree>>() {
                 @Override
                 protected void onMyNext(List<MonitorTypeTree> monitorTypeTrees) {
                     for (MonitorTypeTree monitorTypeTree : monitorTypeTrees) {
@@ -153,7 +159,7 @@ public class AddDataContrastActivity extends BaseActivity {
         } else {
             for (SimpleItem item :mTypeList) {
                 if (item.isChecked()) {
-                    getMessage(getHttpService().getPositions(item.getId(), MyApplication.getMyApplication().getSharedPreference().getString("stationId", "")), new MySubscriber<List<MonitorPosition>>() {
+                    getMessage(getHttpService().getPositions(item.getId(), stationId), new MySubscriber<List<MonitorPosition>>() {
                         @Override
                         protected void onMyNext(List<MonitorPosition> monitorPositions) {
                             aLocation = new String[monitorPositions.size()];
@@ -222,6 +228,39 @@ public class AddDataContrastActivity extends BaseActivity {
             }
         }).create().show();
     }
+
+    public void chooseStation(View view) {
+        station = (MyLinearLayout) view;
+        Intent intent = new Intent(this, StationListActivity.class);
+        startActivityForResult(intent, StationListActivity.REQUEST_CODE);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == StationListActivity.REQUEST_CODE && resultCode == Activity.RESULT_OK) {
+            stationId = data.getStringExtra("stationId");
+            station.setContent(data.getStringExtra("stationName"));
+            mTypeList.clear();
+            mLocationList.clear();
+            positionItems.clear();
+//            positionItemsCorrelation.clear();
+            ViewGroup v = (ViewGroup) findViewById(R.id.container);
+            for (int i = 0; i < v.getChildCount(); i++) {
+                if (v.getChildAt(i) instanceof MyLinearLayout) {
+                    MyLinearLayout linearLayout = (MyLinearLayout) v.getChildAt(i);
+                    if (linearLayout.getId() != R.id.station) {
+                        linearLayout.setContent("");
+                    }
+                }
+
+
+            }
+
+        }
+    }
+
+
 
     public void timeStart(View view) {
         chooseTime((MyLinearLayout) view);

@@ -60,13 +60,12 @@ import java.util.Random;
  */
 
 public class MonitorFragment extends BaseFragment implements View.OnClickListener {
-    public static MonitorFragment monitorFragment; // TODO
     /**
      * 检测项目fragment
      */
     public List<FilterTreeAdapter.Group> groupsOfFilterTree = new ArrayList<>();
     public MyCountDownTimer mTimer;
-    public ArrayList<RealTimeData> mRealTimes = new ArrayList<>();
+    public static ArrayList<RealTimeData> mRealTimes = new ArrayList<>();
     public int startDay; //
     private String stationId;
     private TextView mTextViewCenter;
@@ -148,13 +147,19 @@ public class MonitorFragment extends BaseFragment implements View.OnClickListene
     }
 
     @Override
+    protected void loadOnce() {
+        super.loadOnce();
+        // * entrance *
+        if (groupsOfFilterTree.isEmpty()) getTypeTree(); // getTypeTree
+    }
+
+    @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         initToolBar(getView(), getArguments().getString("stationName"), false);
         stationId = getArguments().getString("stationId");
         cacheStation(stationId, getArguments().getString("stationName"));
 
-        monitorFragment = this; // *static*
 
         mTextViewCenter = (TextView) getView().findViewById(R.id.toolbar_title);
         mImageViewLeft = (ImageView) getView().findViewById(R.id.toolbar_left);
@@ -209,7 +214,7 @@ public class MonitorFragment extends BaseFragment implements View.OnClickListene
             }
         });
 
-        if (groupsOfFilterTree.isEmpty()) getTypeTree(); // getTypeTree
+
 
 /**
  * 弹出窗口
@@ -219,7 +224,9 @@ public class MonitorFragment extends BaseFragment implements View.OnClickListene
 
         ExpandableListView expandableListView = (ExpandableListView) myPopupWindow.getContentView().findViewById(R.id.expandable_list_view);
         Button confirm = (Button) myPopupWindow.getContentView().findViewById(R.id.confirm);
+        Button reset = (Button) myPopupWindow.getContentView().findViewById(R.id.reset);
         confirm.setVisibility(View.GONE);
+        reset.setVisibility(View.GONE);
 
         filterTreeAdapter = new FilterTreeAdapter(groupsOfFilterTree);
         expandableListView.setAdapter(filterTreeAdapter);
@@ -314,6 +321,7 @@ public class MonitorFragment extends BaseFragment implements View.OnClickListene
                                 super.onStart();
                                 if (progressDialog == null && isFirstProgressDialog && getActivity() != null) {
                                     progressDialog = new ProgressDialog(getActivity());
+                                    progressDialog.setCanceledOnTouchOutside(false);
                                     progressDialog.setMessage("正在获取数据...");
                                     progressDialog.show();
                                     isFirstProgressDialog = false;
@@ -413,6 +421,11 @@ public class MonitorFragment extends BaseFragment implements View.OnClickListene
                                 if (!paramsGeted) {
                                     paramsGeted = true;
                                     getParamInfo();
+                                }
+
+                                if (progressDialog != null) {
+                                    progressDialog.dismiss();
+                                    progressDialog = null;
                                 }
 
                                 // error occurred,

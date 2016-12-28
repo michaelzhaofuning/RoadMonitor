@@ -1,6 +1,7 @@
 package com.sxhxjy.roadmonitor.adapter;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,7 +30,10 @@ public class HomelistAdapter extends BaseAdapter {
         this.context=context;
         this.list=list;
         this.resource=resource;
-        inflater=(LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        if (context == null) {
+            Log.e("@@@@@@@@@@@@@@@@@@@", "!!!!!!!!!!!");
+        }
+        inflater=LayoutInflater.from(context);
     }
     @Override
     //获取集合大小

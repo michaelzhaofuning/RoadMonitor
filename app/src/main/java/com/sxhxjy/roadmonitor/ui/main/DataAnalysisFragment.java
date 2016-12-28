@@ -120,6 +120,8 @@ public class DataAnalysisFragment extends BaseFragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, final Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode != Activity.RESULT_OK)
+            return; // do nothing
 
         if (mChartsContainer.getChildAt(1) != null)
             mChartsContainer.removeView(mChartsContainer.getChildAt(1));

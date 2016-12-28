@@ -73,7 +73,7 @@ public class HomeFragment extends BaseFragment{
             for (LoginData.UserGroupsBean groupsBean : loginData.getUserGroups()) {
                 LatLng latLng = new LatLng(groupsBean.getLatitude(), groupsBean.getLongitude());
                 tencentMap.setCenter(latLng);
-                tencentMap.setZoom(7);
+                tencentMap.setZoom(12);
                 Marker marker = tencentMap.addMarker(new MarkerOptions()
                         .position(latLng)
                         .title(groupsBean.getName())
