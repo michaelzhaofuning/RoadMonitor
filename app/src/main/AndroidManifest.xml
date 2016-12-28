@@ -43,6 +43,10 @@
         <activity android:name=".ui.main.AlertDetailActivity"/>
         <activity android:name=".ui.main.RegisterActivity"/>
         <activity android:name=".ui.main.LookStateActivity"/>
+        <activity android:name=".ui.main.picture.TakeNotesActivity"/>
+        <activity android:name=".ui.main.picture.NewPic_Activity"/>
+        <activity android:name=".ui.main.picture.PhotoViewActivity"/>
+        <activity android:name=".ui.main.picture.ChartActivity"/>
         <activity android:name=".ui.main.ChartFullscreenActivity"
             android:screenOrientation="landscape"
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen">

@@ -24,6 +24,7 @@ import com.sxhxjy.roadmonitor.base.BaseActivity;
 import com.sxhxjy.roadmonitor.base.CacheManager;
 import com.sxhxjy.roadmonitor.base.MyApplication;
 import com.sxhxjy.roadmonitor.base.UpdateUtil;
+import com.sxhxjy.roadmonitor.ui.main.picture.TakeNotesActivity;
 import com.sxhxjy.roadmonitor.util.ActivityUtil;
 import com.sxhxjy.roadmonitor.util.MyCountDownTimer;
 import com.sxhxjy.roadmonitor.view.MyLinearLayout;
@@ -288,6 +289,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,
     }
     public void look_state(View view) {
         ActivityUtil.startActivityForResult(this, LookStateActivity.class);
+    }
+    public void pic(View view) {
+        ActivityUtil.startActivityForResult(this, TakeNotesActivity.class);
     }
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {

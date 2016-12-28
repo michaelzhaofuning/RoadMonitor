@@ -39,4 +39,6 @@ dependencies {
     compile 'com.android.support.constraint:constraint-layout:1.0.0-alpha7'
     compile files('libs/TencentMapSDK_Raster_v1.2.4_4af1d6f.jar')
 //    compile 'com.loopj.android:android-async-http:1.4.9'
+    compile 'com.squareup.picasso:picasso:2.5.2'
+    compile 'com.github.PhilJay:MPAndroidChart:v2.2.4'
 }

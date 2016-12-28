@@ -246,4 +246,20 @@ public class DateUtil {
 		return sdf.format(d);
 	}
 
+
+
+
+
+
+
+	public static String getdouble(double dou){
+		String dous=dou+"000000";
+		String s="";
+		char[] chars = dous.toCharArray();
+		for (int i=0;i<4;i++){
+			s=s+chars[i];
+		}
+		return s;
+	}
+
 }
