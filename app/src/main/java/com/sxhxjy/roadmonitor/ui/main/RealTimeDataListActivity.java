@@ -115,8 +115,8 @@ public class RealTimeDataListActivity extends BaseActivity {
             //set集合保存的是引用不同地址的对象
             Set<String> ts = new HashSet<>();
             List<String> slist=new ArrayList<>();
-            for (RealTimeData rd:MonitorFragment.monitorFragment.mRealTimes){
-                if (rd.getCode().equals(MonitorFragment.monitorFragment.mRealTimes.get(0).getCode())){
+            for (RealTimeData rd:MonitorFragment.mRealTimes){
+                if (rd.getCode().equals(MonitorFragment.mRealTimes.get(0).getCode())){
                     rdlist.add(rd);
                 }
                 if (!rd.getCode().equals("")&&rd.getCode()!=null){
@@ -230,9 +230,9 @@ public class RealTimeDataListActivity extends BaseActivity {
                             if (s.isChecked()) {
                                 String title=s.getTitle();
                                 rdlist.clear();
-                                for (int i=0;i<MonitorFragment.monitorFragment.mRealTimes.size();i++){
-                                    if (title.equals(MonitorFragment.monitorFragment.mRealTimes.get(i).getCode())){
-                                        rdlist.add(MonitorFragment.monitorFragment.mRealTimes.get(i));
+                                for (int i=0;i<MonitorFragment.mRealTimes.size();i++){
+                                    if (title.equals(MonitorFragment.mRealTimes.get(i).getCode())){
+                                        rdlist.add(MonitorFragment.mRealTimes.get(i));
                                     }
                                 }
                             }
