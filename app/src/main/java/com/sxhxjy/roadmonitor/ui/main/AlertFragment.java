@@ -172,6 +172,7 @@ public class AlertFragment extends BaseListFragment<AlertData> {
         mFilterList.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_DOWN)
                 mFilterList.setVisibility(View.GONE);
                 return false;
             }
@@ -298,6 +299,10 @@ public class AlertFragment extends BaseListFragment<AlertData> {
                     }
                 }
                 filterTreeAdapter.notifyDataSetChanged();
+                // clear state
+                state = null;
+                level = null;
+                cStype = null;
 
             }
         });

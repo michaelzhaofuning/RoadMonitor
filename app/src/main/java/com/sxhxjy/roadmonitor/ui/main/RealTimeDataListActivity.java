@@ -160,9 +160,9 @@ public class RealTimeDataListActivity extends BaseActivity {
                 new DatePickerDialog(getActivity(), new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                        sb.append(String.format("%d-%d-%d",year,
-                                (monthOfYear+1 < 10 ? "0" + monthOfYear+1 : monthOfYear+1),
-                                (dayOfMonth < 10 ? "0" + dayOfMonth : dayOfMonth)));
+                        sb.append(String.format("%s-%s-%s",year+"",
+                                (monthOfYear+1 < 10 ? "0" + monthOfYear+1 : monthOfYear+1+""),
+                                (dayOfMonth < 10 ? "0" + dayOfMonth : dayOfMonth+"")));
 
                         new TimePickerDialog(getActivity(), new TimePickerDialog.OnTimeSetListener() {
                             @Override
@@ -170,12 +170,15 @@ public class RealTimeDataListActivity extends BaseActivity {
                                 sb.append(" "+ (hourOfDay < 10 ? "0" + hourOfDay : hourOfDay)+":"+(minute < 10 ? "0" + minute : minute));
                                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm");
                                 try {
+
                                     long millionSeconds = sdf.parse(sb.toString()).getTime();//毫秒
                                     long time =mList.get(0).getSaveTime();
+
                                     if (millionSeconds>=time) return;
                                 for (int i=1;i<mList.size();i++){
                                     if (millionSeconds>=mList.get(i).getSaveTime()){
-                                        mRecyclerView.scrollToPosition(i);
+                                        Log.e("test",  ""+mList.size() + "   " + mRecyclerView.getAdapter().getItemCount());
+                                        linearLayoutManager.scrollToPositionWithOffset(i-1, 0);
                                         break;
                                     }
                                 }
@@ -199,13 +202,14 @@ public class RealTimeDataListActivity extends BaseActivity {
                     }
                     timeCode = null;
                     mAdapter.notifyDataSetChanged();
-                    onRefresh();
+                    linearLayoutManager.scrollToPositionWithOffset(0, 0);
                 }
             });
             mFilterList = (RecyclerView) getView().findViewById(R.id.filter_list);
             mFilterList.setOnTouchListener(new View.OnTouchListener() {
                 @Override
                 public boolean onTouch(View v, MotionEvent event) {
+                    if (event.getAction() == MotionEvent.ACTION_DOWN)
                     mFilterList.setVisibility(View.GONE);
                     return false;
                 }

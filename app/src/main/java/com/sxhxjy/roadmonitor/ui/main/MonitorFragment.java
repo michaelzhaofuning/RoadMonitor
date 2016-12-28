@@ -87,7 +87,6 @@ public class MonitorFragment extends BaseFragment implements View.OnClickListene
     private boolean paramsGeted;
     private boolean isFirstProgressDialog = true;
     public static final long interval = 30000;
-    private int test = 0;
     // filter item clicked
     private View.OnClickListener simpleListListener = new View.OnClickListener() {
         @Override
@@ -230,14 +229,11 @@ public class MonitorFragment extends BaseFragment implements View.OnClickListene
         pic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // TODO
-                Log.e("test", "0 or 1"+test);
 
 //                ActivityUtil.startActivityForResult(getActivity(), RealTimeDataListActivity.class);
             }
         });
-        test = 1;
-        Log.e("test", ""+test);
+
 
         confirm.setVisibility(View.GONE);
         reset.setVisibility(View.GONE);
@@ -545,6 +541,7 @@ public class MonitorFragment extends BaseFragment implements View.OnClickListene
                 simpleItem.setChecked(false);
             }
         }
+        if (groupsOfFilterTree.size() == 0) return;
         if (groupsOfFilterTree.get(position).getList().size() > 0) {
             groupsOfFilterTree.get(position).getList().get(0).setChecked(true);
             getLocation(position, 0);
