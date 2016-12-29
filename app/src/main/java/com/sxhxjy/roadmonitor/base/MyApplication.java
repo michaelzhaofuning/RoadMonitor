@@ -34,14 +34,16 @@ public class MyApplication extends Application {
     public static final int PORT = 8000;
 
     //    private static final String ADDRESS = "192.168.1.172";
-    public static final String ADDRESS = "124.163.206.250";
-//    public static final String ADDRESS = "124.163.206.251";
+
+//    public static final String ADDRESS = "124.163.206.250";
+    public static final String ADDRESS = "124.163.206.251";
 
 
-    public static String BASE_IP = "124.163.206.250:8080";
+//    public static String BASE_IP = "124.163.206.250:8080";
+    public static String BASE_IP = "124.163.206.251:8088";
+
     public static String BASE_URL = "http://"+ BASE_IP + "/ClearPro/web/";
 
-//    public static String BASE_IP = "124.163.206.251:8088";
 //    public static String BASE_URL = "http://"+ BASE_IP + "/AirDefencePro/web/";
 
     public static String BASE_URL_Img = "http://"+ BASE_IP+"/";

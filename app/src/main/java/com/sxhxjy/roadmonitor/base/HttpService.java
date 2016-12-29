@@ -75,7 +75,7 @@ public interface HttpService {
     @GET("userGroup/userGroupTreeList")
     Observable<HttpResponse<List<GroupTree>>> getGroups(@Query("gid") String gid);
 
-    @GET("user/appLogin")
+    @GET("webuser/appLogin")
     Observable<HttpResponse<LoginData>> login(@Query("account") String username, @Query("password") String password);
 
     @GET("sensorData/dataList")

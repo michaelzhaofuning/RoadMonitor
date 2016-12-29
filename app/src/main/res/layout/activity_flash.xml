@@ -6,7 +6,7 @@
 
     <ImageView
         android:layout_width="match_parent"
-        android:src="@mipmap/flash"
+        android:src="@mipmap/rf_flash"
         android:scaleType="centerCrop"
         android:layout_height="match_parent" />
 </RelativeLayout>
