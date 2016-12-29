@@ -38,11 +38,11 @@ public class MyApplication extends Application {
 //    public static final String ADDRESS = "124.163.206.251";
 
 
-//    public static String BASE_IP = "124.163.206.250:8080";
-//    public static String BASE_URL = "http://"+ BASE_IP + "/ClearPro/web/";
+    public static String BASE_IP = "124.163.206.250:8080";
+    public static String BASE_URL = "http://"+ BASE_IP + "/ClearPro/web/";
 
-    public static String BASE_IP = "124.163.206.251:8088";
-    public static String BASE_URL = "http://"+ BASE_IP + "/AirDefencePro/web/";
+//    public static String BASE_IP = "124.163.206.251:8088";
+//    public static String BASE_URL = "http://"+ BASE_IP + "/AirDefencePro/web/";
 
     public static String BASE_URL_Img = "http://"+ BASE_IP+"/";
 //    public static final String BASE_URL = "http://192.168.1.172:8088/ClearPro/web/";
