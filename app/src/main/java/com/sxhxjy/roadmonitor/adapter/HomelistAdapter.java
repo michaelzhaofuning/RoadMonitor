@@ -71,7 +71,10 @@ public class HomelistAdapter extends BaseAdapter {
         }else{
             vh=(ViewHolder)convertView.getTag();
         }
-        HomeTheme.DataBean map=list.get(position);//得到列表中某一项的对象
+        HomeTheme.DataBean map=list.get(position);
+        if (position==0)
+            vh.name.setText(map.getName());
+        else
         vh.name.setText(map.getName()+"\n\n优");
         return convertView;
     }

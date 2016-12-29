@@ -32,6 +32,39 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/ntv1"
+                android:text="测试点1"
+                android:textColor="#b6b4b4"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+            <TextView
+                android:id="@+id/ntv2"
+                android:text="测试点2"
+                android:textColor="#b6b4b4"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+            <TextView
+                android:id="@+id/ntv3"
+                android:text="测试点3"
+                android:textColor="#b6b4b4"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+            <TextView
+                android:id="@+id/ntv4"
+                android:text="测试点4"
+                android:textColor="#b6b4b4"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
             <TextView
                 android:id="@+id/ntv5"
                 android:text="时间"
@@ -42,35 +75,6 @@
                 android:layout_marginRight="10dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
-            <TextView
-                android:id="@+id/ntv1"
-                android:text="测试点1"
-                android:layout_weight="1"
-                android:gravity="center_vertical"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-            <TextView
-                android:id="@+id/ntv2"
-                android:text="测试点2"
-                android:layout_weight="1"
-                android:gravity="center_vertical"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-            <TextView
-                android:id="@+id/ntv3"
-                android:text="测试点3"
-                android:layout_weight="1"
-                android:gravity="center_vertical"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-            <TextView
-                android:id="@+id/ntv4"
-                android:text="测试点4"
-                android:layout_weight="1"
-                android:gravity="center_vertical"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-
 
         </LinearLayout>
     </LinearLayout>

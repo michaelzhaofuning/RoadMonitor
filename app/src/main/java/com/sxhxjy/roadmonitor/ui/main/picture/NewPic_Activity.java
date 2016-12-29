@@ -2,7 +2,11 @@ package com.sxhxjy.roadmonitor.ui.main.picture;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.text.Spannable;
+import android.text.SpannableStringBuilder;
+import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -106,22 +110,19 @@ public class NewPic_Activity extends BaseActivity {
             RecordResult.DataBean.ContentBean.NewPicListBean np=list.get(i);
             String PicUrl=(MyApplication.BASE_URL_Img+np.getComPicPathPress()).replace("\\", "/");
             Picassos.getImg(NewPic_Activity.this,PicUrl,newvh.niv);
-            newvh.ntv1.setText("点1增量: "+Picassos.getdouble(np.getX1Change())+",  "+Picassos.getdouble(np.getY1Change()));
-            newvh.ntv2.setText("点2增量: "+Picassos.getdouble(np.getX2Change())+",  "+Picassos.getdouble(np.getY2Change()));
-            newvh.ntv3.setText("点3增量: "+Picassos.getdouble(np.getX3Change())+",  "+Picassos.getdouble(np.getY3Change()));
-            newvh.ntv4.setText("点4增量: "+Picassos.getdouble(np.getX4Change())+",  "+Picassos.getdouble(np.getY4Change()));
-            Log.i("aaaaaaaaaaaaaaa","时间:"+np.getSaveTime()+"");
+            newvh.ntv1.setText(Picassos.getXY(np.getX1Change(),np.getY1Change(),1));
+            newvh.ntv2.setText(Picassos.getXY(np.getX2Change(),np.getY2Change(),2));
+            newvh.ntv3.setText(Picassos.getXY(np.getX3Change(),np.getY3Change(),3));
+            newvh.ntv4.setText(Picassos.getXY(np.getX4Change(),np.getY4Change(),4));
 //坐标
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.CHINA);
             long time = np.getSaveTime();
-            newvh.ntv5.setText("时间:"+sdf.format(new Date(time)));
+            newvh.ntv5.setText(""+sdf.format(new Date(time)));
             return view;
         }
         class NewPicViewHolder{
             TextView ntv1,ntv2,ntv3,ntv4,ntv5;
             ImageView niv;
         }
-
-
     }
 }
