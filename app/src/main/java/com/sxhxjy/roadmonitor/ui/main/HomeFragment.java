@@ -96,11 +96,14 @@ public class HomeFragment extends BaseFragment{
 //                Toast.makeText(getActivity(),"请求失败",Toast.LENGTH_SHORT).show();
             }
             @Override
-            public void onResponse(Call call, Response response) throws IOException {
+            public void onResponse(Call call, final Response response) throws IOException {
                 final String result=response.body().string();//拿到json数据
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+
+                        if (response.code() != 200) return;
+
                         json(result);
                         Log.i("oooooooooo",result);
                     }

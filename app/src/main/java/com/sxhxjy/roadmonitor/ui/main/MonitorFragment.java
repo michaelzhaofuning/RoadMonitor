@@ -152,7 +152,7 @@ public class MonitorFragment extends BaseFragment implements View.OnClickListene
     protected void loadOnce() {
         super.loadOnce();
         // * entrance *
-        if (groupsOfFilterTree.isEmpty()) getTypeTree(); // getTypeTree
+        getTypeTree(); // getTypeTree
     }
 
     @Override

@@ -256,6 +256,7 @@ public class RealTimeDataListActivity extends BaseActivity {
 
 
         public void getlist(){
+            rdlist.clear();
             for (RealTimeData rd:MonitorFragment.mRealTimes){
                 if (rd.getCode().equals(MonitorFragment.mRealTimes.get(0).getCode())){
                     rdlist.add(rd);
