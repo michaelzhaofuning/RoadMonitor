@@ -1,5 +1,6 @@
 package com.sxhxjy.roadmonitor.ui.main;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
@@ -17,6 +18,7 @@ import com.sxhxjy.roadmonitor.base.CacheManager;
 import com.sxhxjy.roadmonitor.base.MyApplication;
 import com.sxhxjy.roadmonitor.entity.HomeTheme;
 import com.sxhxjy.roadmonitor.entity.LoginData;
+import com.sxhxjy.roadmonitor.ui.main.picture.TakeNotesActivity;
 import com.sxhxjy.roadmonitor.view.HorizontalListView;
 import com.tencent.mapsdk.raster.model.BitmapDescriptorFactory;
 import com.tencent.mapsdk.raster.model.LatLng;
@@ -108,15 +110,25 @@ public class HomeFragment extends BaseFragment{
     }
     public void json(String s){
         final HomeTheme theme= JSON.parseObject(s,HomeTheme.class);
-        List<HomeTheme.DataBean> list=theme.getData();
+        List<HomeTheme.DataBean> list=new ArrayList<>();
+        HomeTheme.DataBean hd=new HomeTheme.DataBean();
+        hd.setName("图片比对");
+        list.add(hd);
+        for (HomeTheme.DataBean hds:theme.getData()){
+            list.add(hds);
+        }
         Log.i("aaaaaa",list.size()+"");
             HomelistAdapter adapter=new HomelistAdapter(getActivity(),list,R.layout.home_list_item);
             lv_home.setAdapter(adapter);
             lv_home.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    ((MonitorFragment) ((MainActivity)getActivity()).fragments.get(1)).changeMonitor(position);
+                    if (position==0){
+                        startActivity(new Intent(getActivity(), TakeNotesActivity.class));
+                    } else{
+                    ((MonitorFragment) ((MainActivity)getActivity()).fragments.get(1)).changeMonitor(position-1);
                     ((MainActivity)getActivity()).selectedBar(1);
+                    }
                 }
             });
     }

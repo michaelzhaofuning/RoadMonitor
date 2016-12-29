@@ -79,8 +79,9 @@ public class RealTimeDataListActivity extends BaseActivity {
         private TextView mFilterTitleLeft, mFilterTitleRight,mFilterTitledefault;//等级列表标题，时间列表标题
         private RecyclerView mFilterList;//下拉列表控件
         private String  timeCode;
-        private ArrayList<RealTimeData> rdlist;
-
+        private ArrayList<RealTimeData> rdlist=new ArrayList<>();
+        private Set<String> ts =new HashSet<>();
+        private List<String> slist=new ArrayList<>();
         @Override
         public Observable<HttpResponse<List<RealTimeData>>> getObservable() {
             mAdapter.notifyDataSetChanged();
@@ -101,8 +102,10 @@ public class RealTimeDataListActivity extends BaseActivity {
             countDownTimer = new CountDownTimer(9999999999L, MonitorFragment.interval) {
                 @Override
                 public void onTick(long millisUntilFinished) {
-                    if (mAdapter != null)
+                    if (mAdapter != null) {
+                        getlist();
                         mAdapter.notifyDataSetChanged();
+                    }
                 }
 
                 @Override
@@ -111,21 +114,7 @@ public class RealTimeDataListActivity extends BaseActivity {
                 }
             };
 
-            rdlist=new ArrayList<>();
-            //set集合保存的是引用不同地址的对象
-            Set<String> ts = new HashSet<>();
-            List<String> slist=new ArrayList<>();
-            for (RealTimeData rd:MonitorFragment.mRealTimes){
-                if (rd.getCode().equals(MonitorFragment.mRealTimes.get(0).getCode())){
-                    rdlist.add(rd);
-                }
-                if (!rd.getCode().equals("")&&rd.getCode()!=null){
-                    if(ts.add(rd.getCode())){
-                        slist.add(rd.getName() + "   " + rd.getCode());
-                    }
-                    }
-            }
-            mList = rdlist;
+            getlist();
             countDownTimer.start();
 
             getActivity().getLayoutInflater().inflate(R.layout.filter_title_alert, mAboveList);
@@ -155,6 +144,7 @@ public class RealTimeDataListActivity extends BaseActivity {
             mFilterTitleRight.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    if (mList.size()==0)return;
                     final StringBuilder sb = new StringBuilder();
                     final Date date = new Date(System.currentTimeMillis());
                 new DatePickerDialog(getActivity(), new DatePickerDialog.OnDateSetListener() {
@@ -259,6 +249,24 @@ public class RealTimeDataListActivity extends BaseActivity {
         @Override
         protected RecyclerView.Adapter getAdapter() {
             return new RealTimeDataListAdapter(this, mList);
+        }
+
+
+
+
+
+        public void getlist(){
+            for (RealTimeData rd:MonitorFragment.mRealTimes){
+                if (rd.getCode().equals(MonitorFragment.mRealTimes.get(0).getCode())){
+                    rdlist.add(rd);
+                }
+                if (!rd.getCode().equals("")&&rd.getCode()!=null){
+                    if(ts.add(rd.getCode())){
+                        slist.add(rd.getName() + "   " + rd.getCode());
+                    }
+                }
+            }
+            mList = rdlist;
         }
     }
 
