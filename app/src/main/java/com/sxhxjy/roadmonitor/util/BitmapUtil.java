@@ -2,12 +2,7 @@ package com.sxhxjy.roadmonitor.util;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.util.Log;
 import android.widget.ImageView;
-
-
-
-import java.io.*;
 
 /**
  * Utility of Bitmap, You should work with ImageLoader.

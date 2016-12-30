@@ -1,9 +1,5 @@
 package com.sxhxjy.roadmonitor.base;
 
-import com.sxhxjy.roadmonitor.entity.Data;
-
-import java.util.List;
-
 /**
  * 2016/9/13
  *

@@ -7,7 +7,6 @@ import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.os.CountDownTimer;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -383,6 +382,8 @@ public class MonitorFragment extends BaseFragment implements View.OnClickListene
 
                                     ((TextView) mChartsContainer.getChildAt(0).findViewById(R.id.min)).setText(complexData.getXmin() + "");
                                     ((TextView) mChartsContainer.getChildAt(0).findViewById(R.id.max)).setText(complexData.getXmax() + "");
+                                    ((TextView) mChartsContainer.getChildAt(0).findViewById(R.id.position)).setText(complexData.getContent().get(0).getName() + "");
+
                                 }
 
 
@@ -408,6 +409,7 @@ public class MonitorFragment extends BaseFragment implements View.OnClickListene
 
                                         ((TextView) mChartsContainer.getChildAt(1).findViewById(R.id.min)).setText(complexData.getYmin() + "");
                                         ((TextView) mChartsContainer.getChildAt(1).findViewById(R.id.max)).setText(complexData.getYmax() + "");
+                                        ((TextView) mChartsContainer.getChildAt(1).findViewById(R.id.position)).setText(complexData.getContent().get(0).getName() + "");
                                     }
 
                                 }
@@ -433,6 +435,8 @@ public class MonitorFragment extends BaseFragment implements View.OnClickListene
 
                                         ((TextView) mChartsContainer.getChildAt(2).findViewById(R.id.min)).setText(complexData.getZmin() + "");
                                         ((TextView) mChartsContainer.getChildAt(2).findViewById(R.id.max)).setText(complexData.getZmax() + "");
+                                        ((TextView) mChartsContainer.getChildAt(2).findViewById(R.id.position)).setText(complexData.getContent().get(0).getName() + "");
+
                                     }
                                 }
 
@@ -587,7 +591,7 @@ public class MonitorFragment extends BaseFragment implements View.OnClickListene
 
                 if (mChartsContainer.getChildAt(0) != null) {
                     View view = mChartsContainer.getChildAt(0);
-                    ((TextView) view.findViewById(R.id.position)).setText(paramInfo.getCode());
+                    ((TextView) view.findViewById(R.id.position)).setText(paramInfo.getName());
 
                     ((TextView) view.findViewById(R.id.threshold1)).setText(paramInfo.getxOneThreshold());
                     ((TextView) view.findViewById(R.id.threshold2)).setText(paramInfo.getxTwoThreshold());
@@ -597,7 +601,7 @@ public class MonitorFragment extends BaseFragment implements View.OnClickListene
 
                 if (mChartsContainer.getChildAt(1) != null) {
                     View view = mChartsContainer.getChildAt(1);
-                    ((TextView) view.findViewById(R.id.position)).setText(paramInfo.getCode());
+                    ((TextView) view.findViewById(R.id.position)).setText(paramInfo.getName());
 //                    ((TextView) view.findViewById(R.id.min)).setText(paramInfo.getYmin() + "");
 //                    ((TextView) view.findViewById(R.id.max)).setText(paramInfo.getYmax() + "");
                     ((TextView) view.findViewById(R.id.threshold1)).setText(paramInfo.getyOneThreshold());
@@ -608,7 +612,7 @@ public class MonitorFragment extends BaseFragment implements View.OnClickListene
 
                 if (mChartsContainer.getChildAt(2) != null) {
                     View view = mChartsContainer.getChildAt(2);
-                    ((TextView) view.findViewById(R.id.position)).setText(paramInfo.getCode());
+                    ((TextView) view.findViewById(R.id.position)).setText(paramInfo.getName());
 //                    ((TextView) view.findViewById(R.id.min)).setText(paramInfo.getZmin() + "");
 //                    ((TextView) view.findViewById(R.id.max)).setText(paramInfo.getZmax() + "");
                     ((TextView) view.findViewById(R.id.threshold1)).setText(paramInfo.getzOneThreshold());

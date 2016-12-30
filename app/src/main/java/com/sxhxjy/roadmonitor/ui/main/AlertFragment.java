@@ -1,6 +1,5 @@
 package com.sxhxjy.roadmonitor.ui.main;
 
-import android.graphics.drawable.Drawable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;

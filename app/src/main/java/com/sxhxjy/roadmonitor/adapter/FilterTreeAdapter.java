@@ -11,7 +11,6 @@ import android.widget.TextView;
 import com.sxhxjy.roadmonitor.R;
 import com.sxhxjy.roadmonitor.entity.SimpleItem;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**

@@ -1,38 +1,32 @@
 package com.sxhxjy.roadmonitor.ui.main;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Fragment;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.CountDownTimer;
 import android.support.v13.app.FragmentPagerAdapter;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.sxhxjy.roadmonitor.R;
 import com.sxhxjy.roadmonitor.base.BaseActivity;
 import com.sxhxjy.roadmonitor.base.CacheManager;
 import com.sxhxjy.roadmonitor.base.MyApplication;
+import com.sxhxjy.roadmonitor.base.Test;
 import com.sxhxjy.roadmonitor.base.UpdateUtil;
-import com.sxhxjy.roadmonitor.ui.main.picture.TakeNotesActivity;
 import com.sxhxjy.roadmonitor.util.ActivityUtil;
 import com.sxhxjy.roadmonitor.util.MyCountDownTimer;
 import com.sxhxjy.roadmonitor.view.MyLinearLayout;
-import com.sxhxjy.roadmonitor.view.NumDrawable;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Timer;
 
 // wifi :     hxjy_jszx&
 /**
@@ -71,6 +65,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_activity);
+        Test.t();
         UpdateUtil.update(this, MyApplication.BASE_URL + "user/changeVersion");
 
         String stationName = getIntent().getStringExtra("stationName");

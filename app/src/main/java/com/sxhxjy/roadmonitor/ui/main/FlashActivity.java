@@ -8,7 +8,6 @@ import android.view.View;
 
 import com.sxhxjy.roadmonitor.R;
 import com.sxhxjy.roadmonitor.base.CacheManager;
-import com.sxhxjy.roadmonitor.base.UserManager;
 import com.sxhxjy.roadmonitor.util.ActivityUtil;
 
 import java.util.Timer;

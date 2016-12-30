@@ -13,9 +13,7 @@ import android.widget.TextView;
 import com.sxhxjy.roadmonitor.R;
 import com.sxhxjy.roadmonitor.entity.HomeTheme;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by zm on 2016/10/31.

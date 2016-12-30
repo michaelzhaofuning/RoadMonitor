@@ -1,18 +1,12 @@
 package com.sxhxjy.roadmonitor.ui.main;
 
 import android.app.Activity;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.view.View;
-import android.widget.FrameLayout;
 import android.widget.Toast;
 
 import com.sxhxjy.roadmonitor.R;
-import com.sxhxjy.roadmonitor.base.BaseActivity;
 import com.sxhxjy.roadmonitor.view.LineChartView;
-
-import java.util.ArrayList;
 
 /**
  * 2016/11/2

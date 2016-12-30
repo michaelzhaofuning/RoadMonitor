@@ -4,19 +4,13 @@ import android.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
-import android.widget.FrameLayout;
 
 import com.sxhxjy.roadmonitor.R;
 import com.sxhxjy.roadmonitor.adapter.AlertDetailListAdapter;
-import com.sxhxjy.roadmonitor.adapter.AlertListAdapter;
-import com.sxhxjy.roadmonitor.adapter.RealTimeDataListAdapter;
 import com.sxhxjy.roadmonitor.base.BaseActivity;
 import com.sxhxjy.roadmonitor.base.BaseListFragment;
 import com.sxhxjy.roadmonitor.base.HttpResponse;
-import com.sxhxjy.roadmonitor.base.MyApplication;
-import com.sxhxjy.roadmonitor.base.UserManager;
 import com.sxhxjy.roadmonitor.entity.AlertData;
-import com.sxhxjy.roadmonitor.entity.RealTimeData;
 
 import java.util.List;
 

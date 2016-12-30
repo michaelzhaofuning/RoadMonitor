@@ -23,31 +23,31 @@
         android:icon="@mipmap/rf_logo"
         android:label="@string/rf_app_name"
         android:supportsRtl="true"
-        android:name=".base.MyApplication"
+        android:name="com.sxhxjy.roadmonitor.base.MyApplication"
         android:theme="@style/AppTheme">
         <meta-data
             android:name="TencentMapSDK"
             android:value="BPUBZ-HB3RQ-5SB5M-GLB4U-2A4QF-E7FT7"/>
-        <activity android:name=".ui.main.FlashActivity" android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen">
+        <activity android:name="com.sxhxjy.roadmonitor.ui.main.FlashActivity" android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.main.MainActivity" android:launchMode="singleTask"/>
-        <activity android:name=".ui.main.LoginActivity"/>
-        <activity android:name=".ui.main.StationListActivity"/>
-        <activity android:name=".ui.main.RealTimeDataListActivity"/>
-        <activity android:name=".ui.main.AddDataContrastActivity"/>
-        <activity android:name=".ui.main.AddDataCorrelationActivity"/>
-        <activity android:name=".ui.main.AlertDetailActivity"/>
-        <activity android:name=".ui.main.RegisterActivity"/>
-        <activity android:name=".ui.main.LookStateActivity"/>
-        <activity android:name=".ui.main.picture.TakeNotesActivity"/>
-        <activity android:name=".ui.main.picture.NewPic_Activity"/>
-        <activity android:name=".ui.main.picture.PhotoViewActivity"/>
-        <activity android:name=".ui.main.picture.ChartActivity"/>
-        <activity android:name=".ui.main.ChartFullscreenActivity"
+        <activity android:name="com.sxhxjy.roadmonitor.ui.main.MainActivity" android:launchMode="singleTask"/>
+        <activity android:name="com.sxhxjy.roadmonitor.ui.main.LoginActivity"/>
+        <activity android:name="com.sxhxjy.roadmonitor.ui.main.StationListActivity"/>
+        <activity android:name="com.sxhxjy.roadmonitor.ui.main.RealTimeDataListActivity"/>
+        <activity android:name="com.sxhxjy.roadmonitor.ui.main.AddDataContrastActivity"/>
+        <activity android:name="com.sxhxjy.roadmonitor.ui.main.AddDataCorrelationActivity"/>
+        <activity android:name="com.sxhxjy.roadmonitor.ui.main.AlertDetailActivity"/>
+        <activity android:name="com.sxhxjy.roadmonitor.ui.main.RegisterActivity"/>
+        <activity android:name="com.sxhxjy.roadmonitor.ui.main.LookStateActivity"/>
+        <activity android:name="com.sxhxjy.roadmonitor.ui.main.picture.TakeNotesActivity"/>
+        <activity android:name="com.sxhxjy.roadmonitor.ui.main.picture.NewPic_Activity"/>
+        <activity android:name="com.sxhxjy.roadmonitor.ui.main.picture.PhotoViewActivity"/>
+        <activity android:name="com.sxhxjy.roadmonitor.ui.main.picture.ChartActivity"/>
+        <activity android:name="com.sxhxjy.roadmonitor.ui.main.ChartFullscreenActivity"
             android:screenOrientation="landscape"
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen">
 
@@ -55,7 +55,7 @@
         </activity>
 
 
-        <service android:name=".base.SocketService" />
+        <service android:name="com.sxhxjy.roadmonitor.base.SocketService" />
 
     </application>
 

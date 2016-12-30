@@ -13,13 +13,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.sxhxjy.roadmonitor.R;
-import com.sxhxjy.roadmonitor.entity.LoginData;
-import com.sxhxjy.roadmonitor.ui.main.LoginActivity;
-import com.sxhxjy.roadmonitor.ui.main.MainActivity;
 import com.sxhxjy.roadmonitor.util.ActivityUtil;
 
 import rx.Observable;
-import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 

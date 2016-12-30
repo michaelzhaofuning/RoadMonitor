@@ -3,7 +3,6 @@ package com.sxhxjy.roadmonitor.util;
 import android.os.Handler;
 import android.os.Message;
 import android.os.SystemClock;
-import android.util.Log;
 
 /**
  * 2016/12/23
@@ -29,8 +28,6 @@ public abstract class MyCountDownTimer {
      */
     private boolean mCancelled = false;
 
-    private int test = 0;
-
     /**
      * @param millisInFuture The number of millis in the future from the call
      *   to {@link #start()} until the countdown is done and {@link #onFinish()}
@@ -47,11 +44,7 @@ public abstract class MyCountDownTimer {
      * Cancel the countdown.
      */
     public synchronized final void cancel() {
-        Log.e("MyCountDownTimer", ""+mCancelled + "" + test);
-
         mCancelled = true;
-        test = 1;
-        Log.e("MyCountDownTimer", ""+mCancelled + "" + test);
         mHandler.removeMessages(MSG);
     }
 
@@ -91,10 +84,7 @@ public abstract class MyCountDownTimer {
         @Override
         public void handleMessage(Message msg) {
             synchronized (MyCountDownTimer.this) {
-                Log.e("MyCountDownTimer", "cancelled: "+mCancelled+" test:"+test);
-
                 if (mCancelled) {
-                    Log.e("MyCountDownTimer", "cancelled it Shit !");
                     return;
                 }
 

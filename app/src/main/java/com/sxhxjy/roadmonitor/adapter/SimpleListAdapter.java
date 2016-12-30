@@ -12,7 +12,6 @@ import com.sxhxjy.roadmonitor.R;
 import com.sxhxjy.roadmonitor.base.BaseFragment;
 import com.sxhxjy.roadmonitor.entity.SimpleItem;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**

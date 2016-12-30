@@ -1,7 +1,6 @@
 package com.sxhxjy.roadmonitor.base;
 
 import android.util.Log;
-import android.widget.Toast;
 
 import rx.Subscriber;
 

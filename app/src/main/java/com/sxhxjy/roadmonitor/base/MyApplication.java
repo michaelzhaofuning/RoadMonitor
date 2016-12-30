@@ -4,12 +4,7 @@ import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.Process;
-import android.util.Log;
 
-
-
-import java.io.File;
 
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
@@ -23,7 +18,11 @@ import retrofit2.converter.gson.GsonConverterFactory;
  *
  * password: funing4510
  *
+ * //////////////////////////////////////////////////////////////////////////////
  * 1. IP !!!! 2.app name, Logo 3.flash.jpg
+ *
+ * If you want to change package name, do NOT forget to change Build.gradle
+ * //////////////////////////////////////////////////////////////////////////////
  *
  * @author Michael Zhao
  */

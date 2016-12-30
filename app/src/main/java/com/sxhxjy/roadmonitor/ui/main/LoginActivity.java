@@ -92,7 +92,6 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                             new MySubscriber<LoginData>() {
                         @Override
                         public void onMyNext(LoginData loginData) {
-                            showToastMsg("登录成功");
                             CacheManager.getInstance().set("login", new Gson().toJson(loginData));
                             MyApplication.getMyApplication().getSharedPreference().edit().putString("uid", loginData.getUser().getId()).apply();
                             MyApplication.getMyApplication().getSharedPreference().edit().putString("gid", loginData.getUser().getGid()).apply();

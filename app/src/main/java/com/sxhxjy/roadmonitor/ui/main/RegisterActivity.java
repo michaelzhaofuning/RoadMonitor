@@ -10,8 +10,6 @@ import com.sxhxjy.roadmonitor.R;
 import com.sxhxjy.roadmonitor.base.BaseActivity;
 import com.sxhxjy.roadmonitor.util.Utils;
 
-import org.json.JSONObject;
-
 /**
  * register activity
  *

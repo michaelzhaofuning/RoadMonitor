@@ -1,35 +1,23 @@
 package com.sxhxjy.roadmonitor.base;
 
-import android.app.IntentService;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
-import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
-import android.support.v4.util.TimeUtils;
 import android.util.Log;
 
 import com.alibaba.fastjson.JSON;
 import com.sxhxjy.roadmonitor.R;
-import com.sxhxjy.roadmonitor.ui.main.AddDataCorrelationActivity;
 import com.sxhxjy.roadmonitor.ui.main.MainActivity;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
-import java.io.StringReader;
 import java.net.Socket;
-import java.util.concurrent.Executor;
-import java.util.concurrent.TimeUnit;
 
 /**
  * 2016/11/28
