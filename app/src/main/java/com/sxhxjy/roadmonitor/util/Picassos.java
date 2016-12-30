@@ -31,38 +31,6 @@ public class Picassos {
                 .config(Bitmap.Config.RGB_565)
                 .into(iv);
     }
-    public static String getX(double dou){
-        String dous=Math.abs(dou)+"000000";
-        String s="";
-        char[] chars = dous.toCharArray();
-        for (int i=0;i<4;i++){
-            s=s+chars[i];
-        }
-        if (dou>0){
-            return "右移"+s;
-        }else if (dou<0){
-            return "左移"+s;
-        }else {
-            return "X无变化";
-        }
-    }
-    public static String getY(double dou){
-
-        String dous=Math.abs(dou)+"000000";
-        String s="";
-        char[] chars = dous.toCharArray();
-        for (int i=0;i<4;i++){
-            s=s+chars[i];
-        }
-
-        if (dou>0){
-            return "下移"+s;
-        }else if (dou<0){
-            return "上移"+s;
-        }else {
-            return "Y无变化";
-        }
-    }
 
     public static SpannableStringBuilder tvColor(String s,int X1,int X2 ,int Y1,int Y2 ,int i){
         int[] c={Color.parseColor("#ff8800"),Color.parseColor("#aa66cc"),
@@ -89,14 +57,12 @@ public class Picassos {
         int X1 =0;
         int X2 = 0;
 
-        String sss="";
-
         String X_yi="";
         String Y_yi="";
         if (X>0){
-            X_yi= "右移"+sx;
+            X_yi= "下移"+sx;
         }else if (X<0){
-            X_yi= "左移"+sx;
+            X_yi= "上移"+sx;
         }else {
             X_yi= "X无变化";
         }
@@ -107,10 +73,10 @@ public class Picassos {
         int Y2 =0;
 
         if (Y>0){
-            Y_yi= "下移"+sy;
+            Y_yi= "右移"+sy;
 
         }else if (Y<0){
-            Y_yi= "上移"+sy;
+            Y_yi= "左移"+sy;
 
         }else {
             Y_yi= "Y无变化";

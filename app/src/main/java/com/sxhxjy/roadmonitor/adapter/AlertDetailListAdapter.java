@@ -56,9 +56,6 @@ public class AlertDetailListAdapter extends RecyclerView.Adapter<AlertDetailList
     @Override
     public void onClick(View v) {
         int p = (int) v.getTag();
-
-
-
     }
 
 

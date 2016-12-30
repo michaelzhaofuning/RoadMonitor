@@ -210,6 +210,7 @@ public class RealTimeDataListActivity extends BaseActivity {
                                         rdlist.add(MonitorFragment.mRealTimes.get(i));
                                     }
                                 }
+//                                Toast.makeText(getActivity(),rdlist.size()+"",Toast.LENGTH_SHORT).show();
                             }
                         }
                         mAdapter.notifyDataSetChanged();
