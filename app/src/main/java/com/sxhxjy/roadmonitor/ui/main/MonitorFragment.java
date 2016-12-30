@@ -148,6 +148,14 @@ public class MonitorFragment extends BaseFragment implements View.OnClickListene
     }
 
     @Override
+    public void onDetach() {
+        super.onDetach();
+        if (mTimer != null) {
+            mTimer.cancel();
+        }
+    }
+
+    @Override
     protected void loadOnce() {
         super.loadOnce();
         // * entrance *

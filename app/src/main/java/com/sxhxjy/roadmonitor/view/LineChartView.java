@@ -44,20 +44,13 @@ public class LineChartView extends View {
     public static int pointCount = 20;
     private static final int OFFSET = 65;
     private static final int OFFSET_LEGEND = 80;
-    private static final int LEGEND_WIDTH= 70;
-    private static final int LEGEND_HEIGHT = 35;
 
     private static final float OFFSET_SCALE = 8;
     private static final float SPLIT_TO = 5;
-    private static float xSplitTo = 5;
 
     private static final int ALERT_VALUE = 100000000;
     private Random mRandom = new Random(47);
     private int xAxisLength, yAxisLength;
-    private long xStart, xEnd;
-    private long xStartRight, xEndRight;
-    private float yStart, yEnd;
-    private float yStartRight, yEndRight;
     private float firstPointX, nextPointX, firstPointY, nextPointY;
 
     private long BASE_TIME = System.currentTimeMillis();
@@ -236,10 +229,10 @@ public class LineChartView extends View {
         canvas.translate(OFFSET + 10, getMeasuredHeight() - OFFSET - OFFSET_LEGEND);
 
 
-        xStart = System.currentTimeMillis() * 2; // big enough
-        xEnd = 0; // init !!!!!!!!
-        yStart = 0;
-        yEnd = -10000f;
+        long xStart = System.currentTimeMillis() * 2;
+        long xEnd = 0;
+        float yStart = 0;
+        float yEnd = -10000f;
 
         float sampleY = myLines.get(0).points.get(myLines.get(0).points.size() / 2).value;
         if (sampleY > 10) {
@@ -260,7 +253,7 @@ public class LineChartView extends View {
 
 
         for (MyLine line : myLines) {
-            if (line.points.size() - offset - pointCount <= 0) continue;
+            if (line.points.size() - offset - pointCount < 0) continue;
 
             try {
                 xEnd = Math.max(Collections.max(line.points.subList(line.points.size() - offset - pointCount, line.points.size() - offset), comparatorX).time, xEnd);
@@ -273,12 +266,12 @@ public class LineChartView extends View {
         }
 
         // *RIGHT*
-        xStartRight = System.currentTimeMillis() * 2;
-        xEndRight = 0;
-        yStartRight = 0;
-        yEndRight = -10000f;
+        long xStartRight = System.currentTimeMillis() * 2;
+        long xEndRight = 0;
+        float yStartRight = 0;
+        float yEndRight = -10000f;
         for (MyLine line : myLinesRight) {
-            if (line.points.size() - offset - pointCount <= 0) continue;
+            if (line.points.size() - offset - pointCount < 0) continue;
             try {
                 xEndRight = Math.max(Collections.max(line.points.subList(line.points.size() - offset - pointCount, line.points.size() - offset), comparatorX).time, xEndRight);
                 xStartRight = Math.min(Collections.min(line.points.subList(line.points.size() - offset - pointCount, line.points.size() - offset), comparatorX).time, xStartRight);
@@ -316,11 +309,11 @@ public class LineChartView extends View {
             float minDistance = getMeasuredWidth();
             MyPoint minPointInLine = null;
 
-            for (MyPoint myPoint : line.points) {
+            for (MyPoint myPoint : line.points) { // TODO: reverse index
                 if (line.points.indexOf(myPoint) > line.points.size() - offset || line.points.indexOf(myPoint) < line.points.size() - offset - pointCount)
                     continue;
 
-                if (line.points.size() - offset - pointCount <= 0) continue;
+                if (line.points.size() - offset - pointCount < 0) continue;
 
 
                 firstPointX = nextPointX;
@@ -386,7 +379,7 @@ public class LineChartView extends View {
                 if (line.points.indexOf(myPoint) > line.points.size() - offset || line.points.indexOf(myPoint) < line.points.size() - offset - pointCount)
                     continue;
 
-                if (line.points.size() - offset - pointCount <= 0) continue;
+                if (line.points.size() - offset - pointCount < 0) continue;
 
                 firstPointX = nextPointX;
                 firstPointY = nextPointY;
@@ -487,6 +480,7 @@ public class LineChartView extends View {
         long xEndNew = 0;
         int drawBy = 0;
 
+        float xSplitTo = 5;
         if ((xEnd - xStart) <= 1000 * 3600) { // draw minute
             drawBy = 2;
 
