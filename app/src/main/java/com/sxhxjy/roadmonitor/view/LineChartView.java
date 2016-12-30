@@ -510,8 +510,8 @@ public class LineChartView extends View {
                 dx += 60;
             }
 
-            if (xSplitTo > 10) {
-                xSplitTo = 5;
+            if (xSplitTo > 5) {
+                xSplitTo = 2;
                 while (dx % xSplitTo != 0)
                     xSplitTo++;
             }
@@ -551,8 +551,8 @@ public class LineChartView extends View {
                 dx++;
             }
 
-            if (xSplitTo > 10) {
-                xSplitTo = 5;
+            if (xSplitTo > 5) {
+                xSplitTo = 2;
                 while (dx % xSplitTo != 0)
                     xSplitTo++;
             }
@@ -581,8 +581,8 @@ public class LineChartView extends View {
                 dx += 24;
             }
 
-            if (xSplitTo > 10) {
-                xSplitTo = 5;
+            if (xSplitTo > 5) {
+                xSplitTo = 2;
                 while (dx % xSplitTo != 0)
                     xSplitTo++;
             }
@@ -704,9 +704,9 @@ public class LineChartView extends View {
     private void drawLegend(Canvas canvas, MyLine myLine, RectF rectF) {
         mPaint.setColor(myLine.color);
         if (rectF.left + OFFSET_LEGEND+ mPaint.measureText(myLine.name) + 30 > xAxisLength) {
-            rectF.top += OFFSET_LEGEND / 2;
+            rectF.top += OFFSET_LEGEND / 3;
             rectF.left = 0;
-            rectF.bottom = rectF.top + OFFSET_LEGEND / 2 - 20;
+            rectF.bottom = rectF.top + OFFSET_LEGEND;
             rectF.right = rectF.left + OFFSET_LEGEND;
             canvas.drawRoundRect(rectF, 2, 2, mPaint);
             mPaint.setColor(getResources().getColor(R.color.default_text_color));
@@ -715,8 +715,8 @@ public class LineChartView extends View {
             canvas.drawText(myLine.name, rectF.right + 15, rectF.bottom, mPaint);
             rectF.left += rectF.width() + mPaint.measureText(myLine.name) + 30;
         } else {
-            rectF.right = rectF.left + OFFSET_LEGEND;
-            rectF.bottom = rectF.top + OFFSET_LEGEND / 2 - 20;
+            rectF.right = rectF.left + OFFSET_LEGEND / 3;
+            rectF.bottom = rectF.top + OFFSET_LEGEND / 3;
             canvas.drawRoundRect(rectF, 2, 2, mPaint);
             mPaint.setColor(getResources().getColor(R.color.default_text_color));
             mPaint.setStrokeWidth(0.1f);

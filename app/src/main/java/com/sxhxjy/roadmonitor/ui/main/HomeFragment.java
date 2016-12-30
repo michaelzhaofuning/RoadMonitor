@@ -154,7 +154,9 @@ public class HomeFragment extends BaseFragment implements HomeAdapter.OnItemClic
         if (position==0){
             startActivity(new Intent(getActivity(), TakeNotesActivity.class));
         } else{
-            ((MonitorFragment) ((MainActivity)getActivity()).fragments.get(1)).changeMonitor(position-1);
+            MonitorFragment monitorFragment = ((MonitorFragment) ((MainActivity)getActivity()).fragments.get(1));
+            monitorFragment.setIsFirst(); // load once Not called
+            monitorFragment.changeMonitor(position-1);
             ((MainActivity)getActivity()).selectedBar(1);
         }
     }

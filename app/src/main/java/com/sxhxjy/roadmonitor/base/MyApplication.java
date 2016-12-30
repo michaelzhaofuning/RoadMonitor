@@ -58,7 +58,11 @@ public class MyApplication extends Application {
         super.onCreate();
         app = this;
 //        Fresco.initialize(this);
+        initHttp();
 
+    }
+
+    public void initHttp() {
         HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
         logging.setLevel(HttpLoggingInterceptor.Level.BODY);
         OkHttpClient.Builder httpClient = new OkHttpClient.Builder();

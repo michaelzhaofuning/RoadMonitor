@@ -5,7 +5,7 @@ android {
     buildToolsVersion "24.0.2"
 
     defaultConfig {
-        applicationId "com.sxhxjy.rfroadmonitor"
+        applicationId "com.sxhxjy.roadmonitor"
         minSdkVersion 16
         targetSdkVersion 23
         versionCode 2

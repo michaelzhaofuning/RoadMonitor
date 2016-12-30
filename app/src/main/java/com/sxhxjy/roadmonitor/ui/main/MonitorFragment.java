@@ -154,6 +154,10 @@ public class MonitorFragment extends BaseFragment implements View.OnClickListene
         getTypeTree(); // getTypeTree
     }
 
+    public void setIsFirst() {
+        isFirst = false;
+    }
+
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
