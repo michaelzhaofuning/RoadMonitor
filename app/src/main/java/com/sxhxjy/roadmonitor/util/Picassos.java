@@ -16,8 +16,6 @@ import com.sxhxjy.roadmonitor.R;
  */
 
 public class Picassos {
-
-
     public static void getImg(Context context, String path, final ImageView iv){
         Picasso picasso= Picasso.with(context);
         picasso.load(path).placeholder(R.drawable.placeholder).error(R.drawable.placeholder)
