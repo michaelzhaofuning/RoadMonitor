@@ -25,6 +25,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
     private Button mSignUp;
     private EditText mUser, mPassword, mCode;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

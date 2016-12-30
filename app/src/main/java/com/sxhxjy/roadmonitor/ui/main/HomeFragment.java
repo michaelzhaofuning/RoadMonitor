@@ -32,6 +32,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import okhttp3.Call;
+import okhttp3.Callback;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -82,15 +83,17 @@ public class HomeFragment extends BaseFragment implements HomeAdapter.OnItemClic
         }
     }
     private void getOkHttp() {
-        okHttpClient=new OkHttpClient();
-        request=new Request.Builder().url(path).build();
-        okHttpClient.newCall(request).enqueue(new okhttp3.Callback() {
+        new OkHttpClient().newCall(new Request.Builder()
+//                .post(new FormBody.Builder().build())
+                .url(path)
+                .build()).enqueue(new Callback() {
             @Override//请求失败
             public void onFailure(Call call, IOException e) {
 //                Toast.makeText(getActivity(),"请求失败",Toast.LENGTH_SHORT).show();
             }
             @Override
             public void onResponse(Call call, Response response) throws IOException {
+                if (response.code()!=200) return;
                 final String result=response.body().string();//拿到json数据
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
