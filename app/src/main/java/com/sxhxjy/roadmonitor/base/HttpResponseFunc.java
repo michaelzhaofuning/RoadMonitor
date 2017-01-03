@@ -18,7 +18,6 @@ public class HttpResponseFunc<T> implements Func1<HttpResponse<T>, T> {
     @Override
     public T call(final HttpResponse<T> tHttpResponse) {
 
-        // TODO result code
         if (tHttpResponse != null && tHttpResponse.getResultCode() == 200) {
             Log.d("retrofit", tHttpResponse.toString());
             return tHttpResponse.getData();

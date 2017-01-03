@@ -133,6 +133,7 @@ public class LineChartView extends View {
 //                        Log.e("test", "dx: " + distanceX + "offset:" + offset);
                         if (offset < 0)
                             offset = 0;
+                        // TODO: index point count
                         if (offset > myLines.get(0).points.size() - pointCount)
                             offset = myLines.get(0).points.size() - pointCount;
                     }
@@ -762,9 +763,9 @@ public class LineChartView extends View {
 
     public void addPoints(ArrayList<MyPoint> points, String s, int color, boolean isRight) {
         if (!isRight)
-            myLines.add(new MyLine(s, points, color)); // TODO cost memory
+            myLines.add(new MyLine(s, points, color));
         else
-            myLinesRight.add(new MyLine(s, points, color)); // TODO cost memory
+            myLinesRight.add(new MyLine(s, points, color));
 
         pointCount = myLines.get(0).points.size() / 2; // point count
         if (pointCount > 800) pointCount = 800;

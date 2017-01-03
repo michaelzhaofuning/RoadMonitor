@@ -56,7 +56,7 @@ public class AlertListAdapter extends RecyclerView.Adapter<AlertListAdapter.View
         holder.itemView.setTag(position);
         holder.num.setText(mList.get(position).getNum() + "次");
 
-        if (mList.get(position).getConfirmInfo() == null) {
+        if (mList.get(position).isConfirm.equals("0")) {
             holder.isConfirmed.setText("未确认");
             holder.isConfirmed.setBackgroundDrawable(mFragment.getResources().getDrawable(R.drawable.round_rectangle_red_stroke));
         } else {

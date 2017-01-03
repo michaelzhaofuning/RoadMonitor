@@ -318,7 +318,7 @@ public class AlertFragment extends BaseListFragment<AlertData> {
     protected void onMyNext(List<AlertData> es) {
         int num = 0;
         for (AlertData alertData : es) {
-            if (alertData.getConfirmInfo() == null)
+            if (alertData.isConfirm.equals("0"))
                 num++;
         }
         alertDrawable.setNum(num);

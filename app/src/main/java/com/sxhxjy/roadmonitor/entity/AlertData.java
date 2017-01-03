@@ -43,6 +43,7 @@ public class AlertData implements Serializable{
     private String typeId;
     private String userId;
     public long generationTime;
+    public String isConfirm;
 
     public String getAlarmContent() {
         return alarmContent;

@@ -61,7 +61,6 @@ public class UpdateUtil {
                 if (!version.equals(getVersion(context))) {
                     // update is available ! to ask user
 
-                    // TODO: !!!!!!
                     ((BaseActivity) context).runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
