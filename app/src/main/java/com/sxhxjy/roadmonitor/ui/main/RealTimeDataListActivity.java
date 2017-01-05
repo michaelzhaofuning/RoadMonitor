@@ -27,6 +27,7 @@ import com.sxhxjy.roadmonitor.entity.SimpleItem;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
@@ -128,6 +129,9 @@ public class RealTimeDataListActivity extends BaseActivity {
                     if (mList.size()==0)return;
                     final StringBuilder sb = new StringBuilder();
                     final Date date = new Date(System.currentTimeMillis());
+                    Calendar c = Calendar.getInstance();
+                    c.setTimeInMillis(System.currentTimeMillis());
+                    int year = c.get(Calendar.YEAR);
                 new DatePickerDialog(getActivity(), new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
@@ -160,7 +164,7 @@ public class RealTimeDataListActivity extends BaseActivity {
                                 //0,0指的是时间，true表示是否为24小时，true为24小时制
                         },00,00,true).show();
                     }
-                },2016,date.getMonth(), date.getDate()).show();
+                },year,date.getMonth(), date.getDate()).show();
             }
             });
             mFilterTitledefault.setOnClickListener(new View.OnClickListener() {

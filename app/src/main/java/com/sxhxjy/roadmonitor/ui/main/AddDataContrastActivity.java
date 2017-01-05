@@ -28,6 +28,7 @@ import com.sxhxjy.roadmonitor.view.MyLinearLayout;
 import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -269,7 +270,9 @@ public class AddDataContrastActivity extends BaseActivity {
     public StringBuilder chooseTime(final MyLinearLayout myLinearLayout) {
         final StringBuilder sb = new StringBuilder();
         Date date = new Date(System.currentTimeMillis());
-
+        Calendar c = Calendar.getInstance();
+        c.setTimeInMillis(System.currentTimeMillis());
+        int year = c.get(Calendar.YEAR);
         new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
@@ -293,7 +296,7 @@ public class AddDataContrastActivity extends BaseActivity {
                     }
                 }, 0, 0, true).show();
             }
-        }, 2016, date.getMonth(), date.getDate()).show();
+        }, year, date.getMonth(), date.getDate()).show();
 
         return sb;
     }
@@ -301,7 +304,9 @@ public class AddDataContrastActivity extends BaseActivity {
     public void addTime(View view) {
         final StringBuilder sb = new StringBuilder();
         final Date date = new Date(System.currentTimeMillis());
-
+        final Calendar c = Calendar.getInstance();
+        c.setTimeInMillis(System.currentTimeMillis());
+        int year = c.get(Calendar.YEAR);
         new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
@@ -342,13 +347,13 @@ public class AddDataContrastActivity extends BaseActivity {
                                 }, 0, 0, true).show();
                                 }
                             }
-                        }, 2016, date.getMonth(), date.getDate()).show();
+                        }, c.get(Calendar.YEAR), date.getMonth(), date.getDate()).show();
 
                         showToastMsg("请选择结束时间");
                     }
                 }, 0, 0, true).show();
             }
-        }, 2016, date.getMonth(), date.getDate()).show();
+        }, year, date.getMonth(), date.getDate()).show();
         showToastMsg("请选择开始时间");
     }
 }

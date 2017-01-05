@@ -28,6 +28,7 @@ import com.sxhxjy.roadmonitor.view.MyLinearLayout;
 import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -127,7 +128,7 @@ public class AddDataCorrelationActivity extends BaseActivity {
             final Random random = new Random();
             for (SimpleItem item :mTypeList) {
                 if (item.isChecked()) {
-                    getMessage(getHttpService().getPositions(item.getId(), MyApplication.getMyApplication().getSharedPreference().getString("stationId", "")), new MySubscriber<List<MonitorPosition>>() {
+                    getMessage(getHttpService().getPositions(item.getId(), stationId), new MySubscriber<List<MonitorPosition>>() {
                         @Override
                         protected void onMyNext(List<MonitorPosition> monitorPositions) {
                             aLocation = new String[monitorPositions.size()];
@@ -203,7 +204,9 @@ public class AddDataCorrelationActivity extends BaseActivity {
     public void chooseTime(final MyLinearLayout myLinearLayout) {
         final StringBuilder sb = new StringBuilder();
         Date date = new Date(System.currentTimeMillis());
-
+        Calendar c = Calendar.getInstance();
+        c.setTimeInMillis(System.currentTimeMillis());
+        int year = c.get(Calendar.YEAR);
         new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
@@ -228,7 +231,7 @@ public class AddDataCorrelationActivity extends BaseActivity {
                     }
                 }, 0, 0, true).show();
             }
-        }, 2016, date.getMonth(), date.getDate()).show();
+        }, year, date.getMonth(), date.getDate()).show();
 
     }
 
