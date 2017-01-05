@@ -40,19 +40,24 @@ public class LookStateAdapter extends RecyclerView.Adapter<LookStateAdapter.MyVi
         holder.name.setText(list.get(position).getOrgName()+">"+list.get(position).getPointName()+">"+list.get(position).getStationName());
         String states="";
 
-        switch (list.get(position).getStationState()){
-            case "0":
-                states="正常";
-                colors= R.color.colorPrimary;
-                break;
-            case "1":
-                states="停电";
-                colors=R.color.color1;
-                break;
-            case "2":
-                states="故障";
-                colors=R.color.color2;
-                break;
+        if (list.get(position).getStationState() == null) {
+            states = "故障";
+            colors = R.color.color2;
+        } else {
+            switch (list.get(position).getStationState()) {
+                case "0":
+                    states = "正常";
+                    colors = R.color.colorPrimary;
+                    break;
+                case "1":
+                    states = "停电";
+                    colors = R.color.color1;
+                    break;
+                case "2":
+                    states = "故障";
+                    colors = R.color.color2;
+                    break;
+            }
         }
         holder.state.setText(states);
         holder.stateTime.setText(list.get(position).getSaveTime());
