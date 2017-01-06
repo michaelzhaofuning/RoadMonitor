@@ -133,7 +133,6 @@ public class LineChartView extends View {
 //                        Log.e("test", "dx: " + distanceX + "offset:" + offset);
                         if (offset < 0)
                             offset = 0;
-                        // TODO: index point count
                         if (offset > myLines.get(0).points.size() - pointCount)
                             offset = myLines.get(0).points.size() - pointCount;
                     }

@@ -94,6 +94,7 @@ public class DataAnalysisFragment extends BaseFragment {
             if (mChartsContainer.getChildAt(1) == null)
                 getActivity().getLayoutInflater().inflate(R.layout.chart_layout, mChartsContainer);
             LineChartView lineChartView1 = (LineChartView) mChartsContainer.getChildAt(1).findViewById(R.id.chart);
+            lineChartView1.mIsSimpleDraw = false;
             mChartsContainer.getChildAt(1).findViewById(R.id.param_info).setVisibility(View.GONE);
             lineChartView1.addPoints(lineChartView1.convertY(realTimeDatas, isRight), simpleItem.getTitle(), simpleItem.getColor(), isRight);
 
@@ -271,7 +272,7 @@ public class DataAnalysisFragment extends BaseFragment {
             layout_4.setVisibility(View.GONE);
 
         }
-        // data correlation
+        // data correlationCheck
 
         if (requestCode == 1001 && resultCode == Activity.RESULT_OK) {
             final ArrayList<SimpleItem> positionItems = (ArrayList<SimpleItem>) data.getSerializableExtra("positionItems");
@@ -292,6 +293,7 @@ public class DataAnalysisFragment extends BaseFragment {
                                 List<RealTimeData> realTimeDatas = complexData.getContent();
 
                                 addToChart(realTimeDatas, item, false);
+                                correlationCheck();
                             }
 
                             @Override
@@ -311,6 +313,7 @@ public class DataAnalysisFragment extends BaseFragment {
                                 List<RealTimeData> realTimeDatas = complexData.getContent();
 
                                 addToChart(realTimeDatas, simpleItem, true);
+                                correlationCheck();
                             }
 
                             @Override
@@ -355,6 +358,26 @@ public class DataAnalysisFragment extends BaseFragment {
             tv4.setText(title2);
             tv5.setText(sdf.format(new Date(start))+"---"+sdf.format(new Date(end)));
             mTimer.start();
+        }
+    }
+
+    private void correlationCheck() {
+        if (mChartsContainer.getChildCount() > 0) {
+            LineChartView v0 = (LineChartView) mChartsContainer.getChildAt(0).findViewById(R.id.chart);
+            for (int n = 1; n < mChartsContainer.getChildCount(); n++) {
+                LineChartView v = (LineChartView) mChartsContainer.getChildAt(n).findViewById(R.id.chart);
+                if (v.getLines().size() != v0.getLines().size()) {
+                    v.getLines().clear();
+                    v.getLines().addAll(v0.getLines());
+                    v.invalidate();
+                }
+
+                if (v.getLinesRight().size() != v0.getLinesRight().size()) {
+                    v.getLinesRight().clear();
+                    v.getLinesRight().addAll(v0.getLinesRight());
+                    v.invalidate();
+                }
+            }
         }
     }
     public void init(View v){

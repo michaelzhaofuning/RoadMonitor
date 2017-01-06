@@ -50,17 +50,17 @@ public class LookStateAdapter extends RecyclerView.Adapter<LookStateAdapter.MyVi
                     colors = R.color.colorPrimary;
                     break;
                 case "1":
-                    states = "停电";
+                  /*  states = "停电";
                     colors = R.color.color1;
-                    break;
+                    break;*/
                 case "2":
-                    states = "故障";
+                    states = "异常";
                     colors = R.color.color2;
                     break;
             }
         }
         holder.state.setText(states);
-        holder.stateTime.setText(list.get(position).getSaveTime());
+//        holder.stateTime.setText(list.get(position).getSaveTime());
         holder.state.setBackgroundColor(cotent.getResources().getColor(colors));;
 
 
