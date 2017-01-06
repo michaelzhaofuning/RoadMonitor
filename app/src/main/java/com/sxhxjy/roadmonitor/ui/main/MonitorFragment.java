@@ -310,8 +310,12 @@ public class MonitorFragment extends BaseFragment implements View.OnClickListene
             simpleItem.setShouldGetDiffer(false);
         }
 
-        if (!mListRight.get(3).isChecked()) // 不是'其它'时间段
-            timeId = "0"; // to get the full data
+        if (!mListRight.get(3).isChecked()) {
+            // 不是'其它'时间段
+            for (int m = 0; m < mListRight.size() - 1; m++)
+                if (mListRight.get(m).isChecked())
+                    timeId = "" + m; // to get the full data
+        }
 
         for (int j = 0; j < mChartsContainer.getChildCount(); j++) {
             ((LineChartView) mChartsContainer.getChildAt(j).findViewById(R.id.chart)).getLines().clear();

@@ -369,12 +369,14 @@ public class DataAnalysisFragment extends BaseFragment {
                 if (v.getLines().size() != v0.getLines().size()) {
                     v.getLines().clear();
                     v.getLines().addAll(v0.getLines());
+                    v.yAxisName = v0.yAxisName;
                     v.invalidate();
                 }
 
                 if (v.getLinesRight().size() != v0.getLinesRight().size()) {
                     v.getLinesRight().clear();
                     v.getLinesRight().addAll(v0.getLinesRight());
+                    v.yAxisNameRight = v0.yAxisNameRight;
                     v.invalidate();
                 }
             }
