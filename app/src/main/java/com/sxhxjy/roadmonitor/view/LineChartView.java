@@ -198,12 +198,19 @@ public class LineChartView extends View {
         yAxisLength = getMeasuredHeight() - 2 * OFFSET - OFFSET_LEGEND;
     }
 
-    private static float round(double d, int divide) {
+    private static float roundStart(double d, int divide) {
         int i;
-        if (d >= 0)
-            i = (int) Math.ceil(d);
-        else
-            i = (int) Math.floor(d);
+        i = (int) Math.floor(d);
+
+        while (i % divide != 0) {
+            if (i>=0) i++;
+            else i--;
+        }
+        return i;
+    }
+    private static float roundEnd(double d, int divide) {
+        int i;
+        i = (int) Math.ceil(d);
 
         while (i % divide != 0) {
             if (i>=0) i++;
@@ -289,12 +296,12 @@ public class LineChartView extends View {
 
         // round Y
         if (yEnd - yStart > SPLIT_TO ) {
-            yStart = round(yStart, (int) SPLIT_TO);
-            yEnd = round(yEnd, (int) SPLIT_TO);
+            yStart = roundStart(yStart, (int) SPLIT_TO);
+            yEnd = roundEnd(yEnd, (int) SPLIT_TO);
         }
         if (yEndRight - yStartRight > SPLIT_TO) {
-            yStartRight = round(yStartRight, (int) SPLIT_TO);
-            yEndRight = round(yEndRight, (int) SPLIT_TO);
+            yStartRight = roundStart(yStartRight, (int) SPLIT_TO);
+            yEndRight = roundEnd(yEndRight, (int) SPLIT_TO);
         }
 
         // draw point and line
