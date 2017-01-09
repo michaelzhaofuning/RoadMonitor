@@ -111,6 +111,7 @@ public class HomeFragment extends BaseFragment implements HomeAdapter.OnItemClic
         HomeTheme.DataBean hd=new HomeTheme.DataBean();
         hd.setName("图片比对");
         list.add(hd);
+        if (theme.getData() == null) return;
         for (HomeTheme.DataBean hds:theme.getData()){
             list.add(hds);
         }
