@@ -320,6 +320,10 @@ public class LoginData {
             private String applyType;
             private String latitude;
             private String longitude;
+            // "serverIp" : "124.163.206.250",
+//            "serverPort" : "8080",
+            public String serverIp;
+            public String serverPort;
             private Object priRoleList;
             private Object roleIds;
             private Object childrenGroup;

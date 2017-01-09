@@ -6,8 +6,11 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 
+import com.google.gson.Gson;
 import com.sxhxjy.roadmonitor.R;
 import com.sxhxjy.roadmonitor.base.CacheManager;
+import com.sxhxjy.roadmonitor.base.MyApplication;
+import com.sxhxjy.roadmonitor.entity.LoginData;
 import com.sxhxjy.roadmonitor.util.ActivityUtil;
 
 import java.util.Timer;
@@ -41,6 +44,14 @@ public class FlashActivity extends Activity {
                     ActivityUtil.startActivityForResult(FlashActivity.this, LoginActivity.class, null, -100, android.R.anim.fade_in, android.R.anim.fade_out);
                     finish();
                 } else {
+                    // we init http first !
+                    LoginData loginData = new Gson().fromJson(CacheManager.getInstance().get("login"), LoginData.class);
+
+                    // init http
+                    MyApplication.BASE_IP = "http://"+loginData.getUser().getPriUserGroup().serverIp + ":" + loginData.getUser().getPriUserGroup().serverPort;
+                    MyApplication.ADDRESS = loginData.getUser().getPriUserGroup().serverIp;
+                    MyApplication.getMyApplication().initHttp();
+
                     ActivityUtil.startActivityForResult(FlashActivity.this, MainActivity.class, null, -100, android.R.anim.fade_in, android.R.anim.fade_out);
                     finish();
                 }

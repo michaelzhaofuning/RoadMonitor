@@ -768,7 +768,6 @@ public class LineChartView extends View {
 
         pointCount = myLines.get(0).points.size() / 2; // point count
         if (pointCount > 800) pointCount = 800;
-        if (pointCount < 10) pointCount = 10;
         offset = 0;
         invalidate();
     }
