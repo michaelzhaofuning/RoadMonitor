@@ -243,7 +243,7 @@ public class LineChartView extends View {
 
         long xStart = System.currentTimeMillis() * 2;
         long xEnd = 0;
-        float yStart = 0;
+        float yStart = 10000f;
         float yEnd = -10000f;
         float sampleY;
 
@@ -253,10 +253,10 @@ public class LineChartView extends View {
         } catch (IndexOutOfBoundsException e) {
             sampleY = 0;
         }
-        if (sampleY > 10) {
+        /*if (sampleY > 10) {
             int i = Math.round(sampleY);
-            yStart = i - 5;
-            yEnd = i + 5;
+            yStart = i - 1;
+            yEnd = i + 1;
         }
 
         if (sampleY < 10) {
@@ -265,9 +265,9 @@ public class LineChartView extends View {
         }
 
         if (sampleY < 1) {
-            yStart = -5;
-            yEnd = 5;
-        }
+            yStart = -1;
+            yEnd = 1;
+        }*/
 
 
         for (MyLine line : myLines) {
@@ -311,18 +311,22 @@ public class LineChartView extends View {
 
         // round Y
 
-        yStart = roundStart(yStart, (int) SPLIT_TO);
-        yEnd = roundEnd(yEnd, (int) SPLIT_TO);
+        yStart -= 0.1;
+        yEnd += 0.1;
+     /*   if (Math.abs(yStart - yEnd) > SPLIT_TO) {
+            yStart = roundStart(yStart, (int) SPLIT_TO);
+            yEnd = roundEnd(yEnd, (int) SPLIT_TO);
+        }*/
 
         yStartRight = roundStart(yStartRight, (int) SPLIT_TO);
         yEndRight = roundEnd(yEndRight, (int) SPLIT_TO);
 
-        if (Math.abs(yStart - yEnd) < 1) {
-            yEnd = yStart + 2;
+        if (Math.abs(yStart - yEnd) < 0.01) {
+            yEnd = yStart + 0.02f;
         }
 
-        if (Math.abs(yStartRight - yEndRight) < 1) {
-            yEndRight = yStartRight + 2;
+        if (Math.abs(yStartRight - yEndRight) < 0.01) {
+            yEndRight = yStartRight + 0.02f;
         }
 
         // draw point and line
