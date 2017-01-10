@@ -162,7 +162,7 @@ public class LineChartView extends View {
                 if (offset > myLines.get(0).points.size() - pointCount) offset = myLines.get(0).points.size() - pointCount;
 
                 pointCount = (int) (pointCount + (1 - detector.getScaleFactor()) * 55);
-                if (pointCount < 10) pointCount = 10;
+                if (pointCount < 3) pointCount = 3;
                 if (pointCount > myLines.get(0).points.size()) pointCount = myLines.get(0).points.size();
                 Log.e("test", "p count: " + pointCount + "factor: " + detector.getScaleFactor());
                 return super.onScale(detector);
@@ -225,6 +225,9 @@ public class LineChartView extends View {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
         canvas.drawColor(getResources().getColor(R.color.white));
+
+// TODO: offset, point count is bad, i know it ...
+// TODO: should scale xAxis of time => change timeStart timeEnd, put point to the time line !!!!!!
 
         if (myLines.isEmpty() && myLinesRight.isEmpty()) {
             mPaint.setTextSize(70);
@@ -314,6 +317,13 @@ public class LineChartView extends View {
         yStartRight = roundStart(yStartRight, (int) SPLIT_TO);
         yEndRight = roundEnd(yEndRight, (int) SPLIT_TO);
 
+        if (Math.abs(yStart - yEnd) < 1) {
+            yEnd = yStart + 2;
+        }
+
+        if (Math.abs(yStartRight - yEndRight) < 1) {
+            yEndRight = yStartRight + 2;
+        }
 
         // draw point and line
         mPaint.setStrokeCap(Paint.Cap.ROUND);
