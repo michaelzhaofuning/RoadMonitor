@@ -655,7 +655,7 @@ public class LineChartView extends View {
             canvas.drawLine(0, 0, 0, -yAxisLength, mPaint);
 
             mPaint.setTextAlign(Paint.Align.RIGHT);
-            canvas.drawText(yStart + "", -OFFSET_SCALE, 0, mPaint);
+            canvas.drawText(numberFormat.format(yStart) + "", -OFFSET_SCALE, 0, mPaint);
 
             for (int j = 0; j < SPLIT_TO; j++) {
                 float y = yStart + (yEnd - yStart) / SPLIT_TO * (j + 1);
