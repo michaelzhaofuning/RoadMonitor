@@ -30,7 +30,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.Locale;
 import java.util.Random;
 
@@ -240,8 +242,14 @@ public class LineChartView extends View {
         long xEnd = 0;
         float yStart = 0;
         float yEnd = -10000f;
+        float sampleY;
 
-        float sampleY = myLines.get(0).points.get(myLines.get(0).points.size() / 2).value;
+        try {
+            sampleY = myLines.get(0).points.get(myLines.get(0).points.size() / 2).value;
+
+        } catch (IndexOutOfBoundsException e) {
+            sampleY = 0;
+        }
         if (sampleY > 10) {
             int i = Math.round(sampleY);
             yStart = i - 5;
@@ -286,6 +294,10 @@ public class LineChartView extends View {
                 yStartRight = Math.min(Collections.min(line.points.subList(line.points.size() - offset - pointCount, line.points.size() - offset), comparatorY).value, yStartRight);
             } catch (IndexOutOfBoundsException e) {
                 e.printStackTrace();
+                xEndRight = Math.max(Collections.max(line.points, comparatorX).time, xEndRight);
+                xStartRight = Math.min(Collections.min(line.points, comparatorX).time, xStartRight);
+                yEndRight = Math.max(Collections.max(line.points, comparatorY).value, yEndRight);
+                yStartRight = Math.min(Collections.min(line.points, comparatorY).value, yStartRight);
             }
         }
 
@@ -295,14 +307,13 @@ public class LineChartView extends View {
         }
 
         // round Y
-        if (yEnd - yStart > SPLIT_TO ) {
-            yStart = roundStart(yStart, (int) SPLIT_TO);
-            yEnd = roundEnd(yEnd, (int) SPLIT_TO);
-        }
-        if (yEndRight - yStartRight > SPLIT_TO) {
-            yStartRight = roundStart(yStartRight, (int) SPLIT_TO);
-            yEndRight = roundEnd(yEndRight, (int) SPLIT_TO);
-        }
+
+        yStart = roundStart(yStart, (int) SPLIT_TO);
+        yEnd = roundEnd(yEnd, (int) SPLIT_TO);
+
+        yStartRight = roundStart(yStartRight, (int) SPLIT_TO);
+        yEndRight = roundEnd(yEndRight, (int) SPLIT_TO);
+
 
         // draw point and line
         mPaint.setStrokeCap(Paint.Cap.ROUND);
@@ -316,7 +327,7 @@ public class LineChartView extends View {
             float minDistance = getMeasuredWidth();
             MyPoint minPointInLine = null;
 
-            for (MyPoint myPoint : line.points) { // TODO: reverse index
+            for (MyPoint myPoint : line.points) {
                 if (line.points.indexOf(myPoint) > line.points.size() - offset || line.points.indexOf(myPoint) < line.points.size() - offset - pointCount)
                     continue;
 
@@ -426,10 +437,17 @@ public class LineChartView extends View {
             if (minPoint == null) {
                 minPoint = minPointInLine;
             } else {
-                float dy = Math.abs(touchedY + (float) (((double) (minPoint.value - yStart)) / (yEnd - yStart) * yAxisLength));
+                float dy;
+
+                if (!isRight) {
+                    dy = Math.abs(touchedY + (float) (((double) (minPoint.value - yStart)) / (yEnd - yStart) * yAxisLength));
+                } else {
+                    dy = Math.abs(touchedY + (float) (((double) (minPoint.value - yStartRight)) / (yEndRight - yStartRight) * yAxisLength));
+                }
+
                 float dy1 = 10000;
                 if (minPointInLine != null) {
-                    dy1 = Math.abs(touchedY + (float) (((double) (minPointInLine.value - yStart)) / (yEnd - yStart) * yAxisLength));
+                    dy1 = Math.abs(touchedY + (float) (((double) (minPointInLine.value - yStartRight)) / (yEndRight - yStartRight) * yAxisLength));
                 }
                 if (dy1 <= dy) {
                     minPoint = minPointInLine;
@@ -705,10 +723,10 @@ public class LineChartView extends View {
     private void drawLegend(Canvas canvas, MyLine myLine, RectF rectF) {
         mPaint.setColor(myLine.color);
         if (rectF.left + OFFSET_LEGEND+ mPaint.measureText(myLine.name) + 30 > xAxisLength) {
-            rectF.top += OFFSET_LEGEND / 3;
+            rectF.top += OFFSET_LEGEND / 2f;
             rectF.left = 0;
-            rectF.bottom = rectF.top + OFFSET_LEGEND;
-            rectF.right = rectF.left + OFFSET_LEGEND;
+            rectF.bottom = rectF.top + OFFSET_LEGEND / 3;
+            rectF.right = rectF.left + OFFSET_LEGEND / 3;
             canvas.drawRoundRect(rectF, 2, 2, mPaint);
             mPaint.setColor(getResources().getColor(R.color.default_text_color));
             mPaint.setStrokeWidth(0.1f);
@@ -773,7 +791,7 @@ public class LineChartView extends View {
         else
             myLinesRight.add(new MyLine(s, points, color));
 
-        pointCount = myLines.get(0).points.size() / 2; // point count
+        pointCount = points.size() / 2; // point count
         if (pointCount > 800) pointCount = 800;
         if (pointCount < 10) pointCount = points.size();
         offset = 0;

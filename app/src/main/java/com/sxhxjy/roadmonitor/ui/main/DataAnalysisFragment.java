@@ -31,6 +31,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Random;
 
+import static com.sxhxjy.roadmonitor.ui.main.MonitorFragment.colors;
+
 /**
  * 2016/9/26
  *
@@ -47,6 +49,8 @@ public class DataAnalysisFragment extends BaseFragment {
     private LinearLayout layout_2,layout_3,layout_4;
     private LinearLayout mChartsContainer;
     private ProgressDialog progressDialog;
+    public static int[] colors;
+
 
     @Nullable
     @Override
@@ -108,7 +112,6 @@ public class DataAnalysisFragment extends BaseFragment {
             lineChartView2.addPoints(lineChartView2.convertZ(realTimeDatas, isRight), simpleItem.getTitle(), simpleItem.getColor(), isRight);
         }
 
-        // TODO: 2016/11/4
     }
 
     @Override

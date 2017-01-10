@@ -55,12 +55,25 @@ public class AddDataCorrelationActivity extends BaseActivity {
     private String startTime, endTime;
     private String stationId;
     private MyLinearLayout station;
+    private int[] colors;
+    private Random random = new Random();
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.add_data_correlation_activity);
         initToolBar("数据关联", true);
+        colors = new int[]{
+                Color.BLACK,
+                getResources().getColor(android.R.color.holo_red_light),
+                getResources().getColor(android.R.color.holo_blue_bright),
+                getResources().getColor(android.R.color.holo_orange_dark),
+                getResources().getColor(android.R.color.holo_green_dark),
+                getResources().getColor(android.R.color.holo_purple),
+                getResources().getColor(R.color.colorPrimaryDark),
+                Color.argb(255, random.nextInt(256), random.nextInt(256), random.nextInt(256))
+        };
 
         mToolbar.inflateMenu(R.menu.confirm_right);
         mToolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
@@ -133,6 +146,8 @@ public class AddDataCorrelationActivity extends BaseActivity {
                         protected void onMyNext(List<MonitorPosition> monitorPositions) {
                             aLocation = new String[monitorPositions.size()];
                             int i = 0;
+                            int colorIndex = 0;
+
                             for (MonitorPosition position : monitorPositions) {
                                 SimpleItem simpleItem = new SimpleItem(position.getId(), position.getName(), false);
                                 simpleItem.setCode(position.code);
@@ -177,6 +192,11 @@ public class AddDataCorrelationActivity extends BaseActivity {
         }).setPositiveButton("确定", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+                if (view.getId() == R.id.correlation_position)
+                    positionItemsCorrelation.clear();
+                else
+                    positionItems.clear();
+
                 StringBuilder sb = new StringBuilder();
                 for (int i = 0; i < aTypeChecked.length; i++) {
                     if (aTypeChecked[i]) {
