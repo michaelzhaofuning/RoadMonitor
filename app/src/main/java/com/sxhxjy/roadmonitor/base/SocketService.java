@@ -32,6 +32,7 @@ public class SocketService extends Service {
 //    private BufferedReader in;
     private DataInputStream in;
     private DataOutputStream out;
+    public static int lastAlertNum = 0;
 
     private Runnable runnable = new Runnable() {
         @Override
@@ -60,8 +61,10 @@ public class SocketService extends Service {
                         int num = JSON.parseObject(s).getIntValue("alarmNum");
                         Log.e("socket", s);
 
-                        if (num > 0)
+                        if (num > 0 && lastAlertNum != num) {
                             sendNtf(num);
+                            lastAlertNum = num;
+                        }
                     } else {
                         Log.e("socket", "not available  " + in.available());
                     }

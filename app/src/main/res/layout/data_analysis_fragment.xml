@@ -25,7 +25,7 @@
                 android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1">
+                >
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="0.5dp"
@@ -221,10 +221,11 @@
                         android:text="时间"
                         android:paddingLeft="20dp"
                         android:paddingTop="3dp"
+                        android:paddingBottom="3dp"
                         android:gravity="center_vertical"
                         android:background="@color/colorPrimaryTranslucent"
                         android:textColor="@color/colorPrimaryDark"
-                        android:layout_height="match_parent" />
+                        android:layout_height="wrap_content" />
                     <View
                         android:layout_width="1dp"
                         android:layout_height="match_parent"

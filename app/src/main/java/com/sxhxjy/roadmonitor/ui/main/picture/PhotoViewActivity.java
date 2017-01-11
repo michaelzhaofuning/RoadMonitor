@@ -70,8 +70,9 @@ public class PhotoViewActivity extends Activity {
 //            }
 final String rawOld = contrastResult.getOldPicDetail().getPicDirFilename().replace('\\','/');
 final String rawNew = contrastResult.getNewPicList().get(pos).getComPicPath().replace('\\','/');
-            final String urlOld = MyApplication.BASE_URL_Img + "uploadPhotos"+rawOld.substring(rawOld.indexOf('/', 6));
-            final String urlNew = MyApplication.BASE_URL_Img + "uploadPhotos"+rawNew.substring(rawNew.indexOf('/', 6));
+            // swap
+            final String urlNew = MyApplication.BASE_URL_Img + "uploadPhotos"+rawOld.substring(rawOld.indexOf('/', 6));
+            final String urlOld = MyApplication.BASE_URL_Img + "uploadPhotos"+rawNew.substring(rawNew.indexOf('/', 6));
             showOld(true, urlOld, new MyCallback(true, urlNew, null), null);
         }
     }

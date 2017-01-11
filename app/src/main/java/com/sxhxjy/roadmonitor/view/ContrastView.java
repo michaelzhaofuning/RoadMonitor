@@ -49,11 +49,11 @@ public class ContrastView extends ImageView {
 
         src = new Rect(x - OFFSET, y - OFFSET, x + OFFSET, y + OFFSET);
         final int left, top;
-        if (ratioX > 0.5f)
+        if (this.ratioX > 0.5f)
             left = xInView - OFFSET_INVIEW;
         else
             left = xInView + OFFSET_INVIEW;
-        if (ratioY > 0.5f)
+        if (this.ratioY > 0.5f)
             top = yInView - OFFSET_INVIEW;
         else
             top = yInView + OFFSET_INVIEW;
@@ -71,7 +71,6 @@ public class ContrastView extends ImageView {
         if (contrastBitmap != null) {
             canvas.drawRect(dst, paint);
             canvas.drawBitmap(contrastBitmap, src, dst, null);
-            contrastBitmap = null;
         }
     }
 }
