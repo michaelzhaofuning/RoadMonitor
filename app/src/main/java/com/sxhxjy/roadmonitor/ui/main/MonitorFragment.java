@@ -695,7 +695,7 @@ public class MonitorFragment extends BaseFragment implements View.OnClickListene
         }
     }
 
-    public void cacheStation(String stationId, String stationName) {
+    public static void cacheStation(String stationId, String stationName) {
         MyApplication.getMyApplication().getSharedPreference().edit().putString("stationId", stationId).apply();
         MyApplication.getMyApplication().getSharedPreference().edit().putString("stationName", stationName).apply();
     }

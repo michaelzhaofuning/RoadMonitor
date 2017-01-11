@@ -64,6 +64,7 @@ public class AddDataCorrelationActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.add_data_correlation_activity);
         initToolBar("数据关联", true);
+        stationId = getIntent().getStringExtra("stationId");
         colors = new int[]{
                 Color.BLACK,
                 getResources().getColor(android.R.color.holo_red_light),

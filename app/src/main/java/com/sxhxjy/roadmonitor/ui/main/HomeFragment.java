@@ -95,6 +95,7 @@ public class HomeFragment extends BaseFragment implements HomeAdapter.OnItemClic
             public void onResponse(Call call, Response response) throws IOException {
                 if (response.code()!=200) return;
                 final String result=response.body().string();//拿到json数据
+                if (getActivity() == null) return;
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {

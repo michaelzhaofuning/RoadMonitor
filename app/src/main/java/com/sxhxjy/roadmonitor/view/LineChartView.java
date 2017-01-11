@@ -12,6 +12,7 @@ import android.graphics.PathEffect;
 import android.graphics.RectF;
 import android.os.Vibrator;
 import android.util.AttributeSet;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
@@ -94,9 +95,15 @@ public class LineChartView extends View {
     public boolean mIsSimpleDraw = false;
     private boolean isInitialDown = false;
 
+    private float densityFactor = 1;
+
 
     public LineChartView(final Context context, AttributeSet attrs) {
         super(context, attrs);
+
+        DisplayMetrics dm = getResources().getDisplayMetrics();
+        densityFactor = dm.density / 3f; // because of my phone is 3 !
+
         gestureDetector = new GestureDetector(context, new GestureDetector.SimpleOnGestureListener() {
             @Override
             public boolean onDoubleTap(MotionEvent e) {
@@ -230,7 +237,7 @@ public class LineChartView extends View {
 // TODO: should scale xAxis of time => change timeStart timeEnd, put point to the time line !!!!!!
 
         if (myLines.isEmpty() && myLinesRight.isEmpty()) {
-            mPaint.setTextSize(70);
+            mPaint.setTextSize(70); // TODO: dp???????
             mPaint.setColor(Color.GRAY);
             float width = mPaint.measureText(emptyHint);
             canvas.drawText(emptyHint, getMeasuredWidth() / 2 - width / 2, getMeasuredHeight() / 2, mPaint);
@@ -489,7 +496,7 @@ public class LineChartView extends View {
             canvas.drawPoint(x, y, mPaint);
 
             mPaint.setTextSize(30);
-            mPaint.setColor(Color.MAGENTA);
+            mPaint.setColor(Color.BLUE);
             mPaint.setStrokeWidth(1);
             int offsetX = 50;
             int offsetY = 50;

@@ -54,6 +54,7 @@ public class BaseFragment extends Fragment {
                     }
                 });
             }
+            mToolbar.setOverflowIcon(getResources().getDrawable(R.mipmap.over_flow));
 
         }
     }

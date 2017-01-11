@@ -84,6 +84,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,
         b.putString("stationName", stationName);
         b.putString("stationId", stationId);
         monitorFragment.setArguments(b);
+        MonitorFragment.cacheStation(stationId, stationName);
+
         fragments.add(monitorFragment);
         fragments.add(new DataAnalysisFragment());
         fragments.add(new AlertFragment());
