@@ -49,11 +49,13 @@ public class HomeAdapter  extends RecyclerView.Adapter<HomeAdapter.ViewHolder> i
         HomeTheme.DataBean map=list.get(position);
         WindowManager wm = (WindowManager)context.getSystemService(Context.WINDOW_SERVICE);
         int width = wm.getDefaultDisplay().getWidth();
-        holder.name.setMinimumWidth(width/3);
+        holder.home_list_item.setMinimumWidth(width/4);
+        holder.home_list_item.setMinimumHeight(width/5);
+
         if (position==0)
             holder.name.setText(map.getName());
         else
-            holder.name.setText(map.getName()+"\n\n优");
+            holder.name.setText(map.getName()+"\n\n正常");
     }
 
     @Override

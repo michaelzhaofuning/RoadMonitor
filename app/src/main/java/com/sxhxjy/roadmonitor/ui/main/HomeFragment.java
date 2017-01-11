@@ -14,11 +14,15 @@ import com.alibaba.fastjson.JSON;
 import com.google.gson.Gson;
 import com.sxhxjy.roadmonitor.R;
 import com.sxhxjy.roadmonitor.adapter.HomeAdapter;
+import com.sxhxjy.roadmonitor.adapter.HomethemeAdapter;
 import com.sxhxjy.roadmonitor.base.BaseFragment;
 import com.sxhxjy.roadmonitor.base.CacheManager;
+import com.sxhxjy.roadmonitor.base.HttpResponse;
 import com.sxhxjy.roadmonitor.base.MyApplication;
+import com.sxhxjy.roadmonitor.entity.GroupTree;
 import com.sxhxjy.roadmonitor.entity.HomeTheme;
 import com.sxhxjy.roadmonitor.entity.LoginData;
+import com.sxhxjy.roadmonitor.entity.SimpleItem;
 import com.sxhxjy.roadmonitor.ui.main.picture.TakeNotesActivity;
 import com.tencent.mapsdk.raster.model.BitmapDescriptorFactory;
 import com.tencent.mapsdk.raster.model.LatLng;
@@ -36,6 +40,10 @@ import okhttp3.Callback;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
+import rx.Subscriber;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Func1;
+import rx.schedulers.Schedulers;
 
 /**
  * 2016/9/26
@@ -43,7 +51,8 @@ import okhttp3.Response;
  * @author Michael Zhao
  */
 
-public class HomeFragment extends BaseFragment implements HomeAdapter.OnItemClickLietener{
+public class HomeFragment extends BaseFragment implements HomeAdapter.OnItemClickLietener
+        ,HomethemeAdapter.OnItemClick_Theme{
     /**\
      * 首页——fragment页
      */
@@ -52,6 +61,13 @@ public class HomeFragment extends BaseFragment implements HomeAdapter.OnItemClic
     private OkHttpClient okHttpClient;
     private Request request;
     private RecyclerView lv_home;
+    private RecyclerView rv_place;
+    private List<SimpleItem> mList;
+    private  SimpleItem simpleItem;
+    private HomethemeAdapter adapter;
+
+
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -62,7 +78,7 @@ public class HomeFragment extends BaseFragment implements HomeAdapter.OnItemClic
         super.onViewCreated(view, savedInstanceState);
         initToolBar(view, "首页", false);
         init(view);
-        getOkHttp();
+        getplace();
         mapview.onCreate(savedInstanceState);
         TencentMap tencentMap = mapview.getMap();
         LoginData loginData = new Gson().fromJson(CacheManager.getInstance().get("login"), LoginData.class);
@@ -82,6 +98,86 @@ public class HomeFragment extends BaseFragment implements HomeAdapter.OnItemClic
             }
         }
     }
+
+    public void getplace() {
+        getHttpService().getGroups(MyApplication.getMyApplication().getSharedPreference().getString("gid","4")).subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .map(new Func1<HttpResponse<List<GroupTree>>, List<GroupTree>>() {
+                    @Override
+                    public List<GroupTree> call(HttpResponse<List<GroupTree>> listHttpResponse) {
+                        return listHttpResponse.getData();
+                    }
+                })
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<List<GroupTree>>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onNext(List<GroupTree> data) {
+                        mList=new ArrayList<SimpleItem>();
+                        if (data != null) {
+                            for (GroupTree groupTree : data.get(0).childrenGroup) {
+                                SimpleItem item = new SimpleItem();
+                                item.setTitle(groupTree.name);
+                                item.setId(groupTree.id);
+                                mList.add(item);
+                            }
+
+                            simpleItem = new SimpleItem(data.get(0).childrenGroup.get(0).id, data.get(0).childrenGroup.get(0).name, false);
+                            LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
+                            layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+                            rv_place.setLayoutManager(layoutManager);
+                            adapter=new HomethemeAdapter(getActivity(),mList);
+                            rv_place.setAdapter(adapter);
+                            adapter.setClickLietener(HomeFragment.this);
+                            adapter.setSeclection(0);
+                            getOkHttp();
+                        }
+                    }
+                });
+    }
+    /**
+     *点击地点
+     */
+    @Override
+    public void setItemClick_Theme(int position,View v) {
+        simpleItem=mList.get(position);
+        adapter.setSeclection(position);
+        adapter.notifyDataSetChanged();
+        getOkHttp();
+    }
+
+    /**
+     *点击主题
+     */
+
+//    @Override
+//    public void setItemClickListener(int position) {
+
+//    }
+
+
+    @Override
+    public void setItemClickListener(int position) {
+        if (position==0){
+            startActivity(new Intent(getActivity(), TakeNotesActivity.class));
+        } else{
+            MonitorFragment monitorFragment = ((MonitorFragment) ((MainActivity)getActivity()).fragments.get(1));
+            monitorFragment.cacheStation(simpleItem.getId(),simpleItem.getTitle());
+            monitorFragment.setIsFirst(); // load once Not called
+            monitorFragment.changeMonitor(position-1);
+            ((MainActivity)getActivity()).selectedBar(1);
+        }
+    }
+
     private void getOkHttp() {
         new OkHttpClient().newCall(new Request.Builder()
 //                .post(new FormBody.Builder().build())
@@ -109,7 +205,7 @@ public class HomeFragment extends BaseFragment implements HomeAdapter.OnItemClic
         final HomeTheme theme= JSON.parseObject(s,HomeTheme.class);
         List<HomeTheme.DataBean> list=new ArrayList<>();
         HomeTheme.DataBean hd=new HomeTheme.DataBean();
-        hd.setName("图片比对");
+        hd.setName("图像监测");
         list.add(hd);
         if (theme.getData() == null) return;
         for (HomeTheme.DataBean hds:theme.getData()){
@@ -126,6 +222,7 @@ public class HomeFragment extends BaseFragment implements HomeAdapter.OnItemClic
     }
     public void init(View view){
         lv_home= (RecyclerView) view.findViewById(R.id.list_home);
+        rv_place= (RecyclerView) view.findViewById(R.id.place_rv);
         mapview = (MapView) view.findViewById(R.id.map_view);
     }
 
@@ -150,15 +247,5 @@ public class HomeFragment extends BaseFragment implements HomeAdapter.OnItemClic
         super.onStop();
     }
 
-    @Override
-    public void setItemClickListener(int position) {
-        if (position==0){
-            startActivity(new Intent(getActivity(), TakeNotesActivity.class));
-        } else{
-            MonitorFragment monitorFragment = ((MonitorFragment) ((MainActivity)getActivity()).fragments.get(1));
-            monitorFragment.setIsFirst(); // load once Not called
-            monitorFragment.changeMonitor(position-1);
-            ((MainActivity)getActivity()).selectedBar(1);
-        }
-    }
+
 }

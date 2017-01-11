@@ -5,10 +5,18 @@
     android:orientation="vertical">
     <include layout="@layout/toolbar_layout" />
     <android.support.v7.widget.RecyclerView
+        android:id="@+id/place_rv"
+        android:layout_width="match_parent"
+        android:layout_marginBottom="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_height="wrap_content">
+    </android.support.v7.widget.RecyclerView>
+    <android.support.v7.widget.RecyclerView
         android:id="@+id/list_home"
         android:layout_width="match_parent"
-        android:layout_height="100dip"
-        android:layout_marginTop="10dp"/>
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        />
     <com.tencent.tencentmap.mapsdk.map.MapView
         android:id="@+id/map_view"
         android:layout_width="match_parent"

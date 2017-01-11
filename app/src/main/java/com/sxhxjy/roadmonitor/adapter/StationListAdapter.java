@@ -77,7 +77,9 @@ public class StationListAdapter extends RecyclerView.Adapter<StationListAdapter.
     @Override
     public void onClick(View v) {
         int p = (int) v.getTag();
-
+        /*
+        todo
+         */
         if (currentGroup.get(p).childrenGroup != null) {
             mList.clear();
             for (GroupTree childrenGroup : currentGroup.get(p).childrenGroup) {

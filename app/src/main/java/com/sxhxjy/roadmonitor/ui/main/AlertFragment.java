@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.sxhxjy.roadmonitor.R;
 import com.sxhxjy.roadmonitor.adapter.AlertListAdapter;
 import com.sxhxjy.roadmonitor.adapter.FilterTreeAdapter;
+import com.sxhxjy.roadmonitor.adapter.HomethemeAdapter;
 import com.sxhxjy.roadmonitor.adapter.SimpleListAdapter;
 import com.sxhxjy.roadmonitor.base.BaseActivity;
 import com.sxhxjy.roadmonitor.base.BaseListFragment;
@@ -21,6 +22,7 @@ import com.sxhxjy.roadmonitor.base.MyApplication;
 import com.sxhxjy.roadmonitor.base.MySubscriber;
 import com.sxhxjy.roadmonitor.entity.AlertData;
 import com.sxhxjy.roadmonitor.entity.AlertTree;
+import com.sxhxjy.roadmonitor.entity.GroupTree;
 import com.sxhxjy.roadmonitor.entity.SimpleItem;
 import com.sxhxjy.roadmonitor.view.MyPopupWindow;
 import com.sxhxjy.roadmonitor.view.NumDrawable;
@@ -31,6 +33,10 @@ import java.util.Comparator;
 import java.util.List;
 
 import rx.Observable;
+import rx.Subscriber;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Func1;
+import rx.schedulers.Schedulers;
 
 /**
  * 2016/9/19
@@ -49,15 +55,23 @@ public class AlertFragment extends BaseListFragment<AlertData> {
     private RecyclerView mFilterList;//下拉列表控件
     private MyPopupWindow myPopupWindow;//弹出窗口
     private FilterTreeAdapter filterTreeAdapter;//抽屉中下拉类表适配器
-    private String level,cStype, timeCode, state;
+    private String level,cStype, timeCode, state,stationId;
     private  long afterTime,beforeTime;
     public NumDrawable alertDrawable;
 
     @Override
     public Observable<HttpResponse<List<AlertData>>> getObservable() {
-        FilterTreeAdapter.Group f1=groups.get(0);//告警等级
-        FilterTreeAdapter.Group f2=groups.get(1);//设备类型
-        FilterTreeAdapter.Group f3=groups.get(2);//状态
+        FilterTreeAdapter.Group f0=groups.get(0);//地点
+        FilterTreeAdapter.Group f1=groups.get(1);//告警等级
+        FilterTreeAdapter.Group f2=groups.get(2);//设备类型
+        FilterTreeAdapter.Group f3=groups.get(3);//状态
+        for (SimpleItem s:f0.getList()){
+            if (s.isChecked()==true){
+                stationId=s.getId();
+            }
+        }
+
+
         for (SimpleItem s:f1.getList()){
             if (s.isChecked()==true){
                 level=s.getId();
@@ -86,8 +100,8 @@ public class AlertFragment extends BaseListFragment<AlertData> {
 
 
 
-        return getHttpService().getAlertDataList(null,
-                MyApplication.getMyApplication().getSharedPreference().getString("stationId", ""),
+        return getHttpService().getAlertDataList(stationId,
+                MyApplication.getMyApplication().getSharedPreference().getString("gid","4"),
                 level,cStype,beforeTime,afterTime, timeCode
      , state);
     }
@@ -235,32 +249,40 @@ public class AlertFragment extends BaseListFragment<AlertData> {
         Button confirm = (Button) myPopupWindow.getContentView().findViewById(R.id.confirm);
         Button reset = (Button) myPopupWindow.getContentView().findViewById(R.id.reset);
         groups = new ArrayList<>();
-        final List<SimpleItem> mList0 = new ArrayList<>();
+
+        //增加抽屉列表项
+        final List<SimpleItem> mList0 =getplace();
         final List<SimpleItem> mList1 = new ArrayList<>();
         final List<SimpleItem> mList2 = new ArrayList<>();
+        final List<SimpleItem> mList3 = new ArrayList<>();
         //抽屉
-        FilterTreeAdapter.Group group0 = new FilterTreeAdapter.Group(mList0, "告警等级");
-        FilterTreeAdapter.Group group1 = new FilterTreeAdapter.Group(mList1, "设备类型");
-        FilterTreeAdapter.Group group2 = new FilterTreeAdapter.Group(mList2, "状态");
+        FilterTreeAdapter.Group group0 = new FilterTreeAdapter.Group(mList0, "地点");
+        FilterTreeAdapter.Group group1 = new FilterTreeAdapter.Group(mList1, "告警等级");
+        FilterTreeAdapter.Group group2 = new FilterTreeAdapter.Group(mList2, "设备类型");
+        FilterTreeAdapter.Group group3 = new FilterTreeAdapter.Group(mList3, "状态");
         groups.add(group0);
         groups.add(group1);
         groups.add(group2);
+        groups.add(group3);
         //为抽屉中每个列表循环添加列表项
+//        getFragmentManager().beginTransaction()
+//                .add(R.id.container, new StationListActivity.StationListFragment()).commit();
+
         getMessage(getHttpService().getAlertTree(), new MySubscriber<AlertTree>() {
             @Override
             protected void onMyNext(AlertTree alertTree) {
 
                 for (AlertTree.AlarmLevelBean alarmLevelBean : alertTree.getAlarmLevel()) {
-                    mList0.add(new SimpleItem(alarmLevelBean.getId(), alarmLevelBean.getValue(), false));
+                    mList1.add(new SimpleItem(alarmLevelBean.getId(), alarmLevelBean.getValue(), false));
                 }
 
                 for (AlertTree.AlarmTypeBean alarmTypeBean : alertTree.getAlarmType()) {
-                    mList1.add(new SimpleItem(alarmTypeBean.getId(), alarmTypeBean.getValue(), false));
+                    mList2.add(new SimpleItem(alarmTypeBean.getId(), alarmTypeBean.getValue(), false));
                 }
                 for (AlertTree.AlarmStateBean alarmStateBean : alertTree.getAlarmState()) {
                     SimpleItem simpleItem = new SimpleItem(alarmStateBean.getId(), alarmStateBean.getValue(), false);
                     simpleItem.setCode(alarmStateBean.getCode());
-                    mList2.add(simpleItem);
+                    mList3.add(simpleItem);
                 }
             }
         });
@@ -334,4 +356,43 @@ public class AlertFragment extends BaseListFragment<AlertData> {
         return new AlertListAdapter(this, mList);
     }
 
+
+    public List<SimpleItem> getplace() {
+        final List<SimpleItem> mList=new ArrayList<SimpleItem>();
+        getHttpService().getGroups(MyApplication.getMyApplication().getSharedPreference().getString("gid","4")).subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .map(new Func1<HttpResponse<List<GroupTree>>, List<GroupTree>>() {
+                    @Override
+                    public List<GroupTree> call(HttpResponse<List<GroupTree>> listHttpResponse) {
+                        return listHttpResponse.getData();
+                    }
+                })
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<List<GroupTree>>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onNext(List<GroupTree> data) {
+
+                        if (data != null) {
+                            for (GroupTree groupTree : data.get(0).childrenGroup) {
+                                SimpleItem item = new SimpleItem();
+                                item.setTitle(groupTree.name);
+                                item.setId(groupTree.id);
+                                mList.add(item);
+                            }
+
+                        }
+                    }
+                });
+        return mList;
+    }
 }
