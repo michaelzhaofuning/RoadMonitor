@@ -497,7 +497,7 @@ public class LineChartView extends View {
             canvas.drawPoint(x, y, mPaint);
 
             mPaint.setTextSize(30 * densityFactor);
-            mPaint.setColor(getResources().getColor(R.color.colorPrimaryDark));
+            mPaint.setColor(Color.BLACK);
             mPaint.setStrokeWidth(1);
             int offsetX = 50;
             int offsetY = 50;

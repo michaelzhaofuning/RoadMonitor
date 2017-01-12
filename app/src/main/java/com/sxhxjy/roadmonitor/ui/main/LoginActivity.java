@@ -109,6 +109,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                             @Override
                             public void run() {
                                 showToastMsg("网络连接失败");
+                                MyApplication.getMyApplication().initHttp();
                             }
                         });
 

@@ -562,6 +562,17 @@ public class MonitorFragment extends BaseFragment implements View.OnClickListene
                     isFirstProgressDialog = false;
                 }
             }
+
+            @Override
+            public void onError(Throwable e) {
+                super.onError(e);
+
+                if (progressDialog != null) {
+                    progressDialog.dismiss();
+                    progressDialog = null;
+                }
+            }
+
             @Override
             protected void onMyNext(List<MonitorTypeTree> monitorTypeTrees) {
 

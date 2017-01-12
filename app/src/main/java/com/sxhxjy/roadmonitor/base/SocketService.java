@@ -105,7 +105,7 @@ public class SocketService extends Service {
             out.close();
             socket.close();
             t.interrupt();
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
