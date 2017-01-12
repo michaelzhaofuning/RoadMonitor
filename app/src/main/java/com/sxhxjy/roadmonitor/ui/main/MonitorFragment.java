@@ -548,6 +548,7 @@ public class MonitorFragment extends BaseFragment implements View.OnClickListene
     }
 
     private void getTypeTree(final boolean explicitTheme, final int p) {
+        isFirstProgressDialog = true;
 
         getMessage(getHttpService().getMonitorTypeTree(MyApplication.getMyApplication().getSharedPreference().getString("stationId", "")), new MySubscriber<List<MonitorTypeTree>>() {
             @Override
@@ -577,9 +578,9 @@ public class MonitorFragment extends BaseFragment implements View.OnClickListene
                             }
                         }
                     } else {
-                        if (monitorTypeTrees.indexOf(monitorTypeTree) == p &&  monitorTypeTree.getChildrenPoint() != null) {
+                        if (monitorTypeTree.getChildrenPoint() != null) {
                             for (MonitorTypeTree.ChildrenPointBean childrenPointBean : monitorTypeTree.getChildrenPoint()) { // first click
-                                list.add(new SimpleItem(childrenPointBean.getId(), childrenPointBean.getName(), i++ == 0));
+                                list.add(new SimpleItem(childrenPointBean.getId(), childrenPointBean.getName(), monitorTypeTrees.indexOf(monitorTypeTree) == p && i++ == 0));
                             }
                         }
                     }
