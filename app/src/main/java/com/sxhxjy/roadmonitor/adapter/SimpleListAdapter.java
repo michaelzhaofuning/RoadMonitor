@@ -110,7 +110,7 @@ public class SimpleListAdapter extends RecyclerView.Adapter<SimpleListAdapter.Vi
             title = (TextView) itemView.findViewById(R.id.title);
 //            arrow = (ImageView) itemView.findViewById(R.id.right_arrow);
 //            arrow.setColorFilter(itemView.getResources().getColor(R.color.default_color));
-            checkMarker = (ImageView) itemView.findViewById(R.id.imageView);
+            checkMarker = (ImageView) itemView.findViewById(R.id.check_mark);
         }
     }
 }

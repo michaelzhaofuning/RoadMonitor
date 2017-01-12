@@ -38,7 +38,12 @@ public class MyFragment extends BaseFragment {
         version.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                UpdateUtil.update(getActivity(), MyApplication.BASE_URL + "user/changeVersion");
+                UpdateUtil.update(getActivity(), MyApplication.BASE_URL + "user/changeVersion", new UpdateUtil.UpdateListener() {
+                    @Override
+                    public void onNewest() {
+                        showToastMsg("已经是最新版本！");
+                    }
+                });
             }
         });
     }

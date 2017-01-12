@@ -126,6 +126,12 @@ public class DataAnalysisFragment extends BaseFragment {
         mChartsContainer.getChildAt(0).findViewById(R.id.param_info).setVisibility(View.GONE);
         LineChartView lineChartView = (LineChartView) mChartsContainer.getChildAt(0).findViewById(R.id.chart);
         lineChartView.emptyHint = "请选择分析条件";
+        lineChartView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mToolbar.showOverflowMenu();
+            }
+        });
     }
 
     private void addToChart(List<RealTimeData> realTimeDatas, SimpleItem simpleItem, boolean isRight) {

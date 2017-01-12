@@ -37,7 +37,10 @@ import static android.content.Context.NOTIFICATION_SERVICE;
  */
 
 public class UpdateUtil {
-    public static void update(final Context context, String url) {
+    public interface UpdateListener {
+        void onNewest();
+    }
+    public static void update(final Context context, String url, final UpdateListener listener) {
         final OkHttpClient okHttpClient = new OkHttpClient.Builder().build();
 
         final Request req = new Request.Builder()
@@ -112,6 +115,16 @@ public class UpdateUtil {
                                             });
                                         }
                                     }).show();
+                        }
+                    });
+                } else {
+                    // newest
+                    ((BaseActivity) context).runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            // call in ui thread
+                            if (listener != null)
+                                listener.onNewest();
                         }
                     });
                 }

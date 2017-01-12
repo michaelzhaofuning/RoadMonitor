@@ -75,8 +75,11 @@ public class MyApplication extends Application {
                 .build();
         httpService = retrofit.create(HttpService.class);
 
-        // start service
+
+
         Intent intent = new Intent(this, SocketService.class);
+        stopService(intent);
+
         startService(intent);
     }
 

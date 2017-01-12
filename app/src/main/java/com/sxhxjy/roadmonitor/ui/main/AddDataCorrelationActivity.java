@@ -110,6 +110,7 @@ public class AddDataCorrelationActivity extends BaseActivity {
             getMessage(getHttpService().getMonitorTypeTree(stationId), new MySubscriber<List<MonitorTypeTree>>() {
                 @Override
                 protected void onMyNext(List<MonitorTypeTree> monitorTypeTrees) {
+                    mTypeList.clear();
                     for (MonitorTypeTree monitorTypeTree : monitorTypeTrees) {
                         if (monitorTypeTree.getChildrenPoint() != null) {
                             for (MonitorTypeTree.ChildrenPointBean childrenPointBean : monitorTypeTree.getChildrenPoint()) {
@@ -148,7 +149,7 @@ public class AddDataCorrelationActivity extends BaseActivity {
                             aLocation = new String[monitorPositions.size()];
                             int i = 0;
                             int colorIndex = 0;
-
+                            mLocationList.clear();
                             for (MonitorPosition position : monitorPositions) {
                                 SimpleItem simpleItem = new SimpleItem(position.getId(), position.getName(), false);
                                 simpleItem.setCode(position.code);

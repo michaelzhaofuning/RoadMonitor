@@ -51,7 +51,7 @@ public class SocketService extends Service {
                 return;
             }
 
-            while (true) {
+            while (!t.isInterrupted()) {
                 try {
                     if (in == null)
                         break;

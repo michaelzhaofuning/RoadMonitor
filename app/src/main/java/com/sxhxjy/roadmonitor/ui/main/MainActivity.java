@@ -24,6 +24,7 @@ import com.sxhxjy.roadmonitor.base.UpdateUtil;
 import com.sxhxjy.roadmonitor.util.ActivityUtil;
 import com.sxhxjy.roadmonitor.util.MyCountDownTimer;
 import com.sxhxjy.roadmonitor.view.MyLinearLayout;
+import com.sxhxjy.roadmonitor.view.NumDrawable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -60,13 +61,14 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,
             return FRAGMENTS_IN_VIEW_PAGER;
         }
     };
+    public NumDrawable alertDrawable = new NumDrawable(0);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_activity);
         Test.t();
-        UpdateUtil.update(this, MyApplication.BASE_URL + "user/changeVersion");
+        UpdateUtil.update(this, MyApplication.BASE_URL + "user/changeVersion", null);
 
         String stationName = getIntent().getStringExtra("stationName");
         String stationId = getIntent().getStringExtra("stationId");
@@ -97,13 +99,11 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,
         String i=getIntent().getStringExtra("name");
         selectedBar(0);
         fragments.get(0).setUserVisibleHint(true);
+        findViewById(R.id.imageView_bar3).setBackground(alertDrawable);
 
         if (getIntent().getBooleanExtra("alert", false)) {
-            // from ntf
-            selectedBar(3);
-            final AlertFragment alertFragment = (AlertFragment) fragments.get(3);
-            alertFragment.alertDrawable.setNum(getIntent().getIntExtra("alert_num", 0));
-            alertFragment.onRefresh();
+            // draw red circle
+            alertDrawable.setNum(getIntent().getIntExtra("alert_num", 0));
         }
     }
 
@@ -114,7 +114,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,
         // from ntf
         selectedBar(3);
         final AlertFragment alertFragment = (AlertFragment) fragments.get(3);
-        alertFragment.alertDrawable.setNum(intent.getIntExtra("alert_num", 0));
+        alertDrawable.setNum(intent.getIntExtra("alert_num", 0));
         alertFragment.onRefresh();
     }
 
