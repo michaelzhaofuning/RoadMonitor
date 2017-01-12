@@ -769,7 +769,9 @@ public class LineChartView extends View {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        super.onTouchEvent(event);
+        if (myLines.isEmpty() && myLinesRight.isEmpty()) {
+            return super.onTouchEvent(event);
+        }
         if (!myLines.isEmpty()) {
             try {
                 gestureDetector.onTouchEvent(event);

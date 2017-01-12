@@ -62,6 +62,7 @@ public class AddDataContrastActivity extends BaseActivity {
 
     private int[] colors;
     private Random random = new Random();
+    private boolean gettingMsg = false;
 
 
     @Override
@@ -134,7 +135,7 @@ public class AddDataContrastActivity extends BaseActivity {
     }
 
     public void monitorType(final View view) {
-        if (stationId == null) return;
+        if (stationId == null || gettingMsg) return;
         if (mTypeList.isEmpty()) {
             getMessage(getHttpService().getMonitorTypeTree(stationId), new MySubscriber<List<MonitorTypeTree>>() {
                 @Override
@@ -156,6 +157,23 @@ public class AddDataContrastActivity extends BaseActivity {
 
                     showDialogType(view);
                 }
+
+                @Override
+                public void onCompleted() {
+                    super.onCompleted();
+                    gettingMsg = false;
+                }
+                @Override
+                public void onStart() {
+                    super.onStart();
+                    gettingMsg = true;
+                }
+
+                @Override
+                public void onError(Throwable e) {
+                    super.onError(e);
+                    gettingMsg = false;
+                }
             });
         } else {
             for (SimpleItem item : mTypeList) {
@@ -166,6 +184,7 @@ public class AddDataContrastActivity extends BaseActivity {
     }
 
     public void monitorLocation(final View view) {
+        if (gettingMsg) return;
         if (!mLocationList.isEmpty()) {
             showDialogPosition(view);
         } else {
@@ -189,6 +208,22 @@ public class AddDataContrastActivity extends BaseActivity {
                                 aLocation[i++] = position.getName();
                             }
                             showDialogPosition(view);
+                        }
+                        @Override
+                        public void onCompleted() {
+                            super.onCompleted();
+                            gettingMsg = false;
+                        }
+                        @Override
+                        public void onStart() {
+                            super.onStart();
+                            gettingMsg = true;
+                        }
+
+                        @Override
+                        public void onError(Throwable e) {
+                            super.onError(e);
+                            gettingMsg = false;
                         }
                     });
                 }

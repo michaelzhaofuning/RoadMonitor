@@ -99,8 +99,8 @@ public class AlertFragment extends BaseListFragment<AlertData> {
 
 
 
-        return getHttpService().getAlertDataList(stationId,
-                MyApplication.getMyApplication().getSharedPreference().getString("gid","4"),
+        return getHttpService().getAlertDataList(null,
+                stationId,
                 level,cStype,beforeTime,afterTime, timeCode
      , state);
     }
@@ -166,6 +166,7 @@ public class AlertFragment extends BaseListFragment<AlertData> {
                     mFilterList.setVisibility(View.GONE);
             }
         });
+        // 默认
         mFilterTitledefault.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -323,6 +324,7 @@ public class AlertFragment extends BaseListFragment<AlertData> {
                 state = null;
                 level = null;
                 cStype = null;
+                stationId = null;
 
             }
         });

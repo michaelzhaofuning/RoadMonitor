@@ -48,14 +48,14 @@ public class ContrastView extends ImageView {
         final int yInView = (int) (this.ratioY * getMeasuredHeight());
 
         src = new Rect(x - OFFSET, y - OFFSET, x + OFFSET, y + OFFSET);
-        final int left, top;
+        int left, top = yInView;
         if (this.ratioX > 0.5f)
             left = xInView - OFFSET_INVIEW;
         else
             left = xInView + OFFSET_INVIEW;
-        if (this.ratioY > 0.5f)
+        if (this.ratioY > 0.7f)
             top = yInView - OFFSET_INVIEW;
-        else
+        else if (this.ratioY < 0.3f)
             top = yInView + OFFSET_INVIEW;
 
         dst = new Rect(left, top, left + OFFSET_INVIEW, top + OFFSET_INVIEW);

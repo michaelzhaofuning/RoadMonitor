@@ -44,25 +44,13 @@
                 android:orientation="vertical"
                 android:layout_weight="1"
                 android:background="@color/white"
-                android:layout_height="wrap_content">
+                android:layout_height="match_parent">
+
                 <TextView
-                    android:text="位置"
+                    android:padding="3dp"
                     android:gravity="center"
-                    android:padding="3dp"
-                    android:background="@color/colorPrimaryTranslucent"
-                    android:textColor="@color/colorPrimaryDark"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                   />
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="@color/colorPrimary"/>
-                <TextView
-                    android:padding="3dp"
-                    android:gravity="center_horizontal"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:id="@+id/position"
                  />
 

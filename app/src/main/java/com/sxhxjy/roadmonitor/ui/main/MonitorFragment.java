@@ -241,8 +241,6 @@ public class MonitorFragment extends BaseFragment implements View.OnClickListene
             }
         });
 
-        getTypeTree(false);
-
 /**
  * 弹出窗口
  */
@@ -360,17 +358,7 @@ public class MonitorFragment extends BaseFragment implements View.OnClickListene
 
 
                         getMessage(getHttpService().getRealTimeData(simpleItem.getCode(), start, end, Integer.parseInt(timeId)), new MySubscriber<ComplexData>() {
-                            @Override
-                            public void onStart() {
-                                super.onStart();
-                                if (progressDialog == null && isFirstProgressDialog && getActivity() != null) {
-                                    progressDialog = new ProgressDialog(getActivity());
-                                    progressDialog.setCanceledOnTouchOutside(false);
-                                    progressDialog.setMessage("正在获取数据...");
-                                    progressDialog.show();
-                                    isFirstProgressDialog = false;
-                                }
-                            }
+
 
                             @Override
                             protected void onMyNext(ComplexData complexData) {
@@ -464,6 +452,18 @@ public class MonitorFragment extends BaseFragment implements View.OnClickListene
                             }
 
                             @Override
+                            public void onStart() {
+                                super.onStart();
+                                if (progressDialog == null && isFirstProgressDialog && getActivity() != null) {
+                                    progressDialog = new ProgressDialog(getActivity());
+                                    progressDialog.setCanceledOnTouchOutside(false);
+                                    progressDialog.setMessage("正在获取数据...");
+                                    progressDialog.show();
+                                    isFirstProgressDialog = false;
+                                }
+                            }
+
+                            @Override
                             public void onError(Throwable e) {
                                 super.onError(e);
 
@@ -542,14 +542,25 @@ public class MonitorFragment extends BaseFragment implements View.OnClickListene
         });
     }
 
+
     private void getTypeTree() {
-        getTypeTree(true);
+        getTypeTree(false, 0);
     }
 
-    private void getTypeTree(final boolean getLocation) {
-
+    private void getTypeTree(final boolean explicitTheme, final int p) {
 
         getMessage(getHttpService().getMonitorTypeTree(MyApplication.getMyApplication().getSharedPreference().getString("stationId", "")), new MySubscriber<List<MonitorTypeTree>>() {
+            @Override
+            public void onStart() {
+                super.onStart();
+                if (progressDialog == null && isFirstProgressDialog && getActivity() != null) {
+                    progressDialog = new ProgressDialog(getActivity());
+                    progressDialog.setCanceledOnTouchOutside(false);
+                    progressDialog.setMessage("正在获取数据...");
+                    progressDialog.show();
+                    isFirstProgressDialog = false;
+                }
+            }
             @Override
             protected void onMyNext(List<MonitorTypeTree> monitorTypeTrees) {
 
@@ -559,17 +570,23 @@ public class MonitorFragment extends BaseFragment implements View.OnClickListene
 
                 for (MonitorTypeTree monitorTypeTree : monitorTypeTrees) {
                     List<SimpleItem> list = new ArrayList<SimpleItem>();
-                    if (monitorTypeTree.getChildrenPoint() != null) {
-                        for (MonitorTypeTree.ChildrenPointBean childrenPointBean : monitorTypeTree.getChildrenPoint()) { // first click
-                            list.add(new SimpleItem(childrenPointBean.getId(), childrenPointBean.getName(), i++ == 0));
+                    if (!explicitTheme) {
+                        if (monitorTypeTree.getChildrenPoint() != null) {
+                            for (MonitorTypeTree.ChildrenPointBean childrenPointBean : monitorTypeTree.getChildrenPoint()) { // first click
+                                list.add(new SimpleItem(childrenPointBean.getId(), childrenPointBean.getName(), i++ == 0));
+                            }
+                        }
+                    } else {
+                        if (monitorTypeTrees.indexOf(monitorTypeTree) == p &&  monitorTypeTree.getChildrenPoint() != null) {
+                            for (MonitorTypeTree.ChildrenPointBean childrenPointBean : monitorTypeTree.getChildrenPoint()) { // first click
+                                list.add(new SimpleItem(childrenPointBean.getId(), childrenPointBean.getName(), i++ == 0));
+                            }
                         }
                     }
                     FilterTreeAdapter.Group group = new FilterTreeAdapter.Group(list, monitorTypeTree.getName());
                     groupsOfFilterTree.add(group);
                 }
                 filterTreeAdapter.notifyDataSetChanged();
-
-                if (!getLocation) return;
 
                 for (int j = 0; j < groupsOfFilterTree.size(); j++) {
                     for (int k = 0; k < groupsOfFilterTree.get(j).getList().size(); k++) {
@@ -586,6 +603,11 @@ public class MonitorFragment extends BaseFragment implements View.OnClickListene
 
     //首页点击修改主题
     public void changeMonitor(int position) {
+        stationId = MyApplication.getMyApplication().getSharedPreference().getString("stationId", "");
+        mTextViewCenter.setText(MyApplication.getMyApplication().getSharedPreference().getString("stationName", ""));
+        groupsOfFilterTree.clear();
+        getTypeTree(true, position);
+        /*
         if (groupsOfFilterTree != null && groupsOfFilterTree.size() == 0) return;
 
         for (FilterTreeAdapter.Group group : filterTreeAdapter.mGroups) {
@@ -597,7 +619,7 @@ public class MonitorFragment extends BaseFragment implements View.OnClickListene
             groupsOfFilterTree.get(position).getList().get(0).setChecked(true);
             getLocation(position, 0);
             mAdapter.notifyDataSetChanged();
-        }
+        }*/
     }
 
     private void getParamInfo() {

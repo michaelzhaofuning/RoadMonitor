@@ -106,6 +106,8 @@ public class ChartActivity extends BaseActivity {
         set.setColor(Color.argb(255, random.nextInt(256), random.nextInt(256), random.nextInt(256)));
         set.setAxisDependency(YAxis.AxisDependency.LEFT);
         set.setDrawCubic(false);
+        set.setDrawCircleHole(false);
+        set.setCircleRadius(2.0f);
         return set;
     }
 
