@@ -55,12 +55,12 @@ public void onBindViewHolder(final ViewHolder holder, int position) {
 	if (clickTemp == position) {
 //		holder.theme_layout.setBackgroundResource(R.drawable.border_color1);
 		holder.theme_layout.setEnabled(false);
-		holder.name.setBackgroundResource(R.drawable.placeholder2);
+//		holder.name.setBackgroundResource(R.drawable.placeholder2);
 
 	} else {
 //		holder.theme_layout.setBackgroundResource(R.drawable.border_color2);
 		holder.theme_layout.setEnabled(true);
-		holder.name.setBackgroundResource(R.drawable.gray_white_selector);
+//		holder.name.setBackgroundResource(R.drawable.gray_white_selector);
 	}
 
 }

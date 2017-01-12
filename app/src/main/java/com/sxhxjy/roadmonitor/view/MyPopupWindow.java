@@ -23,7 +23,7 @@ public class MyPopupWindow extends PopupWindow implements PopupWindow.OnDismissL
     protected View view;
 
     public MyPopupWindow(BaseActivity activity, int viewId) {
-        super(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT);
+        super(700, ViewGroup.LayoutParams.MATCH_PARENT);
         mActivity = activity;
         setAnimationStyle(R.style.popup_window_anim);
         setFocusable(true);

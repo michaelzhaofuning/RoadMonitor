@@ -6,7 +6,7 @@
     <color name="colorAccent">#16a085</color>
 
     <color name="default_text_color">#aaaaaa</color>
-    <color name="grey_text_color">#ececec</color>
+    <color name="grey_text_color">#ecedef</color>
     <!--<color name="grey_text_color">#fff</color>-->
     <color name="default_color">#dddddd</color>
     <color name="default_color_light">#eeeeee</color>

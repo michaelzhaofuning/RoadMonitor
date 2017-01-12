@@ -105,7 +105,13 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                 okHttpClient.newCall(request).enqueue(new Callback() {
                     @Override
                     public void onFailure(Call call, IOException e) {
-                        showToastMsg("网络连接失败");
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                showToastMsg("网络连接失败");
+                            }
+                        });
+
                     }
 
                     @Override
