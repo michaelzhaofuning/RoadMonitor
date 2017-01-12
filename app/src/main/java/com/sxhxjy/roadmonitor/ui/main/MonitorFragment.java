@@ -588,13 +588,21 @@ public class MonitorFragment extends BaseFragment implements View.OnClickListene
                 }
                 filterTreeAdapter.notifyDataSetChanged();
 
+                boolean flag = false;
                 for (int j = 0; j < groupsOfFilterTree.size(); j++) {
                     for (int k = 0; k < groupsOfFilterTree.get(j).getList().size(); k++) {
                         if (groupsOfFilterTree.get(j).getList().get(k).isChecked()) {
-                            getLocation(j, k);
+                            getLocation(j, k); flag = true;
                         }
                     }
                 }
+                if (!flag) {
+                    if (progressDialog != null) {
+                        progressDialog.dismiss();
+                        progressDialog = null;
+                    }
+                }
+
 
 
             }
@@ -603,8 +611,11 @@ public class MonitorFragment extends BaseFragment implements View.OnClickListene
 
     //首页点击修改主题
     public void changeMonitor(int position) {
+        isFirstProgressDialog = true;
+
         stationId = MyApplication.getMyApplication().getSharedPreference().getString("stationId", "");
-        mTextViewCenter.setText(MyApplication.getMyApplication().getSharedPreference().getString("stationName", ""));
+        if (mTextViewCenter!=null)
+            mTextViewCenter.setText(MyApplication.getMyApplication().getSharedPreference().getString("stationName", ""));
         groupsOfFilterTree.clear();
         getTypeTree(true, position);
         /*
