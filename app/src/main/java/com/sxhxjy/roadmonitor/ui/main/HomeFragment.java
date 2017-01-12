@@ -2,6 +2,8 @@ package com.sxhxjy.roadmonitor.ui.main;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -9,6 +11,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.alibaba.fastjson.JSON;
 import com.google.gson.Gson;
@@ -56,6 +60,7 @@ public class HomeFragment extends BaseFragment implements HomeAdapter.OnItemClic
     /**\
      * 首页——fragment页
      */
+    private TextView hide;
     private MapView mapview;
     private String path= MyApplication.BASE_URL + "points/findAppRootPoint?groupId=4028812c57b6993b0157b6aca4410004";
     private OkHttpClient okHttpClient;
@@ -65,8 +70,30 @@ public class HomeFragment extends BaseFragment implements HomeAdapter.OnItemClic
     private List<SimpleItem> mList;
     private  SimpleItem simpleItem;
     private HomethemeAdapter adapter;
+    private LinearLayout layout_theme;
+    Handler handler=new Handler(){
+        //接受消息的线程
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            switch (msg.what){
+                case 0:
+                    layout_theme.setVisibility(View.GONE);
+                    hide.setVisibility(View.VISIBLE);
+                    hide.setText("网络连接失败，点击刷新");
+                    hide.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            layout_theme.setVisibility(View.VISIBLE);
+                            hide.setVisibility(View.GONE);
+                            getplace();
+                        }
+                    });
 
-
+                    break;
+            }
+        }
+    };
 
     @Nullable
     @Override
@@ -112,12 +139,15 @@ public class HomeFragment extends BaseFragment implements HomeAdapter.OnItemClic
                 .subscribe(new Subscriber<List<GroupTree>>() {
                     @Override
                     public void onCompleted() {
-
+                        Log.i("ooooooooooooooo","??????????????______-----onCompleted");
                     }
 
                     @Override
                     public void onError(Throwable e) {
-
+                        Message message = new Message();
+                        message.what = 0;
+//                        message.obj = result;
+                        handler.sendMessage(message);
                     }
 
                     @Override
@@ -192,6 +222,7 @@ public class HomeFragment extends BaseFragment implements HomeAdapter.OnItemClic
                 if (response.code()!=200) return;
                 final String result=response.body().string();//拿到json数据
                 if (getActivity() == null) return;
+
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -212,7 +243,6 @@ public class HomeFragment extends BaseFragment implements HomeAdapter.OnItemClic
         for (HomeTheme.DataBean hds:theme.getData()){
             list.add(hds);
         }
-        Log.i("aaaaaa",list.size()+"");
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
@@ -225,6 +255,8 @@ public class HomeFragment extends BaseFragment implements HomeAdapter.OnItemClic
         lv_home= (RecyclerView) view.findViewById(R.id.list_home);
         rv_place= (RecyclerView) view.findViewById(R.id.place_rv);
         mapview = (MapView) view.findViewById(R.id.map_view);
+        hide= (TextView) view.findViewById(R.id.home_hide);
+        layout_theme= (LinearLayout) view.findViewById(R.id.layout_theme);
     }
 
     @Override
