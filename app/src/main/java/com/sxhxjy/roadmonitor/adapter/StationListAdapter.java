@@ -109,13 +109,15 @@ public class StationListAdapter extends RecyclerView.Adapter<StationListAdapter.
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView title, location, date, status;
-        ImageView arrow;
+        TextView title, location, date;
+        ImageView arrow, checkMark;
 
         ViewHolder(View itemView) {
             super(itemView);
             title = (TextView) itemView.findViewById(R.id.title);
             arrow = (ImageView) itemView.findViewById(R.id.right_arrow);
+            checkMark = (ImageView) itemView.findViewById(R.id.check_mark);
+            checkMark.setVisibility(View.GONE);
             arrow.setColorFilter(itemView.getResources().getColor(R.color.default_color));
         }
     }

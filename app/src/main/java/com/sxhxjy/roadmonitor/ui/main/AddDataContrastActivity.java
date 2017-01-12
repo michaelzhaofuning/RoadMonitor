@@ -69,6 +69,7 @@ public class AddDataContrastActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.add_data_contrast_activity);
         initToolBar("数据对比", true);
+        stationId = getIntent().getStringExtra("stationId");
         colors = new int[]{
                 Color.BLACK,
                 getResources().getColor(android.R.color.holo_red_light),
@@ -138,6 +139,7 @@ public class AddDataContrastActivity extends BaseActivity {
             getMessage(getHttpService().getMonitorTypeTree(stationId), new MySubscriber<List<MonitorTypeTree>>() {
                 @Override
                 protected void onMyNext(List<MonitorTypeTree> monitorTypeTrees) {
+                    mTypeList.clear();
                     for (MonitorTypeTree monitorTypeTree : monitorTypeTrees) {
                         if (monitorTypeTree.getChildrenPoint() != null) {
                             for (MonitorTypeTree.ChildrenPointBean childrenPointBean : monitorTypeTree.getChildrenPoint()) {
@@ -172,6 +174,7 @@ public class AddDataContrastActivity extends BaseActivity {
                     getMessage(getHttpService().getPositions(item.getId(), stationId), new MySubscriber<List<MonitorPosition>>() {
                         @Override
                         protected void onMyNext(List<MonitorPosition> monitorPositions) {
+                            mLocationList.clear();
                             aLocation = new String[monitorPositions.size()];
                             int i = 0;
                             int colorIndex = 0;

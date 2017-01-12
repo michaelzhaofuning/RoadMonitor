@@ -14,6 +14,7 @@ app:dividerShowOfMyLinearLayout="true"
         app:titleOfMyLinearLayout="监测点"
         app:expandedOfMyLinearLayout="true"
         android:onClick="chooseStation"
+        android:visibility="gone"
         android:layout_height="wrap_content">
 
     </com.sxhxjy.roadmonitor.view.MyLinearLayout>

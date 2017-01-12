@@ -126,16 +126,7 @@ public class AlertListAdapter extends RecyclerView.Adapter<AlertListAdapter.View
                     });
 
                 }
-            }).setNegativeButton("取消", null).setNeutralButton("查看详情", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    Bundle b = new Bundle();
-                    b.putString("start", mList.get(p).getStime()+"");
-                    b.putString("end", mList.get(p).getEtime()+"");
-                    b.putString("id", mList.get(p).getId());
-                    ActivityUtil.startActivityForResult(mFragment.getActivity(), AlertDetailActivity.class, b, 100);
-                }
-            }).create();
+            }).setNegativeButton("取消", null).create();
             alertDialog.show();
             ((EditText) alertDialog.findViewById(R.id.editText)).setText(mList.get(p).getConfirmInfo());
         }

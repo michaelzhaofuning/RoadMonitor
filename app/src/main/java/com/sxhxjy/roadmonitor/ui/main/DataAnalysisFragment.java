@@ -1,7 +1,9 @@
 package com.sxhxjy.roadmonitor.ui.main;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -17,11 +19,14 @@ import android.widget.TextView;
 
 import com.sxhxjy.roadmonitor.R;
 import com.sxhxjy.roadmonitor.base.BaseFragment;
+import com.sxhxjy.roadmonitor.base.CacheManager;
+import com.sxhxjy.roadmonitor.base.MyApplication;
 import com.sxhxjy.roadmonitor.base.MySubscriber;
 import com.sxhxjy.roadmonitor.entity.ComplexData;
 import com.sxhxjy.roadmonitor.entity.RealTimeData;
 import com.sxhxjy.roadmonitor.entity.SimpleItem;
 import com.sxhxjy.roadmonitor.view.LineChartView;
+import com.sxhxjy.roadmonitor.view.MyLinearLayout;
 
 import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
@@ -50,6 +55,8 @@ public class DataAnalysisFragment extends BaseFragment {
     private LinearLayout mChartsContainer;
     private ProgressDialog progressDialog;
     public static int[] colors;
+    private TextView mTextViewCenter;
+    private String stationId;
 
 
     @Nullable
@@ -59,31 +66,72 @@ public class DataAnalysisFragment extends BaseFragment {
     }
 
     @Override
+    protected void loadOnce() {
+        super.loadOnce();
+        CharSequence[] aType = {"数据对比", "数据关联"};
+        new AlertDialog.Builder(getActivity()).setTitle("请选择分析条件").setSingleChoiceItems(aType, 0, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if (which == 0) {//数据对比
+                    Intent intent = new Intent(getActivity(), AddDataContrastActivity.class);
+                    intent.putExtra("stationId", stationId);
+                    startActivityForResult(intent, 1000);
+
+                } else if (which == 1) {
+                    Intent intent = new Intent(getActivity(), AddDataCorrelationActivity.class);
+                    intent.putExtra("stationId", stationId);
+                    startActivityForResult(intent, 1001);
+
+                }
+                dialog.dismiss();
+            }
+        }).create().show();
+    }
+
+    @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         init(view);
-        initToolBar(view, "数据分析", false);
+        initToolBar(view, MyApplication.getMyApplication().getSharedPreference().getString("stationName", ""), false);
         mToolbar.inflateMenu(R.menu.data_right);
         mToolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
                 if (item.getItemId() == R.id.data_contrast) {//数据对比
                     Intent intent = new Intent(getActivity(), AddDataContrastActivity.class);
+                    intent.putExtra("stationId", stationId);
                     startActivityForResult(intent, 1000);
 
                 } else if (item.getItemId() == R.id.data_correlation) {//数据关联
                     Intent intent = new Intent(getActivity(), AddDataCorrelationActivity.class);
+                    intent.putExtra("stationId", stationId);
                     startActivityForResult(intent, 1001);
 
                 }
                 return true;
             }
         });
-
+        mTextViewCenter = (TextView) getView().findViewById(R.id.toolbar_title);
+        mTextViewCenter.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), StationListActivity.class);
+                startActivityForResult(intent, StationListActivity.REQUEST_CODE);
+            }
+        });
+        mTextViewCenter.setCompoundDrawablesWithIntrinsicBounds(null, null, getResources().getDrawable(R.mipmap.expand), null);
+        mTextViewCenter.setCompoundDrawablePadding(20);
+        stationId = MyApplication.getMyApplication().getSharedPreference().getString("stationId", "");
         mChartsContainer = (LinearLayout) getView().findViewById(R.id.charts_container);
         mChartsContainer.getChildAt(0).findViewById(R.id.param_info).setVisibility(View.GONE);
         LineChartView lineChartView = (LineChartView) mChartsContainer.getChildAt(0).findViewById(R.id.chart);
         lineChartView.emptyHint = "请选择分析条件";
+        lineChartView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mToolbar.showOverflowMenu();
+            }
+        });
     }
 
     private void addToChart(List<RealTimeData> realTimeDatas, SimpleItem simpleItem, boolean isRight) {
@@ -119,6 +167,12 @@ public class DataAnalysisFragment extends BaseFragment {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode != Activity.RESULT_OK)
             return; // do nothing
+
+        if (requestCode == StationListActivity.REQUEST_CODE && resultCode == Activity.RESULT_OK) {
+            stationId = data.getStringExtra("stationId");
+            mTextViewCenter.setText(data.getStringExtra("stationName"));
+            return;
+        }
 
         if (mChartsContainer.getChildAt(1) != null)
             mChartsContainer.removeView(mChartsContainer.getChildAt(1));

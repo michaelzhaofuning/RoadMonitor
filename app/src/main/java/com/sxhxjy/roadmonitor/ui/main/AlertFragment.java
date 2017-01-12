@@ -57,7 +57,6 @@ public class AlertFragment extends BaseListFragment<AlertData> {
     private FilterTreeAdapter filterTreeAdapter;//抽屉中下拉类表适配器
     private String level,cStype, timeCode, state,stationId;
     private  long afterTime,beforeTime;
-    public NumDrawable alertDrawable;
 
     @Override
     public Observable<HttpResponse<List<AlertData>>> getObservable() {
@@ -330,9 +329,7 @@ public class AlertFragment extends BaseListFragment<AlertData> {
 
 
 
-            // draw red circle
-        alertDrawable = new NumDrawable(0);
-        getActivity().findViewById(R.id.imageView_bar3).setBackground(alertDrawable);
+
 
     }
 
@@ -343,7 +340,7 @@ public class AlertFragment extends BaseListFragment<AlertData> {
             if (alertData.isConfirm.equals("0"))
                 num++;
         }
-        alertDrawable.setNum(num);
+        ((MainActivity)getActivity()).alertDrawable.setNum(num);
     }
 
     @Override
