@@ -37,7 +37,7 @@ import rx.Observable;
 
 /**
  * 2016/9/26
- *
+ * <p>
  * 实时数据
  */
 
@@ -58,26 +58,30 @@ public class RealTimeDataListActivity extends BaseActivity {
 
         private List<SimpleItem> mListLeft = new ArrayList<>();//等级列表
         private SimpleListAdapter mSimpleListAdapter;//下拉列表适配器
-        private TextView mFilterTitleLeft, mFilterTitleRight,mFilterTitledefault;//等级列表标题，时间列表标题
+        private TextView mFilterTitleLeft, mFilterTitleRight, mFilterTitledefault;//等级列表标题，时间列表标题
         private RecyclerView mFilterList;//下拉列表控件
-        private String  timeCode;
-        private ArrayList<RealTimeData> rdlist=new ArrayList<>();
-        private Set<String> ts =new HashSet<>();
-        private List<String> slist=new ArrayList<>();
+        private String timeCode;
+        private ArrayList<RealTimeData> rdlist = new ArrayList<>();
+        private Set<String> ts = new HashSet<>();
+        private List<String> slist = new ArrayList<>();
+
         @Override
         public Observable<HttpResponse<List<RealTimeData>>> getObservable() {
             mAdapter.notifyDataSetChanged();
             return null;
         }
+
         @Override
         public void onDetach() {
             super.onDetach();
             countDownTimer.cancel();
         }
+
         @Override
         protected Class<RealTimeData> getItemClass() {
             return RealTimeData.class;
         }
+
         @Override
         protected void init() {
             mPullRefreshLoadLayout.enableRefresh(false);
@@ -105,7 +109,7 @@ public class RealTimeDataListActivity extends BaseActivity {
             mFilterTitleLeft.setText("监测点");
             mFilterTitleRight = (TextView) getView().findViewById(R.id.filter_right);
             mFilterTitledefault = (TextView) getView().findViewById(R.id.filter_default);
-            for (int i=0;i<slist.size();i++){
+            for (int i = 0; i < slist.size(); i++) {
                 mListLeft.add(new SimpleItem("", slist.get(i), false));
             }
 
@@ -126,46 +130,53 @@ public class RealTimeDataListActivity extends BaseActivity {
             mFilterTitleRight.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (mList.size()==0)return;
+                    if (mList.size() == 0) return;
                     final StringBuilder sb = new StringBuilder();
                     final Date date = new Date(System.currentTimeMillis());
                     Calendar c = Calendar.getInstance();
                     c.setTimeInMillis(System.currentTimeMillis());
                     int year = c.get(Calendar.YEAR);
-                new DatePickerDialog(getActivity(), new DatePickerDialog.OnDateSetListener() {
-                    @Override
-                    public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                        sb.append(String.format("%s-%s-%s",year+"",
-                                (monthOfYear+1 < 10 ? "0" + monthOfYear+1 : monthOfYear+1+""),
-                                (dayOfMonth < 10 ? "0" + dayOfMonth : dayOfMonth+"")));
+                    new DatePickerDialog(getActivity(), new DatePickerDialog.OnDateSetListener() {
+                        @Override
+                        public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                            sb.append(String.format("%s-%s-%s", year + "",
+                                    (monthOfYear + 1 < 10 ? "0" + monthOfYear + 1 : monthOfYear + 1 + ""),
+                                    (dayOfMonth < 10 ? "0" + dayOfMonth : dayOfMonth + "")));
 
-                        new TimePickerDialog(getActivity(), new TimePickerDialog.OnTimeSetListener() {
-                            @Override
-                            public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                                sb.append(" "+ (hourOfDay < 10 ? "0" + hourOfDay : hourOfDay)+":"+(minute < 10 ? "0" + minute : minute));
-                                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm");
-                                try {
+                            new TimePickerDialog(getActivity(), new TimePickerDialog.OnTimeSetListener() {
+                                @Override
+                                public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                                    sb.append(" " + (hourOfDay < 10 ? "0" + hourOfDay : hourOfDay) + ":" + (minute < 10 ? "0" + minute : minute));
+                                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm");
+                                    try {
 
-                                    long millionSeconds = sdf.parse(sb.toString()).getTime();//毫秒
-                                    long time =mList.get(0).getSaveTime();
+                                        long millionSeconds = sdf.parse(sb.toString()).getTime();//毫秒
+                                        long time = mList.get(0).getSaveTime();
 
-                                    if (millionSeconds>=time) return;
-                                for (int i=1;i<mList.size();i++){
-                                    if (millionSeconds>=mList.get(i).getSaveTime()){
-                                        Log.e("test",  ""+mList.size() + "   " + mRecyclerView.getAdapter().getItemCount());
-                                        linearLayoutManager.scrollToPositionWithOffset(i-1, 0);
-                                        break;
+                                        if (millionSeconds >= time) return;
+
+                                        boolean flag = false;
+                                        for (int i = 1; i < mList.size(); i++) {
+                                            if (millionSeconds >= mList.get(i).getSaveTime()) {
+                                                Log.e("test", "" + mList.size() + "   " + mRecyclerView.getAdapter().getItemCount());
+                                                linearLayoutManager.scrollToPositionWithOffset(i - 1, 0);
+                                                flag = true;
+                                                break;
+                                            }
+                                        }
+
+                                        if (!flag) showToastMsg("没有找到对应数据");
+
+
+                                    } catch (ParseException e) {
+                                        e.printStackTrace();
                                     }
                                 }
-                            } catch (ParseException e) {
-                                    e.printStackTrace();
-                                }
-                                }
                                 //0,0指的是时间，true表示是否为24小时，true为24小时制
-                        },00,00,true).show();
-                    }
-                },year,date.getMonth(), date.getDate()).show();
-            }
+                            }, 0, 0, true).show();
+                        }
+                    }, year, date.getMonth(), date.getDate()).show();
+                }
             });
             mFilterTitledefault.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -185,7 +196,7 @@ public class RealTimeDataListActivity extends BaseActivity {
                 @Override
                 public boolean onTouch(View v, MotionEvent event) {
                     if (event.getAction() == MotionEvent.ACTION_DOWN)
-                    mFilterList.setVisibility(View.GONE);
+                        mFilterList.setVisibility(View.GONE);
                     return false;
                 }
             });
@@ -205,12 +216,12 @@ public class RealTimeDataListActivity extends BaseActivity {
                     mFilterList.setVisibility(View.GONE);
                     if (mSimpleListAdapter.getListData() == mListLeft) {
                         mFilterTitleLeft.setText(mSimpleListAdapter.getListData().get(p).getTitle());
-                        for (SimpleItem s:mListLeft){
+                        for (SimpleItem s : mListLeft) {
                             if (s.isChecked()) {
-                                String title=s.getTitle();
+                                String title = s.getTitle();
                                 rdlist.clear();
-                                for (int i=0;i<MonitorFragment.mRealTimes.size();i++){
-                                    if (title.equals(MonitorFragment.mRealTimes.get(i).getName() + "   " +MonitorFragment.mRealTimes.get(i).getCode())){
+                                for (int i = 0; i < MonitorFragment.mRealTimes.size(); i++) {
+                                    if (title.equals(MonitorFragment.mRealTimes.get(i).getName() + "   " + MonitorFragment.mRealTimes.get(i).getCode())) {
                                         rdlist.add(MonitorFragment.mRealTimes.get(i));
                                     }
                                 }
@@ -238,17 +249,14 @@ public class RealTimeDataListActivity extends BaseActivity {
         }
 
 
-
-
-
-        public void getlist(){
+        public void getlist() {
             rdlist.clear();
-            for (RealTimeData rd:MonitorFragment.mRealTimes){
-                if (rd.getCode().equals(MonitorFragment.mRealTimes.get(0).getCode())){
+            for (RealTimeData rd : MonitorFragment.mRealTimes) {
+                if (rd.getCode().equals(MonitorFragment.mRealTimes.get(0).getCode())) {
                     rdlist.add(rd);
                 }
-                if (!rd.getCode().equals("")&&rd.getCode()!=null){
-                    if(ts.add(rd.getCode())){
+                if (!rd.getCode().equals("") && rd.getCode() != null) {
+                    if (ts.add(rd.getCode())) {
                         slist.add(rd.getName() + "   " + rd.getCode());
                     }
                 }
