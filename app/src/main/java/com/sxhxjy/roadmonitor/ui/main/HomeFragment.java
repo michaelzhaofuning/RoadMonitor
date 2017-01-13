@@ -65,7 +65,8 @@ public class HomeFragment extends BaseFragment implements HomeAdapter.OnItemClic
     private List<SimpleItem> mList;
     private  SimpleItem simpleItem;
     private HomethemeAdapter adapter;
-
+    private LoginData loginData;
+    private TencentMap tencentMap;
 
 
     @Nullable
@@ -80,13 +81,13 @@ public class HomeFragment extends BaseFragment implements HomeAdapter.OnItemClic
         init(view);
         getplace();
         mapview.onCreate(savedInstanceState);
-        TencentMap tencentMap = mapview.getMap();
-        LoginData loginData = new Gson().fromJson(CacheManager.getInstance().get("login"), LoginData.class);
+        tencentMap = mapview.getMap();
+        loginData = new Gson().fromJson(CacheManager.getInstance().get("login"), LoginData.class);
         if (loginData != null) {
             for (LoginData.UserGroupsBean groupsBean : loginData.getUserGroups()) {
                 LatLng latLng = new LatLng(groupsBean.getLatitude(), groupsBean.getLongitude());
                 tencentMap.setCenter(latLng);
-                tencentMap.setZoom(12);
+                tencentMap.setZoom(6);
                 Marker marker = tencentMap.addMarker(new MarkerOptions()
                         .position(latLng)
                         .title(groupsBean.getName())
@@ -150,6 +151,17 @@ public class HomeFragment extends BaseFragment implements HomeAdapter.OnItemClic
     @Override
     public void setItemClick_Theme(int position,View v) {
         simpleItem=mList.get(position);
+        if (loginData != null) {
+            for (LoginData.UserGroupsBean groupsBean : loginData.getUserGroups()) {
+                if (simpleItem.getId().equals(groupsBean.getId())) {
+                    LatLng latLng = new LatLng(groupsBean.getLatitude(), groupsBean.getLongitude());
+                    tencentMap.setCenter(latLng);
+                    tencentMap.setZoom(9);
+                }
+
+            }
+        }
+
         adapter.setSeclection(position);
         adapter.notifyDataSetChanged();
         getOkHttp();

@@ -231,6 +231,7 @@ public class LineChartView extends View {
 
     @Override
     protected void onDraw(Canvas canvas) {
+
         super.onDraw(canvas);
         canvas.drawColor(getResources().getColor(R.color.white));
 
@@ -245,8 +246,15 @@ public class LineChartView extends View {
             return;
         }
 
+
         // translate AXIS
-        canvas.translate(OFFSET + 10, getMeasuredHeight() - OFFSET - OFFSET_LEGEND);
+        if (myLines.size() > 6) {// legend more
+            yAxisLength = getMeasuredHeight() - 2 * OFFSET - (int) (OFFSET_LEGEND * 1.5);
+            canvas.translate(OFFSET + 10, getMeasuredHeight() - OFFSET - (int) (OFFSET_LEGEND * 1.5));
+        } else {
+            canvas.translate(OFFSET + 10, getMeasuredHeight() - OFFSET - OFFSET_LEGEND);
+
+        }
 
 
         long xStart = System.currentTimeMillis() * 2;

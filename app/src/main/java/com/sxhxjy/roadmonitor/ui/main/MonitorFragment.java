@@ -178,7 +178,10 @@ public class MonitorFragment extends BaseFragment implements View.OnClickListene
                 getResources().getColor(android.R.color.holo_green_dark),
                 getResources().getColor(android.R.color.holo_purple),
                 getResources().getColor(R.color.colorPrimaryDark),
-                Color.argb(255, random.nextInt(256), random.nextInt(256), random.nextInt(256))
+                Color.argb(255, random.nextInt(256), random.nextInt(256), random.nextInt(256)),
+                Color.argb(255, random.nextInt(256), random.nextInt(256), random.nextInt(256)),
+                Color.argb(255, random.nextInt(256), random.nextInt(256), random.nextInt(256)),
+                Color.argb(255, random.nextInt(256), random.nextInt(256), random.nextInt(256)),
         };
 
 
