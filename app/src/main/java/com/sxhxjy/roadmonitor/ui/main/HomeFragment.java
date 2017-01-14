@@ -114,12 +114,17 @@ public class HomeFragment extends BaseFragment implements HomeAdapter.OnItemClic
         loginData = new Gson().fromJson(CacheManager.getInstance().get("login"), LoginData.class);
         if (loginData != null) {
             for (LoginData.UserGroupsBean groupsBean : loginData.getUserGroups()) {
+                // root
+                if (groupsBean.getParentid().equals("0")) continue;
+
                 LatLng latLng = new LatLng(groupsBean.getLatitude(), groupsBean.getLongitude());
                 tencentMap.setCenter(latLng);
                 tencentMap.setZoom(6);
+
                 Marker marker = tencentMap.addMarker(new MarkerOptions()
                         .position(latLng)
-                        .title(groupsBean.getName())
+                        .snippet(groupsBean.getDescription())
+                        .title(groupsBean.getName() + "\n")
                         .anchor(0.5f, 0.5f)
                         .icon(BitmapDescriptorFactory
                                 .defaultMarker())
