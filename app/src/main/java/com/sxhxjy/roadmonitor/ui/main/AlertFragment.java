@@ -382,7 +382,10 @@ public class AlertFragment extends BaseListFragment<AlertData> {
                     public void onNext(List<GroupTree> data) {
 
                         if (data != null) {
-                            for (GroupTree groupTree : data.get(0).childrenGroup) {
+                            List<GroupTree> container = new ArrayList<GroupTree>();
+
+                            HomeFragment.findGroup(data, container);
+                            for (GroupTree groupTree : container) {
                                 SimpleItem item = new SimpleItem();
                                 item.setTitle(groupTree.name);
                                 item.setId(groupTree.id);

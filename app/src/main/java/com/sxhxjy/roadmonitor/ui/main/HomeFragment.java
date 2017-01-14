@@ -193,7 +193,7 @@ public class HomeFragment extends BaseFragment implements HomeAdapter.OnItemClic
 
 
 
-    public void findGroup(List<GroupTree> d, List<GroupTree> container) {
+    public static void findGroup(List<GroupTree> d, List<GroupTree> container) {
         for (GroupTree groupTree : d) {
             if (groupTree.childrenGroup == null) {
                 container.add(groupTree);
