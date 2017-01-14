@@ -17,6 +17,7 @@ import android.widget.TextView;
 import com.alibaba.fastjson.JSON;
 import com.google.gson.Gson;
 import com.sxhxjy.roadmonitor.R;
+import com.sxhxjy.roadmonitor.adapter.FilterTreeAdapter;
 import com.sxhxjy.roadmonitor.adapter.HomeAdapter;
 import com.sxhxjy.roadmonitor.adapter.HomethemeAdapter;
 import com.sxhxjy.roadmonitor.base.BaseFragment;
@@ -162,14 +163,18 @@ public class HomeFragment extends BaseFragment implements HomeAdapter.OnItemClic
                     public void onNext(List<GroupTree> data) {
                         mList=new ArrayList<SimpleItem>();
                         if (data != null) {
-                            for (GroupTree groupTree : data.get(0).childrenGroup) {
+                            List<GroupTree> container = new ArrayList<GroupTree>();
+
+                            findGroup(data, container);
+
+                            for (GroupTree groupTree : container) {
                                 SimpleItem item = new SimpleItem();
                                 item.setTitle(groupTree.name);
                                 item.setId(groupTree.id);
                                 mList.add(item);
                             }
 
-                            simpleItem = new SimpleItem(data.get(0).childrenGroup.get(0).id, data.get(0).childrenGroup.get(0).name, false);
+                            simpleItem = new SimpleItem(container.get(0).id, container.get(0).name, false);
                             LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
                             layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
                             rv_place.setLayoutManager(layoutManager);
@@ -185,6 +190,20 @@ public class HomeFragment extends BaseFragment implements HomeAdapter.OnItemClic
     /**
      *点击地点
      */
+
+
+
+    public void findGroup(List<GroupTree> d, List<GroupTree> container) {
+        for (GroupTree groupTree : d) {
+            if (groupTree.childrenGroup == null) {
+                container.add(groupTree);
+            } else {
+                findGroup(groupTree.childrenGroup, container);
+            }
+        }
+    }
+
+
     @Override
     public void setItemClick_Theme(int position,View v) {
         simpleItem=mList.get(position);

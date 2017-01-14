@@ -109,7 +109,6 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                             @Override
                             public void run() {
                                 showToastMsg("网络连接失败");
-                                MyApplication.getMyApplication().initHttp();
                             }
                         });
 
@@ -120,8 +119,17 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                         if (response.code() != 200) return;
                         String result = response.body().string();
 
-                        JSONObject jsonObject = JSON.parseObject(result);
-                        if (!jsonObject.getString("resultCode").equals("200")) return;
+                        final JSONObject jsonObject = JSON.parseObject(result);
+                        if (!jsonObject.getString("resultCode").equals("200")) {
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    showToastMsg(jsonObject.getString("resultMessage"));
+
+                                }
+                            });
+                            return;
+                        }
                         String data = jsonObject.getJSONObject("data").toJSONString();
                         LoginData loginData = JSON.parseObject(data, LoginData.class);
 
