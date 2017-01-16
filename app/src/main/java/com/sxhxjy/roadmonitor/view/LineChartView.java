@@ -236,9 +236,6 @@ public class LineChartView extends View {
         super.onDraw(canvas);
         canvas.drawColor(getResources().getColor(R.color.white));
 
-// TODO: offset, point count is bad, i know it ...
-// TODO: should scale xAxis of time => change timeStart timeEnd, put point to the time line !!!!!!
-
         if (myLines.isEmpty() && myLinesRight.isEmpty()) {
             mPaint.setTextSize(70 * densityFactor);
             mPaint.setColor(Color.GRAY);
@@ -314,11 +311,19 @@ public class LineChartView extends View {
                 yStartRight = Math.min(Collections.min(line.points.subList(line.points.size() - offset - pointCount, line.points.size() - offset), comparatorY).value, yStartRight);
             } catch (IndexOutOfBoundsException e) {
                 e.printStackTrace();
-                xEndRight = Math.max(Collections.max(line.points, comparatorX).time, xEndRight);
-                xStartRight = Math.min(Collections.min(line.points, comparatorX).time, xStartRight);
+                /*xEndRight = Math.max(Collections.max(line.points, comparatorX).time, xEndRight);
+                xStartRight = Math.min(Collections.min(line.points, comparatorX).time, xStartRight);*/
                 yEndRight = Math.max(Collections.max(line.points, comparatorY).value, yEndRight);
                 yStartRight = Math.min(Collections.min(line.points, comparatorY).value, yStartRight);
+                Log.e("test", yStartRight + "     " + yEndRight);
+                break;
             }
+        }
+
+        // maybe index error occurred
+        if (yEndRight ==  -10000f && myLinesRight.size() != 0) {
+            yEndRight = Math.max(Collections.max(myLinesRight.get(0).points, comparatorY).value, yEndRight);
+            yStartRight = Math.min(Collections.min(myLinesRight.get(0).points, comparatorY).value, yStartRight);
         }
 
         if (!myLinesRight.isEmpty()) {
@@ -428,7 +433,7 @@ public class LineChartView extends View {
             index = 0;
 
             for (MyPoint myPoint : line.points) {
-                if (myPoint.time < xStartRight || myPoint.time > xEndRight ) continue;
+                if (myPoint.time < xStart || myPoint.time > xEnd ) continue;
 
 
                 firstPointX = nextPointX;
@@ -695,7 +700,7 @@ public class LineChartView extends View {
             canvas.drawLine(xAxisLength, 0, xAxisLength, - yAxisLength, mPaint);
 
             mPaint.setTextAlign(Paint.Align.RIGHT);
-            canvas.drawText(yStart + "", - OFFSET_SCALE, 0, mPaint);
+            canvas.drawText(numberFormat.format(yStartRight) + "", xAxisLength + OFFSET_SCALE * 3, 0, mPaint);
 
             for (int j = 0; j < SPLIT_TO; j++) {
                 float y = yStartRight + (yEndRight - yStartRight) / SPLIT_TO * (j + 1);
