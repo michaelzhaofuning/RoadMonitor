@@ -54,7 +54,8 @@ public class LineChartView extends View {
     private static final int ALERT_VALUE = 100000000;
     private Random mRandom = new Random(47);
     private int xAxisLength, yAxisLength;
-    private float firstPointX, nextPointX, firstPointY, nextPointY;
+    private float nextPointX;
+    private float nextPointY;
 
     private long BASE_TIME = System.currentTimeMillis();
     private SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.CHINA);
@@ -353,15 +354,17 @@ public class LineChartView extends View {
         float simpleMinX = 0;
         boolean isRight = false;
 
+        float firstPointX;
+        float firstPointY;
+        int index = 0;
         for (MyLine line : myLines) {
             float minDistance = getMeasuredWidth();
             MyPoint minPointInLine = null;
+            index = 0;
 
             for (MyPoint myPoint : line.points) {
-                if (line.points.indexOf(myPoint) > line.points.size() - offset || line.points.indexOf(myPoint) < line.points.size() - offset - pointCount)
-                    continue;
+                if (myPoint.time < xStart || myPoint.time > xEnd ) continue;
 
-                if (line.points.size() - offset - pointCount < 0) continue;
 
 
                 firstPointX = nextPointX;
@@ -378,7 +381,7 @@ public class LineChartView extends View {
                 mPaint.setStrokeWidth(4);
 
                 // draw line
-                if (line.points.indexOf(myPoint) != line.points.size() - offset - pointCount) {// do not draw line when draw first point !
+                if (index++ != 0) {// do not draw line when draw first point !
                     // first point is bad because of equals last next point
                     canvas.drawLine(firstPointX, firstPointY, nextPointX, nextPointY, mPaint);
                 }
@@ -422,12 +425,11 @@ public class LineChartView extends View {
         for (MyLine line : myLinesRight) {
             float minDistance = getMeasuredWidth();
             MyPoint minPointInLine = null;
+            index = 0;
 
             for (MyPoint myPoint : line.points) {
-                if (line.points.indexOf(myPoint) > line.points.size() - offset || line.points.indexOf(myPoint) < line.points.size() - offset - pointCount)
-                    continue;
+                if (myPoint.time < xStartRight || myPoint.time > xEndRight ) continue;
 
-                if (line.points.size() - offset - pointCount < 0) continue;
 
                 firstPointX = nextPointX;
                 firstPointY = nextPointY;
@@ -438,7 +440,7 @@ public class LineChartView extends View {
                 mPaint.setStrokeWidth(4);
 
                 // draw line
-                if (line.points.indexOf(myPoint) != line.points.size() - offset - pointCount) {// do not draw line when draw first point !
+                if ((index++ != 0)) {// do not draw line when draw first point !
                     // first point is bad because of equals last next point
                     canvas.drawLine(firstPointX, firstPointY, nextPointX, nextPointY, mPaint);
                 }
