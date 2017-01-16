@@ -54,7 +54,8 @@ public class AddDataCorrelationActivity extends BaseActivity {
     private String title, titleCorrelation;
     private String startTime, endTime;
     private String stationId;
-    private MyLinearLayout station;
+    private MyLinearLayout station, stationCorrelation;
+    private MyLinearLayout location, locationCorrelation;
     private int[] colors;
     private Random random = new Random();
     private boolean gettingMsg;
@@ -154,6 +155,11 @@ public class AddDataCorrelationActivity extends BaseActivity {
     }
 
     public void monitorLocation(final View view) {
+        if (view.getId() != R.id.correlation_position) {
+            location = (MyLinearLayout) view;
+        } else {
+            locationCorrelation = (MyLinearLayout) view;
+        }
         if (gettingMsg) return;
         if (!mLocationList.isEmpty()) {
             showDialogPosition(view);
@@ -212,6 +218,13 @@ public class AddDataCorrelationActivity extends BaseActivity {
                     title = mTypeList.get(which).getTitle();
                 }
                 dialog.dismiss();
+                if (view.getId() == R.id.correlation_type) {
+                    if (locationCorrelation != null)
+                        locationCorrelation.setContent("");
+                } else {
+                    if (location != null)
+                        location.setContent("");
+                }
                 mLocationList.clear();
             }
         }).create().show();
@@ -292,7 +305,7 @@ public class AddDataCorrelationActivity extends BaseActivity {
     }
 
     public void chooseStation(View view) {
-        station = (MyLinearLayout) view;
+
         Intent intent = new Intent(this, StationListActivity.class);
         startActivityForResult(intent, StationListActivity.REQUEST_CODE);
     }

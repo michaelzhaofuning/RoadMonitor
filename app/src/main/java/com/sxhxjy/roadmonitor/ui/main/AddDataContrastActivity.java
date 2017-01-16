@@ -59,6 +59,7 @@ public class AddDataContrastActivity extends BaseActivity {
 
     private String stationId;
     private MyLinearLayout station;
+    private MyLinearLayout location;
 
     private int[] colors;
     private Random random = new Random();
@@ -184,6 +185,7 @@ public class AddDataContrastActivity extends BaseActivity {
     }
 
     public void monitorLocation(final View view) {
+        location = (MyLinearLayout) view;
         if (gettingMsg) return;
         if (!mLocationList.isEmpty()) {
             showDialogPosition(view);
@@ -240,6 +242,9 @@ public class AddDataContrastActivity extends BaseActivity {
                 mTypeList.get(which).setChecked(true);
                 title = mTypeList.get(which).getTitle();
                 mLocationList.clear();
+                if (location != null) {
+                    location.setContent("");
+                }
                 dialog.dismiss();
             }
         }).create().show();
