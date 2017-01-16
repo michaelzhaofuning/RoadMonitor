@@ -44,7 +44,7 @@ import java.util.Random;
  */
 public class LineChartView extends View {
     private static final int DELAY = 1000;
-    public static int pointCount = 20;
+    public int pointCount = 20;
     private static final int OFFSET = 65;
     private static int OFFSET_LEGEND = 80;
 
@@ -283,7 +283,7 @@ public class LineChartView extends View {
             yEnd = 1;
         }*/
 
-
+// TODO: scale xStart xEnd maybe better
         for (MyLine line : myLines) {
             if (line.points.size() - offset - pointCount < 0) continue;
 
@@ -322,8 +322,10 @@ public class LineChartView extends View {
 
         // maybe index error occurred
         if (yEndRight ==  -10000f && myLinesRight.size() != 0) {
-            yEndRight = Math.max(Collections.max(myLinesRight.get(0).points, comparatorY).value, yEndRight);
-            yStartRight = Math.min(Collections.min(myLinesRight.get(0).points, comparatorY).value, yStartRight);
+            for (MyLine line : myLinesRight) {
+                yEndRight = Math.max(Collections.max(line.points, comparatorY).value, yEndRight);
+                yStartRight = Math.min(Collections.min(line.points, comparatorY).value, yStartRight);
+            }
         }
 
         if (!myLinesRight.isEmpty()) {
