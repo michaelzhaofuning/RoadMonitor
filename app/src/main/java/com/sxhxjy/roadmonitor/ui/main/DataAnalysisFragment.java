@@ -231,6 +231,10 @@ public class DataAnalysisFragment extends BaseFragment {
                                 public void onError(Throwable e) {
                                     super.onError(e);
 
+                                    if (progressDialog != null) {
+                                        progressDialog.dismiss();
+                                        progressDialog = null;
+                                    }
                                 }
 
                                 @Override
@@ -333,6 +337,16 @@ public class DataAnalysisFragment extends BaseFragment {
                                         showToastMsg("选择的时间段没有数据");
                                     }
                                 }
+
+                                @Override
+                                public void onError(Throwable e) {
+                                    super.onError(e);
+
+                                    if (progressDialog != null) {
+                                        progressDialog.dismiss();
+                                        progressDialog = null;
+                                    }
+                                }
                             });
                             String time=strings[0]+"---"+strings[1];
                             if (str.equals("")){
@@ -389,6 +403,16 @@ public class DataAnalysisFragment extends BaseFragment {
                             }
 
                             @Override
+                            public void onError(Throwable e) {
+                                super.onError(e);
+
+                                if (progressDialog != null) {
+                                    progressDialog.dismiss();
+                                    progressDialog = null;
+                                }
+                            }
+
+                            @Override
                             public void onNext(ComplexData complexData) {
                                 if (complexData != null) {
                                     super.onNext(complexData);
@@ -417,6 +441,18 @@ public class DataAnalysisFragment extends BaseFragment {
                                 }
 
                             }
+
+                            @Override
+                            public void onError(Throwable e) {
+                                super.onError(e);
+
+                                if (progressDialog != null) {
+                                    progressDialog.dismiss();
+                                    progressDialog = null;
+                                }
+                            }
+
+
 
                             @Override
                             public void onNext(ComplexData complexData) {
