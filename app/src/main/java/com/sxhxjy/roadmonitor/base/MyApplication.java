@@ -16,8 +16,6 @@ import retrofit2.converter.gson.GsonConverterFactory;
 /**
  * Extends application to add some methods
  *
- * password: funing4510
- *
  * //////////////////////////////////////////////////////////////////////////////
  * 1. IP !!!! 2.app name, Logo 3.flash.jpg
  *
