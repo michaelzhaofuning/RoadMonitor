@@ -13,10 +13,10 @@
         android:textSize="16sp"
         android:id="@+id/titleOfMy"
         android:layout_gravity="left"
-        android:layout_marginLeft="20dp"
-        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="30dp"
         android:layout_alignParentTop="true"
-       />
+        android:layout_alignLeft="@+id/decoration"
+        android:layout_alignStart="@+id/decoration" />
 
     <ImageView
         android:layout_width="20dp"
@@ -57,7 +57,7 @@
     <ImageView
         android:layout_width="20dp"
         android:layout_height="20dp"
-        android:visibility="gone"
+        android:visibility="visible"
         android:id="@+id/decoration"
         android:layout_centerVertical="true"
         android:layout_marginLeft="18dp" />

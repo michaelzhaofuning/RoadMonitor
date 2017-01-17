@@ -23,6 +23,7 @@
         app:titleOfMyLinearLayout="监测因素"
         app:expandedOfMyLinearLayout="true"
         android:onClick="monitorType"
+        app:decoratedDrawableOfMyLinearLayout="@mipmap/topic"
         android:layout_marginTop="@dimen/activity_vertical_margin"
 
         android:layout_height="wrap_content">
@@ -32,6 +33,7 @@
     <com.sxhxjy.roadmonitor.view.MyLinearLayout
         android:layout_width="match_parent"
         app:titleOfMyLinearLayout="监测位置"
+        app:decoratedDrawableOfMyLinearLayout="@mipmap/location"
         app:expandedOfMyLinearLayout="true"
         android:onClick="monitorLocation"
         android:layout_height="wrap_content">
@@ -48,6 +50,7 @@
         <com.sxhxjy.roadmonitor.view.MyLinearLayout
             android:layout_width="match_parent"
             app:titleOfMyLinearLayout="开始时间"
+            app:decoratedDrawableOfMyLinearLayout="@mipmap/time"
             app:expandedOfMyLinearLayout="true"
             android:id="@+id/start_time"
             android:onClick="timeStart"
@@ -60,6 +63,7 @@
             app:titleOfMyLinearLayout="结束时间"
             app:expandedOfMyLinearLayout="true"
             android:onClick="timeEnd"
+            app:decoratedDrawableOfMyLinearLayout="@mipmap/endtime"
             android:id="@+id/end_time"
 
             android:layout_height="wrap_content">

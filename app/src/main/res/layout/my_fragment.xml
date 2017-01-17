@@ -37,6 +37,7 @@ android:layout_marginTop="55dp"
         app:titleOfMyLinearLayout="查看当前设备状态"
         android:onClick="look_state"
         app:expandedOfMyLinearLayout="true"
+        app:decoratedDrawableOfMyLinearLayout="@mipmap/statedevice"
         android:layout_height="wrap_content">
     </com.sxhxjy.roadmonitor.view.MyLinearLayout>
     <com.sxhxjy.roadmonitor.view.MyLinearLayout
@@ -61,6 +62,7 @@ android:layout_marginTop="55dp"
     <com.sxhxjy.roadmonitor.view.MyLinearLayout
         android:layout_width="match_parent"
         android:id="@+id/version"
+        app:decoratedDrawableOfMyLinearLayout="@mipmap/version"
         app:titleOfMyLinearLayout="版本"
         android:layout_marginBottom="@dimen/activity_vertical_margin"
         android:layout_height="wrap_content">
@@ -72,6 +74,7 @@ android:layout_marginTop="55dp"
         app:expandedOfMyLinearLayout="true"
         app:titleOfMyLinearLayout="退出登录"
         android:onClick="logout"
+        app:decoratedDrawableOfMyLinearLayout="@mipmap/logout"
         android:layout_height="wrap_content">
 
     </com.sxhxjy.roadmonitor.view.MyLinearLayout>
