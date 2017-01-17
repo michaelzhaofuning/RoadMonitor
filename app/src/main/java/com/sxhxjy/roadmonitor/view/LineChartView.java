@@ -103,7 +103,7 @@ public class LineChartView extends View {
         super(context, attrs);
 
         DisplayMetrics dm = getResources().getDisplayMetrics();
-        densityFactor = dm.density / 3f; // because of my phone is 3 !!!
+//        densityFactor = dm.density / 3f; // because of my phone is 3 !!!
         OFFSET_LEGEND *= densityFactor;
 
         gestureDetector = new GestureDetector(context, new GestureDetector.SimpleOnGestureListener() {
