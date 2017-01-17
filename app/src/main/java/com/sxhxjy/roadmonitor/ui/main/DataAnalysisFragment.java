@@ -284,6 +284,27 @@ public class DataAnalysisFragment extends BaseFragment {
                                         progressDialog = null;
                                     }
                                 }
+
+                                @Override
+                                public void onError(Throwable e) {
+                                    super.onError(e);
+
+                                    if (progressDialog != null) {
+                                        progressDialog.dismiss();
+                                        progressDialog = null;
+                                    }
+                                }
+
+                                @Override
+                                public void onNext(ComplexData complexData) {
+                                    if (complexData != null) {
+                                        super.onNext(complexData);
+                                    } else {
+                                        showToastMsg("选择的时间段没有数据");
+                                    }
+                                }
+
+
                             });
                             if (str.equals("")){
                                 str+=item.getTitle();
@@ -363,6 +384,25 @@ public class DataAnalysisFragment extends BaseFragment {
                                         progressDialog = null;
                                     }
                                 }
+
+                                @Override
+                                public void onNext(ComplexData complexData) {
+                                    if (complexData != null) {
+                                        super.onNext(complexData);
+                                    } else {
+                                        showToastMsg("选择的时间段没有数据");
+                                    }
+                                }
+
+                                @Override
+                                public void onError(Throwable e) {
+                                    super.onError(e);
+
+                                    if (progressDialog != null) {
+                                        progressDialog.dismiss();
+                                        progressDialog = null;
+                                    }
+                                }
                             });
                             String time=strings[0]+"---"+strings[1];
                             if (str.equals("")){
@@ -419,6 +459,25 @@ public class DataAnalysisFragment extends BaseFragment {
                                     progressDialog = null;
                                 }
                             }
+
+                            @Override
+                            public void onError(Throwable e) {
+                                super.onError(e);
+
+                                if (progressDialog != null) {
+                                    progressDialog.dismiss();
+                                    progressDialog = null;
+                                }
+                            }
+
+                            @Override
+                            public void onNext(ComplexData complexData) {
+                                if (complexData != null) {
+                                    super.onNext(complexData);
+                                } else {
+                                    showToastMsg("选择的时间段没有数据");
+                                }
+                            }
                         });
                     }
                     for (final SimpleItem simpleItem : positionItemsCorrelation) {
@@ -439,6 +498,27 @@ public class DataAnalysisFragment extends BaseFragment {
                                     progressDialog = null;
                                 }
 
+                            }
+
+                            @Override
+                            public void onError(Throwable e) {
+                                super.onError(e);
+
+                                if (progressDialog != null) {
+                                    progressDialog.dismiss();
+                                    progressDialog = null;
+                                }
+                            }
+
+
+
+                            @Override
+                            public void onNext(ComplexData complexData) {
+                                if (complexData != null) {
+                                    super.onNext(complexData);
+                                } else {
+                                    showToastMsg("选择的时间段没有数据");
+                                }
                             }
                         });
                     }

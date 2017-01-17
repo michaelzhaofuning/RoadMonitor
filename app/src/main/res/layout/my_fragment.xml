@@ -1,15 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical" android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <include layout="@layout/toolbar_layout"/>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="200dp">
+        <com.john.waveview.WaveView
+            android:id="@+id/wave_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/colorPrimary"
+            app:above_wave_color="@color/default_color"
+            app:blow_wave_color="@android:color/white"
+app:progress="40"            app:wave_hz="fast"
+            app:wave_length="middle" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:id="@+id/info"
+            android:textColor="#fff"
+            android:textSize="25sp"
+android:layout_marginTop="55dp"
+            android:textStyle="italic"
+
+            android:text="路网监测平台"
+
+            android:layout_gravity="center_horizontal|top"
+            android:layout_height="wrap_content" />
+    </FrameLayout>
+
     <com.sxhxjy.roadmonitor.view.MyLinearLayout
         android:layout_width="match_parent"
         android:layout_marginTop="@dimen/activity_vertical_margin"
         app:titleOfMyLinearLayout="查看当前设备状态"
         android:onClick="look_state"
         app:expandedOfMyLinearLayout="true"
+        app:decoratedDrawableOfMyLinearLayout="@mipmap/statedevice"
         android:layout_height="wrap_content">
     </com.sxhxjy.roadmonitor.view.MyLinearLayout>
     <com.sxhxjy.roadmonitor.view.MyLinearLayout
@@ -40,6 +68,7 @@
     <com.sxhxjy.roadmonitor.view.MyLinearLayout
         android:layout_width="match_parent"
         android:id="@+id/version"
+        app:decoratedDrawableOfMyLinearLayout="@mipmap/version"
         app:titleOfMyLinearLayout="版本"
         android:layout_marginBottom="@dimen/activity_vertical_margin"
         android:layout_height="wrap_content">
@@ -51,6 +80,7 @@
         app:expandedOfMyLinearLayout="true"
         app:titleOfMyLinearLayout="退出登录"
         android:onClick="logout"
+        app:decoratedDrawableOfMyLinearLayout="@mipmap/logout"
         android:layout_height="wrap_content">
 
     </com.sxhxjy.roadmonitor.view.MyLinearLayout>

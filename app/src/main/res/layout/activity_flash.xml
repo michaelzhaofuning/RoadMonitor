@@ -2,11 +2,40 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorPrimary">
+    android:background="@color/white">
 
     <ImageView
-        android:layout_width="match_parent"
-        android:src="@mipmap/flash"
+        android:layout_width="200dp"
+        android:src="@mipmap/laucher"
         android:scaleType="centerCrop"
-        android:layout_height="match_parent" />
+        android:layout_height="150dp"
+        android:layout_marginTop="120dp"
+        android:id="@+id/imageView2"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="40dp"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:layout_width="26dp"
+                android:src="@mipmap/logo"
+                android:layout_marginRight="15dp"
+                android:layout_gravity="center"
+                android:layout_height="26dp" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:textSize="16sp"
+                android:layout_gravity="center"
+                android:text="路网健康信息监测平台"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
+    </RelativeLayout>
+
 </RelativeLayout>

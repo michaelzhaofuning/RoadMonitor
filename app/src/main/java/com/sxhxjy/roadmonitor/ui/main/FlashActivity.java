@@ -1,6 +1,7 @@
 package com.sxhxjy.roadmonitor.ui.main;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -41,7 +42,8 @@ public class FlashActivity extends Activity {
             @Override
             public void run() {
                 if (TextUtils.isEmpty(CacheManager.getInstance().get("login"))) {
-                    ActivityUtil.startActivityForResult(FlashActivity.this, LoginActivity.class, null, -100, android.R.anim.fade_in, android.R.anim.fade_out);
+                    startActivity(new Intent(FlashActivity.this, LoginActivity.class));
+                    overridePendingTransition(-1, -1);
                     finish();
                 } else {
                     // we init http first !

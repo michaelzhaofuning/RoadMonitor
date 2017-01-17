@@ -87,7 +87,7 @@ public class MonitorFragment extends BaseFragment implements View.OnClickListene
     private String positionId;
     private boolean paramsGeted;
     private boolean isFirstProgressDialog = true;
-    public static final long interval = 30000;
+    public static final long interval = 60000 * 30;
     public static int[] colors;
     // filter item clicked
     private View.OnClickListener simpleListListener = new View.OnClickListener() {

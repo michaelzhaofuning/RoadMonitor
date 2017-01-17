@@ -1,3 +1,7 @@
+// TODO: scale xStart xEnd maybe better
+
+
+
 package com.sxhxjy.roadmonitor.view;
 
 import android.app.Activity;
@@ -44,7 +48,6 @@ import java.util.Random;
  */
 public class LineChartView extends View {
     private static final int DELAY = 1000;
-    public int pointCount = 20;
     private static final int OFFSET = 65;
     private static int OFFSET_LEGEND = 80;
 
@@ -70,6 +73,10 @@ public class LineChartView extends View {
     private ArrayList<MyLine> myLinesRight = new ArrayList<>();
 
     private int offset = 0;
+    public int pointCount = 20;
+    private int scaleX;
+    private int offsetX;
+
 
     private long globalIndex = 0;
 
@@ -103,7 +110,7 @@ public class LineChartView extends View {
         super(context, attrs);
 
         DisplayMetrics dm = getResources().getDisplayMetrics();
-//        densityFactor = dm.density / 3f; // because of my phone is 3 !!!
+        densityFactor = dm.density / 3f; // because of my phone is 3 !!!
         OFFSET_LEGEND *= densityFactor;
 
         gestureDetector = new GestureDetector(context, new GestureDetector.SimpleOnGestureListener() {
@@ -131,21 +138,37 @@ public class LineChartView extends View {
 
 
                 if (!isBeingTouched) {
-                    if (++globalIndex % 2 == 0) { // reduce called times
-                        if (distanceX > 5) {
-                            distanceX = pointCount / 20;
-                            if (distanceX == 0) distanceX = 1;
-                        } else if (distanceX < -5) {
-                            distanceX = -1 * pointCount / 20;
-                            if (distanceX == 0) distanceX = -1;
-                        } else distanceX = 0;
+                    long xStart = System.currentTimeMillis() * 2;
+                    long xEnd = 0;
+                    for (MyLine line : myLines) {
+                        xEnd = Math.max(Collections.max(line.points, comparatorX).time, xEnd);
+                        xStart = Math.min(Collections.min(line.points, comparatorX).time, xStart);
+                    }
+                    long startEdge = xStart;
+                    long endEdge = xEnd;
+                    xStart = xStart + (xEnd - xStart) / 2;
+                    xStart = xStart + offsetX * 1000 * 60 * 60; // 1h
+                    xEnd = xEnd + offsetX * 1000 * 60 * 60;
 
-                        offset = offset - (int) distanceX;
-//                        Log.e("test", "dx: " + distanceX + "offset:" + offset);
-                        if (offset < 0)
-                            offset = 0;
-                        if (offset > myLines.get(0).points.size() - pointCount)
-                            offset = myLines.get(0).points.size() - pointCount;
+                    if (xStart < startEdge && distanceX < 0) {
+                        return true;
+                    }
+                    if (xEnd > endEdge && distanceX > 0) {
+                        return true;
+                    }
+                    if (++globalIndex % 2 == 0) {
+                        // reduce called times
+
+                        Log.e("f", "dx: " + distanceX);
+                        if (distanceX > 5) {
+                            offsetX++;
+                        }
+                        if (distanceX < -5) {
+                            offsetX--;
+                        }
+
+
+
                     }
                 }
                 return true;
@@ -164,8 +187,16 @@ public class LineChartView extends View {
         scaleGestureDetector = new ScaleGestureDetector(context, new ScaleGestureDetector.SimpleOnScaleGestureListener() {
             @Override
             public boolean onScale(ScaleGestureDetector detector) {
-//                offset = detector.getFocusX() / xAxisLength * myLines.get(0).points.size();
-                offset = 0;
+                Log.e("f", "factor: " + detector.getScaleFactor());
+
+                if (detector.getScaleFactor() - 1 > 0) {
+                    scaleX++;
+                } else {
+                    scaleX--;
+                }
+                offset = -5;
+                if (offset < 0)
+                    offset = 0;
                 if (offset > myLines.get(0).points.size() - pointCount) offset = myLines.get(0).points.size() - pointCount;
 
                 pointCount = (int) (pointCount + (1 - detector.getScaleFactor()) * 55);
@@ -281,17 +312,12 @@ public class LineChartView extends View {
             yEnd = 1;
         }*/
 
+// TODO: scale xStart xEnd maybe better
         for (MyLine line : myLines) {
-            if (line.points.size() - offset - pointCount < 0) continue;
-
-            try {
-                xEnd = Math.max(Collections.max(line.points.subList(line.points.size() - offset - pointCount, line.points.size() - offset), comparatorX).time, xEnd);
-                xStart = Math.min(Collections.min(line.points.subList(line.points.size() - offset - pointCount, line.points.size() - offset), comparatorX).time, xStart);
-                yEnd = Math.max(Collections.max(line.points.subList(line.points.size() - offset - pointCount, line.points.size() - offset), comparatorY).value, yEnd);
-                yStart = Math.min(Collections.min(line.points.subList(line.points.size() - offset - pointCount, line.points.size() - offset), comparatorY).value, yStart);
-            } catch (IndexOutOfBoundsException e) {
-                e.printStackTrace();
-            }
+            xEnd = Math.max(Collections.max(line.points, comparatorX).time, xEnd);
+            xStart = Math.min(Collections.min(line.points, comparatorX).time, xStart);
+            yEnd = Math.max(Collections.max(line.points, comparatorY).value, yEnd);
+            yStart = Math.min(Collections.min(line.points, comparatorY).value, yStart);
         }
 
         // *RIGHT*
@@ -300,35 +326,18 @@ public class LineChartView extends View {
         float yStartRight = 0;
         float yEndRight = -10000f;
         for (MyLine line : myLinesRight) {
-            if (line.points.size() - offset - pointCount < 0) continue;
-            try {
-                xEndRight = Math.max(Collections.max(line.points.subList(line.points.size() - offset - pointCount, line.points.size() - offset), comparatorX).time, xEndRight);
-                xStartRight = Math.min(Collections.min(line.points.subList(line.points.size() - offset - pointCount, line.points.size() - offset), comparatorX).time, xStartRight);
-                yEndRight = Math.max(Collections.max(line.points.subList(line.points.size() - offset - pointCount, line.points.size() - offset), comparatorY).value, yEndRight);
-                yStartRight = Math.min(Collections.min(line.points.subList(line.points.size() - offset - pointCount, line.points.size() - offset), comparatorY).value, yStartRight);
-            } catch (IndexOutOfBoundsException e) {
-                e.printStackTrace();
-                /*xEndRight = Math.max(Collections.max(line.points, comparatorX).time, xEndRight);
-                xStartRight = Math.min(Collections.min(line.points, comparatorX).time, xStartRight);*/
-                yEndRight = Math.max(Collections.max(line.points, comparatorY).value, yEndRight);
-                yStartRight = Math.min(Collections.min(line.points, comparatorY).value, yStartRight);
-                Log.e("test", yStartRight + "     " + yEndRight);
-                break;
-            }
-        }
+            xEndRight = Math.max(Collections.max(line.points, comparatorX).time, xEndRight);
+            xStartRight = Math.min(Collections.min(line.points, comparatorX).time, xStartRight);
+            yEndRight = Math.max(Collections.max(line.points, comparatorY).value, yEndRight);
+            yStartRight = Math.min(Collections.min(line.points, comparatorY).value, yStartRight);
 
-        // maybe index error occurred
-        if (yEndRight ==  -10000f && myLinesRight.size() != 0) {
-            for (MyLine line : myLinesRight) {
-                yEndRight = Math.max(Collections.max(line.points, comparatorY).value, yEndRight);
-                yStartRight = Math.min(Collections.min(line.points, comparatorY).value, yStartRight);
-            }
         }
 
         if (!myLinesRight.isEmpty()) {
             xEnd = Math.max(xEnd, xEndRight);
             xStart = Math.min(xStart, xStartRight);
         }
+
 
         // round Y
 
@@ -349,6 +358,35 @@ public class LineChartView extends View {
         if (Math.abs(yStartRight - yEndRight) < 0.01) {
             yEndRight = yStartRight + 0.02f;
         }
+
+        // scale / offset X !!!
+        long startEdge = xStart;
+        long endEdge = xEnd;
+        xStart = xStart + (xEnd - xStart) / 2;
+        xStart = xStart + offsetX * 1000 * 60 * 60; // 1h
+        xEnd = xEnd + offsetX * 1000 * 60 * 60;
+
+
+        xStart = xStart + scaleX * 1000 * 60 * 60;
+        xEnd = xEnd - scaleX * 1000 * 60 * 60;
+        if (xStart < startEdge) {
+            xStart = startEdge;
+            scaleX++;
+        }
+        if (xEnd > endEdge) {
+            xEnd = endEdge;
+            scaleX++;
+        }
+
+        if (xEnd - xStart < 1000 * 60 * 60) {
+            scaleX--;
+            xStart = xStart + scaleX * 1000 * 60 * 60;
+            xEnd = xStart + 1000 * 60 * 60;
+        }
+        Log.e("scale offset x", offsetX + "     " + scaleX);
+
+        // scale / offset X !!! End
+
 
         // draw point and line
         mPaint.setStrokeCap(Paint.Cap.ROUND);
