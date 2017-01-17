@@ -21,10 +21,11 @@ app:progress="40"            app:wave_hz="fast"
             android:layout_width="wrap_content"
             android:id="@+id/info"
             android:textColor="#fff"
-            android:textSize="20sp"
-android:layout_marginTop="15dp"
+            android:textSize="25sp"
+android:layout_marginTop="55dp"
+            android:textStyle="italic"
 
-            android:text="@string/app_name"
+            android:text="路网监测平台"
 
             android:layout_gravity="center_horizontal|top"
             android:layout_height="wrap_content" />
