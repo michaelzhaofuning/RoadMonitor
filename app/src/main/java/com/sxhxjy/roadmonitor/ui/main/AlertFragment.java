@@ -60,6 +60,8 @@ public class AlertFragment extends BaseListFragment<AlertData> {
 
     @Override
     public Observable<HttpResponse<List<AlertData>>> getObservable() {
+        stationId = MyApplication.getMyApplication().getSharedPreference().getString("stationId", "");
+
         FilterTreeAdapter.Group f0=groups.get(0);//地点
         FilterTreeAdapter.Group f1=groups.get(1);//告警等级
         FilterTreeAdapter.Group f2=groups.get(2);//设备类型
