@@ -133,7 +133,7 @@ public class LineChartView extends View {
                 if (!isBeingTouched) {
                     if (++globalIndex % 2 == 0) { // reduce called times
                         if (distanceX > 5) {
-                            distanceX = 1 * pointCount / 20;
+                            distanceX = pointCount / 20;
                             if (distanceX == 0) distanceX = 1;
                         } else if (distanceX < -5) {
                             distanceX = -1 * pointCount / 20;
@@ -165,9 +165,7 @@ public class LineChartView extends View {
             @Override
             public boolean onScale(ScaleGestureDetector detector) {
 //                offset = detector.getFocusX() / xAxisLength * myLines.get(0).points.size();
-                offset = -5;
-                if (offset < 0)
-                    offset = 0;
+                offset = 0;
                 if (offset > myLines.get(0).points.size() - pointCount) offset = myLines.get(0).points.size() - pointCount;
 
                 pointCount = (int) (pointCount + (1 - detector.getScaleFactor()) * 55);
