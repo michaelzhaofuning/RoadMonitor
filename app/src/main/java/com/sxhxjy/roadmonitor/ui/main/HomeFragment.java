@@ -148,7 +148,6 @@ public class HomeFragment extends BaseFragment implements HomeAdapter.OnItemClic
                 .subscribe(new Subscriber<List<GroupTree>>() {
                     @Override
                     public void onCompleted() {
-                        Log.i("ooooooooooooooo","??????????????______-----onCompleted");
                     }
 
                     @Override

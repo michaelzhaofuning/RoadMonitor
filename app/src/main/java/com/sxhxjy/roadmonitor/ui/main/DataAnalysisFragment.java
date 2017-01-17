@@ -14,10 +14,16 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.GridView;
 import android.widget.LinearLayout;
+import android.widget.PopupWindow;
+import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
 import com.sxhxjy.roadmonitor.R;
+import com.sxhxjy.roadmonitor.adapter.PopAdapter;
+import com.sxhxjy.roadmonitor.base.BaseActivity;
 import com.sxhxjy.roadmonitor.base.BaseFragment;
 import com.sxhxjy.roadmonitor.base.CacheManager;
 import com.sxhxjy.roadmonitor.base.MyApplication;
@@ -26,14 +32,19 @@ import com.sxhxjy.roadmonitor.entity.ComplexData;
 import com.sxhxjy.roadmonitor.entity.RealTimeData;
 import com.sxhxjy.roadmonitor.entity.SimpleItem;
 import com.sxhxjy.roadmonitor.view.LineChartView;
+import com.sxhxjy.roadmonitor.view.MyForm;
 import com.sxhxjy.roadmonitor.view.MyLinearLayout;
+import com.sxhxjy.roadmonitor.view.MyPopup;
+import com.sxhxjy.roadmonitor.view.MyPopupWindow;
 
 import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Random;
 
 import static com.sxhxjy.roadmonitor.ui.main.MonitorFragment.colors;
@@ -48,15 +59,18 @@ public class DataAnalysisFragment extends BaseFragment {
      * 数据分析——fragment页
      */
     private CountDownTimer mTimer;
-    private TextView tv1,tv2,tv3,tv4,tv5;
+    private MyForm form_1,form_2,form_3,form_4,form_5;
     private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.CHINA);
     private Random random = new Random();
-    private LinearLayout layout_2,layout_3,layout_4;
+
     private LinearLayout mChartsContainer;
     private ProgressDialog progressDialog;
     public static int[] colors;
     private TextView mTextViewCenter;
     private String stationId;
+
+    private MyPopup myPopupWindow;//弹出窗口
+
 
 
     @Nullable
@@ -87,30 +101,76 @@ public class DataAnalysisFragment extends BaseFragment {
             }
         }).create().show();
     }
+    public List<Map<String,String>> getlist(){
+        String [] str={"数据比对","数据关联"};
+//        int [] img={};
 
+
+        List<Map<String,String>> list=new ArrayList<>();
+        for (int i=0;i<str.length;i++){
+            Map<String,String> map=new HashMap<>();
+            map.put("title",str[i]);
+//            map.put("img",img[i]+"");
+            list.add(map);
+        }
+        return list;
+    }
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         init(view);
         initToolBar(view, MyApplication.getMyApplication().getSharedPreference().getString("stationName", ""), false);
-        mToolbar.inflateMenu(R.menu.data_right);
+
+        mToolbar.inflateMenu(R.menu.filter_right);//添加菜单menu
         mToolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
-                if (item.getItemId() == R.id.data_contrast) {//数据对比
-                    Intent intent = new Intent(getActivity(), AddDataContrastActivity.class);
-                    intent.putExtra("stationId", stationId);
-                    startActivityForResult(intent, 1000);
-
-                } else if (item.getItemId() == R.id.data_correlation) {//数据关联
-                    Intent intent = new Intent(getActivity(), AddDataCorrelationActivity.class);
-                    intent.putExtra("stationId", stationId);
-                    startActivityForResult(intent, 1001);
-
-                }
+                myPopupWindow.show();
                 return true;
             }
         });
+        myPopupWindow = new MyPopup((BaseActivity) getActivity(), R.layout.popgrid);//设置弹出窗口
+        GridView gv= (GridView) myPopupWindow.getContentView().findViewById(R.id.pop_gv);
+        List<Map<String,String>> list=getlist();
+        PopAdapter adapter=new PopAdapter(getActivity(),list);
+        gv.setAdapter(adapter);
+        gv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                switch (position){
+                    case 0:
+                        Intent intent = new Intent(getActivity(), AddDataContrastActivity.class);
+                        intent.putExtra("stationId", stationId);
+                        startActivityForResult(intent, 1000);
+                        myPopupWindow.dismiss();
+                        break;
+                    case 1:
+                        Intent intentq = new Intent(getActivity(), AddDataCorrelationActivity.class);
+                        intentq.putExtra("stationId", stationId);
+                        startActivityForResult(intentq, 1001);
+                        myPopupWindow.dismiss();
+                        break;
+                }
+            }
+        });
+//        mToolbar.inflateMenu(R.menu.data_right);
+//        mToolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+//            @Override
+//            public boolean onMenuItemClick(MenuItem item) {
+//                if (item.getItemId() == R.id.data_contrast) {//数据对比
+//                    Intent intent = new Intent(getActivity(), AddDataContrastActivity.class);
+//                    intent.putExtra("stationId", stationId);
+//                    startActivityForResult(intent, 1000);
+//
+//                } else if (item.getItemId() == R.id.data_correlation) {//数据关联
+//                    Intent intent = new Intent(getActivity(), AddDataCorrelationActivity.class);
+//                    intent.putExtra("stationId", stationId);
+//                    startActivityForResult(intent, 1001);
+//
+//                }
+//                return true;
+//            }
+//        });
         mTextViewCenter = (TextView) getView().findViewById(R.id.toolbar_title);
         mTextViewCenter.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -207,7 +267,6 @@ public class DataAnalysisFragment extends BaseFragment {
                         for (int j = 0; j < mChartsContainer.getChildCount(); j++) {
                             ((LineChartView) mChartsContainer.getChildAt(j).findViewById(R.id.chart)).getLines().clear();
                             ((LineChartView) mChartsContainer.getChildAt(j).findViewById(R.id.chart)).getLinesRight().clear();
-
                         }
                         String str="";
                         for (final SimpleItem item : positionItems) {
@@ -217,7 +276,6 @@ public class DataAnalysisFragment extends BaseFragment {
                                     List<RealTimeData> realTimeDatas = complexData.getContent();
                                     addToChart(realTimeDatas, item, false);
                                 }
-
                                 @Override
                                 public void onCompleted() {
                                     super.onCompleted();
@@ -235,11 +293,9 @@ public class DataAnalysisFragment extends BaseFragment {
                         }
                         long start= data.getLongExtra("start", 0);
                         long end= data.getLongExtra("end", 0);
-                        tv2.setText(str);
-                        tv5.setText(sdf.format(new Date(start))+"---"+sdf.format(new Date(end)));
-
+                        form_2.setForm("",str,false);
+                        form_5.setForm("",sdf.format(new Date(start))+"---"+sdf.format(new Date(end)),true);
                     }
-
                     @Override
                     public void onFinish() {
 
@@ -315,8 +371,8 @@ public class DataAnalysisFragment extends BaseFragment {
                                 str=str+"\n"+time;
                             }
                         }
-                        tv2.setText(positionItems.get(0).getTitle());
-                        tv5.setText(str);
+                        form_2.setForm("",positionItems.get(0).getTitle(),false);
+                        form_5.setForm("",str,true);
                     }
                     @Override
                     public void onFinish() {
@@ -324,12 +380,14 @@ public class DataAnalysisFragment extends BaseFragment {
                 };
                 mTimer.start();
             }
-            tv1.setText(data.getStringExtra("title"));
-            layout_3.setVisibility(View.GONE);
-            layout_4.setVisibility(View.GONE);
+            form_1.setForm("",data.getStringExtra("title"),true);
+            //todo
+            form_3.setVisibility(View.GONE);
+            form_4.setVisibility(View.GONE);
+
 
         }
-        // data correlationCheck
+        // 数据关联
 
         if (requestCode == 1001 && resultCode == Activity.RESULT_OK) {
             final ArrayList<SimpleItem> positionItems = (ArrayList<SimpleItem>) data.getSerializableExtra("positionItems");
@@ -389,13 +447,11 @@ public class DataAnalysisFragment extends BaseFragment {
                 public void onFinish() {
                 }
             };
-            layout_3.setVisibility(View.VISIBLE);
-            layout_4.setVisibility(View.VISIBLE);
             long start= data.getLongExtra("start", 0);
             long end= data.getLongExtra("end", 0);
             String title1="";
             String title2="";
-            tv1.setText(data.getStringExtra("title"));
+            form_1.setForm("",data.getStringExtra("title"),true);
             for (SimpleItem sim:positionItems){
                 if (title1.equals("")){
                     title1+=sim.getTitle();
@@ -403,8 +459,8 @@ public class DataAnalysisFragment extends BaseFragment {
                     title1=title1+","+sim.getTitle();
                 }
             }
-            tv2.setText(title1);
-            tv3.setText(data.getStringExtra("titleCorrelation"));
+            form_2.setForm("",title1,false);
+            form_3.setForm("",data.getStringExtra("titleCorrelation"),true);
             for (SimpleItem sim:positionItemsCorrelation){
                 if (title2.equals("")){
                     title2+=sim.getTitle();
@@ -412,8 +468,11 @@ public class DataAnalysisFragment extends BaseFragment {
                     title2=title2+","+sim.getTitle();
                 }
             }
-            tv4.setText(title2);
-            tv5.setText(sdf.format(new Date(start))+"---"+sdf.format(new Date(end)));
+            form_3.setVisibility(View.VISIBLE);
+            form_4.setVisibility(View.VISIBLE);
+            form_4.setForm("",title2,false);
+            form_5.setForm("",sdf.format(new Date(start))+"---"+sdf.format(new Date(end)),true);
+
             mTimer.start();
         }
     }
@@ -440,12 +499,13 @@ public class DataAnalysisFragment extends BaseFragment {
         }
     }
     public void init(View v){
-        tv1= (TextView) v.findViewById(R.id.tv1_data);
-        tv2= (TextView) v.findViewById(R.id.tv2_data);
-        tv3= (TextView) v.findViewById(R.id.tv3_data);
-        tv4= (TextView) v.findViewById(R.id.tv4_data);
-        tv5= (TextView) v.findViewById(R.id.tv5_data);
-        layout_3= (LinearLayout) v.findViewById(R.id.layout_3);
-        layout_4= (LinearLayout) v.findViewById(R.id.layout_4);
+        form_1= (MyForm) v.findViewById(R.id.form_1);
+        form_2= (MyForm) v.findViewById(R.id.form_2);
+        form_3= (MyForm) v.findViewById(R.id.form_3);
+        form_4= (MyForm) v.findViewById(R.id.form_4);
+        form_5= (MyForm) v.findViewById(R.id.form_5);
     }
+
+//    update
+
 }

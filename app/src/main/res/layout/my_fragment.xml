@@ -16,10 +16,16 @@
         android:layout_width="match_parent"
         app:titleOfMyLinearLayout="Change IP"
         android:onClick="changeIp"
-        android:visibility="gone"
         app:expandedOfMyLinearLayout="true"
         android:layout_height="wrap_content">
 
+    </com.sxhxjy.roadmonitor.view.MyLinearLayout>
+    <com.sxhxjy.roadmonitor.view.MyLinearLayout
+        android:layout_width="match_parent"
+        app:titleOfMyLinearLayout="意见反馈"
+        android:onClick="FeedBack"
+        app:expandedOfMyLinearLayout="true"
+        android:layout_height="wrap_content">
     </com.sxhxjy.roadmonitor.view.MyLinearLayout>
     <com.sxhxjy.roadmonitor.view.MyLinearLayout
         android:layout_width="match_parent"

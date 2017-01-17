@@ -139,6 +139,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                         MyApplication.getMyApplication().initHttp();
 
                         CacheManager.getInstance().set("login", new Gson().toJson(loginData));
+                        MyApplication.getMyApplication().getSharedPreference().edit().putString("account", loginData.getUser().getAccount()).apply();
                         MyApplication.getMyApplication().getSharedPreference().edit().putString("uid", loginData.getUser().getId()).apply();
                         MyApplication.getMyApplication().getSharedPreference().edit().putString("gid", loginData.getUser().getGid()).apply();
                         ActivityUtil.startActivityForResult(LoginActivity.this, StationListActivity.class, null, 111);
