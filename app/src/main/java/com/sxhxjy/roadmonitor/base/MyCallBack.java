@@ -11,7 +11,7 @@ import retrofit2.Response;
  *
  * @author Michael Zhao
  */
-public abstract class MyCallBack<T extends BaseEntity> implements Callback<T> {
+public abstract class MyCallBack<T> implements Callback<T> {
     private BaseActivity mActivity;
     public MyCallBack(BaseActivity baseActivity) {
         mActivity = baseActivity;

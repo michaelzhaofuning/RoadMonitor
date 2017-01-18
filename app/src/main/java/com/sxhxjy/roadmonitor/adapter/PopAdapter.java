@@ -59,12 +59,14 @@ public class PopAdapter extends BaseAdapter {
 //                //获取原图item布局和控件
             view = LayoutInflater.from(context).inflate(R.layout.gv_item, null);
             vh.name= (TextView) view.findViewById(R.id.gv_tv);
+            vh.oiv= (ImageView) view.findViewById(R.id.gv_iv);
             view.setTag(vh);
             convertView = view;
         } else {
             vh = (ViewHolder) convertView.getTag();
         }
             vh.name.setText(map.get("title").toString());
+            vh.oiv.setImageResource(Integer.parseInt(map.get("img")));
         return convertView;
     }
 

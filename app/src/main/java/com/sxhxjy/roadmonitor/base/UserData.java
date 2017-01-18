@@ -7,7 +7,7 @@ import java.util.List;
  *
  * @author Michael Zhao
  */
-public class UserData extends BaseEntity {
+public class UserData {
 
     /**
      * vcUserId : 34242

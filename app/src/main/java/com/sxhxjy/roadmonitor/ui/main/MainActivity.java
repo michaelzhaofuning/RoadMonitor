@@ -308,4 +308,11 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,
             }
         }).show();
     }
+
+    public void FeedBack(View v){
+        ActivityUtil.startActivityForResult(this,FeedBackActivity.class);
+    }
+
+
+
 }

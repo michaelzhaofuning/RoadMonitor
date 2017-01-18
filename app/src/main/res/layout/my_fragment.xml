@@ -59,7 +59,6 @@ android:layout_marginTop="55dp"
         android:layout_width="match_parent"
         app:titleOfMyLinearLayout="修改密码"
         android:onClick="changePassword"
-        android:visibility="gone"
         app:expandedOfMyLinearLayout="true"
         android:layout_height="wrap_content">
 

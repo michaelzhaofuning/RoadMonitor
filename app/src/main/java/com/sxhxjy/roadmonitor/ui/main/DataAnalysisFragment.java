@@ -16,7 +16,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
@@ -58,18 +60,23 @@ public class DataAnalysisFragment extends BaseFragment {
     /**\
      * 数据分析——fragment页
      */
-    private CountDownTimer mTimer;
     private MyForm form_1,form_2,form_3,form_4,form_5;
+    private ImageView form_option;
+    private LinearLayout layout_correlation,layout_option;
+    private MyPopup myPopupWindow;//弹出窗口
+    private boolean option=true;
+
+
+    private CountDownTimer mTimer;
     private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.CHINA);
     private Random random = new Random();
-
     private LinearLayout mChartsContainer;
     private ProgressDialog progressDialog;
     public static int[] colors;
     private TextView mTextViewCenter;
     private String stationId;
 
-    private MyPopup myPopupWindow;//弹出窗口
+
 
 
 
@@ -103,14 +110,12 @@ public class DataAnalysisFragment extends BaseFragment {
     }
     public List<Map<String,String>> getlist(){
         String [] str={"数据比对","数据关联"};
-//        int [] img={};
-
-
+        int [] img={R.drawable.analysis1,R.drawable.analysis2};
         List<Map<String,String>> list=new ArrayList<>();
         for (int i=0;i<str.length;i++){
             Map<String,String> map=new HashMap<>();
             map.put("title",str[i]);
-//            map.put("img",img[i]+"");
+            map.put("img",img[i]+"");
             list.add(map);
         }
         return list;
@@ -121,6 +126,24 @@ public class DataAnalysisFragment extends BaseFragment {
         init(view);
         initToolBar(view, MyApplication.getMyApplication().getSharedPreference().getString("stationName", ""), false);
 
+        layout_option.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (option){
+                    layout_correlation.setVisibility(View.GONE);
+                    form_option.setImageResource(R.mipmap.expand2);
+                    option=false;
+                }else {
+                    layout_correlation.setVisibility(View.VISIBLE);
+                    form_option.setImageResource(R.mipmap.expand);
+                    option=true;
+                }
+            }
+        });
+
+
+
+
         mToolbar.inflateMenu(R.menu.filter_right);//添加菜单menu
         mToolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
@@ -129,8 +152,10 @@ public class DataAnalysisFragment extends BaseFragment {
                 return true;
             }
         });
+
+
         myPopupWindow = new MyPopup((BaseActivity) getActivity(), R.layout.popgrid);//设置弹出窗口
-        GridView gv= (GridView) myPopupWindow.getContentView().findViewById(R.id.pop_gv);
+        ListView gv= (ListView) myPopupWindow.getContentView().findViewById(R.id.pop_gv);
         List<Map<String,String>> list=getlist();
         PopAdapter adapter=new PopAdapter(getActivity(),list);
         gv.setAdapter(adapter);
@@ -153,24 +178,6 @@ public class DataAnalysisFragment extends BaseFragment {
                 }
             }
         });
-//        mToolbar.inflateMenu(R.menu.data_right);
-//        mToolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
-//            @Override
-//            public boolean onMenuItemClick(MenuItem item) {
-//                if (item.getItemId() == R.id.data_contrast) {//数据对比
-//                    Intent intent = new Intent(getActivity(), AddDataContrastActivity.class);
-//                    intent.putExtra("stationId", stationId);
-//                    startActivityForResult(intent, 1000);
-//
-//                } else if (item.getItemId() == R.id.data_correlation) {//数据关联
-//                    Intent intent = new Intent(getActivity(), AddDataCorrelationActivity.class);
-//                    intent.putExtra("stationId", stationId);
-//                    startActivityForResult(intent, 1001);
-//
-//                }
-//                return true;
-//            }
-//        });
         mTextViewCenter = (TextView) getView().findViewById(R.id.toolbar_title);
         mTextViewCenter.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -183,17 +190,18 @@ public class DataAnalysisFragment extends BaseFragment {
         mTextViewCenter.setCompoundDrawablePadding(20);
         stationId = MyApplication.getMyApplication().getSharedPreference().getString("stationId", "");
         mChartsContainer = (LinearLayout) getView().findViewById(R.id.charts_container);
+        //设置图标layout中的表格影藏
         mChartsContainer.getChildAt(0).findViewById(R.id.param_info).setVisibility(View.GONE);
         LineChartView lineChartView = (LineChartView) mChartsContainer.getChildAt(0).findViewById(R.id.chart);
         lineChartView.emptyHint = "请选择分析条件";
         lineChartView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mToolbar.showOverflowMenu();
+                myPopupWindow.show();
             }
         });
     }
-
+    //LineChartView
     private void addToChart(List<RealTimeData> realTimeDatas, SimpleItem simpleItem, boolean isRight) {
         if (mChartsContainer.getChildAt(0) == null)
             getActivity().getLayoutInflater().inflate(R.layout.chart_layout, mChartsContainer);
@@ -274,7 +282,7 @@ public class DataAnalysisFragment extends BaseFragment {
                                 @Override
                                 protected void onMyNext(ComplexData complexData) {
                                     List<RealTimeData> realTimeDatas = complexData.getContent();
-                                    addToChart(realTimeDatas, item, false);
+                                    addToChart(realTimeDatas, item, false);//图表
                                 }
                                 @Override
                                 public void onCompleted() {
@@ -314,14 +322,15 @@ public class DataAnalysisFragment extends BaseFragment {
                         }
                         long start= data.getLongExtra("start", 0);
                         long end= data.getLongExtra("end", 0);
-                        form_2.setForm("",str,false);
-                        form_5.setForm("",sdf.format(new Date(start))+"---"+sdf.format(new Date(end)),true);
+                        form_2.setForm("监测位置",str,true);
+                        form_5.setForm("时间",sdf.format(new Date(start))+"---"+sdf.format(new Date(end)),false);
                     }
                     @Override
                     public void onFinish() {
 
                     }
                 };
+                form_option.setColorFilter(getResources().getColor(R.color.default_text_color));
                 mTimer.start();
             } else {//多时间
                 final ArrayList<String> times = (ArrayList<String>) data.getSerializableExtra("times");
@@ -411,21 +420,20 @@ public class DataAnalysisFragment extends BaseFragment {
                                 str=str+"\n"+time;
                             }
                         }
-                        form_2.setForm("",positionItems.get(0).getTitle(),false);
-                        form_5.setForm("",str,true);
+                        form_2.setForm("监测位置",positionItems.get(0).getTitle(),true);
+                        form_5.setForm("时间",str,false);
                     }
                     @Override
                     public void onFinish() {
                     }
                 };
+                form_option.setColorFilter(getResources().getColor(R.color.default_text_color));
                 mTimer.start();
             }
-            form_1.setForm("",data.getStringExtra("title"),true);
+            form_1.setForm("监测因素",data.getStringExtra("title"),false);
             //todo
             form_3.setVisibility(View.GONE);
             form_4.setVisibility(View.GONE);
-
-
         }
         // 数据关联
 
@@ -531,7 +539,7 @@ public class DataAnalysisFragment extends BaseFragment {
             long end= data.getLongExtra("end", 0);
             String title1="";
             String title2="";
-            form_1.setForm("",data.getStringExtra("title"),true);
+            form_1.setForm("监测因素",data.getStringExtra("title"),false);
             for (SimpleItem sim:positionItems){
                 if (title1.equals("")){
                     title1+=sim.getTitle();
@@ -539,8 +547,8 @@ public class DataAnalysisFragment extends BaseFragment {
                     title1=title1+","+sim.getTitle();
                 }
             }
-            form_2.setForm("",title1,false);
-            form_3.setForm("",data.getStringExtra("titleCorrelation"),true);
+            form_2.setForm("监测位置",title1,true);
+            form_3.setForm("关联监测因素",data.getStringExtra("titleCorrelation"),false);
             for (SimpleItem sim:positionItemsCorrelation){
                 if (title2.equals("")){
                     title2+=sim.getTitle();
@@ -550,9 +558,9 @@ public class DataAnalysisFragment extends BaseFragment {
             }
             form_3.setVisibility(View.VISIBLE);
             form_4.setVisibility(View.VISIBLE);
-            form_4.setForm("",title2,false);
-            form_5.setForm("",sdf.format(new Date(start))+"---"+sdf.format(new Date(end)),true);
-
+            form_4.setForm("关联监测位置",title2,true);
+            form_5.setForm("时间",sdf.format(new Date(start))+"---"+sdf.format(new Date(end)),false);
+            form_option.setColorFilter(getResources().getColor(R.color.default_text_color));
             mTimer.start();
         }
     }
@@ -579,6 +587,9 @@ public class DataAnalysisFragment extends BaseFragment {
         }
     }
     public void init(View v){
+        form_option= (ImageView) v.findViewById(R.id.form_option);
+        layout_correlation= (LinearLayout) v.findViewById(R.id.layout_correlation);
+        layout_option= (LinearLayout) v.findViewById(R.id.layout_option);
         form_1= (MyForm) v.findViewById(R.id.form_1);
         form_2= (MyForm) v.findViewById(R.id.form_2);
         form_3= (MyForm) v.findViewById(R.id.form_3);

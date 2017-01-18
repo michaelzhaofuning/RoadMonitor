@@ -21,7 +21,7 @@ public class MyPopup extends PopupWindow implements PopupWindow.OnDismissListene
     protected View view;
 
     public MyPopup(BaseActivity activity, int viewId) {
-        super(700, ViewGroup.LayoutParams.WRAP_CONTENT);
+        super(480, ViewGroup.LayoutParams.WRAP_CONTENT);
         mActivity = activity;
         setAnimationStyle(R.style.popup_window_anim);//设置动画
         setFocusable(true);
@@ -47,7 +47,7 @@ public class MyPopup extends PopupWindow implements PopupWindow.OnDismissListene
     }
 
     public void show(View parentView) {
-        showAtLocation(parentView, Gravity.TOP, 300, 300);//设置位置
+        showAtLocation(parentView, Gravity.TOP, 290, 250);//设置位置(左右上下)
         WindowManager.LayoutParams params = mActivity.getWindow().getAttributes();
         params.alpha = 0.6f;
         mActivity.getWindow().setAttributes(params);

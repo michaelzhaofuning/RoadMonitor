@@ -8,7 +8,7 @@
     <color name="default_text_color">#aaaaaa</color>
     <color name="black">#000000</color>
     <color name="grey_text_color">#ecedef</color>
-    <!--<color name="grey_text_color">#fff</color>-->
+    <!--<color name="grey_text">#fff</color>-->
     <color name="default_color">#dddddd</color>
     <color name="default_color_light">#eeeeee</color>
     <color name="white">#fff</color>

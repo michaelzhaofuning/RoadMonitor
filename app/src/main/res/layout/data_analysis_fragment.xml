@@ -3,70 +3,63 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#fff">
+    <include layout="@layout/toolbar_layout"/>
+    <LinearLayout
+        android:id="@+id/layout_correlation"
+        android:gravity="center"
+        android:layout_marginTop="10dp"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        >
+        <com.sxhxjy.roadmonitor.view.MyForm
+            android:id="@+id/form_1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+        <com.sxhxjy.roadmonitor.view.MyForm
+            android:id="@+id/form_2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
 
+        <com.sxhxjy.roadmonitor.view.MyForm
+            android:id="@+id/form_3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
 
-<include layout="@layout/toolbar_layout"/>
+        <com.sxhxjy.roadmonitor.view.MyForm
+            android:id="@+id/form_4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <com.sxhxjy.roadmonitor.view.MyForm
+            android:id="@+id/form_5"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/layout_option"
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
+        android:orientation="vertical">
+        <ImageView
+            android:id="@+id/form_option"
+            android:src="@mipmap/expand"
+            android:layout_gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
     <ScrollView
-          android:layout_width="match_parent"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="15">
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:orientation="vertical"
-            android:layout_height="match_parent">
-            <!--数据关联-->
-            <!--<ListView-->
-                <!--android:id="@+id/form_lv"-->
-                <!--android:layout_marginLeft="5dp"-->
-                <!--android:layout_marginRight="5dp"-->
-                <!--android:layout_marginBottom="15dp"-->
-                <!--android:layout_marginTop="20dp"-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="350dp">-->
-
-            <LinearLayout
-                android:id="@+id/layout_correlation"
-                android:gravity="center"
-                android:layout_marginBottom="20dp"
-                android:layout_marginTop="20dp"
-                android:orientation="vertical"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                >
-                <com.sxhxjy.roadmonitor.view.MyForm
-                    android:id="@+id/form_1"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
-                <com.sxhxjy.roadmonitor.view.MyForm
-                    android:id="@+id/form_2"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
-
-                <com.sxhxjy.roadmonitor.view.MyForm
-                    android:id="@+id/form_3"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
-
-                <com.sxhxjy.roadmonitor.view.MyForm
-                    android:id="@+id/form_4"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
-
-                <com.sxhxjy.roadmonitor.view.MyForm
-                    android:id="@+id/form_5"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
-            </LinearLayout>
             <LinearLayout
                 android:layout_width="match_parent"
                 android:orientation="vertical"
                 android:id="@+id/charts_container"
                 android:layout_height="wrap_content">
                 <include layout="@layout/chart_layout"/>
-            </LinearLayout>
         </LinearLayout>
-
-
     </ScrollView>
 
 </LinearLayout>
