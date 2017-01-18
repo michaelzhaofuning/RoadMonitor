@@ -717,6 +717,7 @@ public class LineChartView extends View {
         if (!myLines.isEmpty()) {
             mPaint.setTextAlign(Paint.Align.LEFT);
             mPaint.setStrokeWidth(1);
+            mPaint.setTextSize(25);
             canvas.drawText(yAxisName, -OFFSET_SCALE * 3, -yAxisLength - OFFSET / 2, mPaint);
         }
 
@@ -724,6 +725,8 @@ public class LineChartView extends View {
         if (!myLinesRight.isEmpty()) {
             mPaint.setTextAlign(Paint.Align.LEFT);
             mPaint.setStrokeWidth(1);
+            mPaint.setTextSize(25);
+
             canvas.drawText(yAxisNameRight, xAxisLength - OFFSET_SCALE * 7, -yAxisLength - OFFSET / 2, mPaint);
         }
 
