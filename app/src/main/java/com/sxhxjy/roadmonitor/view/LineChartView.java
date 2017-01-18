@@ -44,7 +44,7 @@ import java.util.Random;
  */
 public class LineChartView extends View {
     private static final int DELAY = 1000;
-    public int pointCount = 20;
+    public int pointCount = 6;
     private static final int OFFSET = 65;
     private static int OFFSET_LEGEND = 80;
 
@@ -168,7 +168,7 @@ public class LineChartView extends View {
                 offset = 0;
                 if (offset > myLines.get(0).points.size() - pointCount) offset = myLines.get(0).points.size() - pointCount;
 
-                pointCount = (int) (pointCount + (1 - detector.getScaleFactor()) * 55);
+                pointCount = (int) (pointCount + (1 - detector.getScaleFactor()) * 20);
                 if (pointCount < 3) pointCount = 3;
                 if (pointCount > myLines.get(0).points.size()) pointCount = myLines.get(0).points.size();
                 Log.e("test", "p count: " + pointCount + "factor: " + detector.getScaleFactor());
@@ -830,9 +830,9 @@ public class LineChartView extends View {
         else
             myLinesRight.add(new MyLine(s, points, color));
 
-        pointCount = points.size() / 2; // point count
+        pointCount = points.size() / 4; // point count
         if (pointCount > 800) pointCount = 800;
-        if (pointCount < 10) pointCount = points.size();
+        if (pointCount < 3) pointCount = 3;
         offset = 0;
         invalidate();
     }
