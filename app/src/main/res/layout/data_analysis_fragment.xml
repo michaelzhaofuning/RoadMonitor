@@ -12,7 +12,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         >
-
+        <View
+            android:layout_width="match_parent"
+            android:id="@+id/divider2"
+            android:visibility="gone"
+            android:layout_height="1dp"
+            android:background="@color/default_color"/>
         <com.sxhxjy.roadmonitor.view.MyForm
             android:id="@+id/form_1"
             android:layout_width="match_parent"
