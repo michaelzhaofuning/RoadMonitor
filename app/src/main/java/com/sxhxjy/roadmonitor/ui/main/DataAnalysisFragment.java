@@ -75,6 +75,7 @@ public class DataAnalysisFragment extends BaseFragment {
     public static int[] colors;
     private TextView mTextViewCenter;
     private String stationId;
+    private View divider, divider2;
 
 
 
@@ -153,6 +154,8 @@ public class DataAnalysisFragment extends BaseFragment {
             }
         });
 
+        divider = view.findViewById(R.id.divider);
+        divider2 = view.findViewById(R.id.divider2);
 
         myPopupWindow = new MyPopup((BaseActivity) getActivity(), R.layout.popgrid);//设置弹出窗口
         ListView gv= (ListView) myPopupWindow.getContentView().findViewById(R.id.pop_gv);
@@ -203,6 +206,8 @@ public class DataAnalysisFragment extends BaseFragment {
     }
     //LineChartView
     private void addToChart(List<RealTimeData> realTimeDatas, SimpleItem simpleItem, boolean isRight) {
+        divider.setVisibility(View.VISIBLE);
+        divider2.setVisibility(View.VISIBLE);
         if (mChartsContainer.getChildAt(0) == null)
             getActivity().getLayoutInflater().inflate(R.layout.chart_layout, mChartsContainer);
         LineChartView lineChartView0 = (LineChartView) mChartsContainer.getChildAt(0).findViewById(R.id.chart);
@@ -331,6 +336,7 @@ public class DataAnalysisFragment extends BaseFragment {
                     }
                 };
                 form_option.setColorFilter(getResources().getColor(R.color.default_text_color));
+
                 mTimer.start();
             } else {//多时间
                 final ArrayList<String> times = (ArrayList<String>) data.getSerializableExtra("times");
