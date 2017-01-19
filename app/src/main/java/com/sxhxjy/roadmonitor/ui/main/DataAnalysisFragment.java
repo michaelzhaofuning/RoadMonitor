@@ -72,10 +72,8 @@ public class DataAnalysisFragment extends BaseFragment {
     private Random random = new Random();
     private LinearLayout mChartsContainer;
     private ProgressDialog progressDialog;
-    public static int[] colors;
     private TextView mTextViewCenter;
     private String stationId;
-    private View divider, divider2;
 
 
 
@@ -142,9 +140,6 @@ public class DataAnalysisFragment extends BaseFragment {
             }
         });
 
-
-
-
         mToolbar.inflateMenu(R.menu.filter_right);//添加菜单menu
         mToolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
@@ -154,8 +149,6 @@ public class DataAnalysisFragment extends BaseFragment {
             }
         });
 
-        divider = view.findViewById(R.id.divider);
-        divider2 = view.findViewById(R.id.divider2);
 
         myPopupWindow = new MyPopup((BaseActivity) getActivity(), R.layout.popgrid);//设置弹出窗口
         ListView gv= (ListView) myPopupWindow.getContentView().findViewById(R.id.pop_gv);
@@ -206,8 +199,7 @@ public class DataAnalysisFragment extends BaseFragment {
     }
     //LineChartView
     private void addToChart(List<RealTimeData> realTimeDatas, SimpleItem simpleItem, boolean isRight) {
-        divider.setVisibility(View.VISIBLE);
-        divider2.setVisibility(View.VISIBLE);
+        form_option.setColorFilter(getResources().getColor(R.color.default_text_color));
         if (mChartsContainer.getChildAt(0) == null)
             getActivity().getLayoutInflater().inflate(R.layout.chart_layout, mChartsContainer);
         LineChartView lineChartView0 = (LineChartView) mChartsContainer.getChildAt(0).findViewById(R.id.chart);
@@ -335,8 +327,7 @@ public class DataAnalysisFragment extends BaseFragment {
 
                     }
                 };
-                form_option.setColorFilter(getResources().getColor(R.color.default_text_color));
-
+                layout_correlation.setVisibility(View.VISIBLE);
                 mTimer.start();
             } else {//多时间
                 final ArrayList<String> times = (ArrayList<String>) data.getSerializableExtra("times");
@@ -433,10 +424,10 @@ public class DataAnalysisFragment extends BaseFragment {
                     public void onFinish() {
                     }
                 };
-                form_option.setColorFilter(getResources().getColor(R.color.default_text_color));
                 mTimer.start();
             }
             form_1.setForm("监测因素",data.getStringExtra("title"),false);
+            layout_correlation.setVisibility(View.VISIBLE);
             //todo
             form_3.setVisibility(View.GONE);
             form_4.setVisibility(View.GONE);
@@ -564,9 +555,9 @@ public class DataAnalysisFragment extends BaseFragment {
             }
             form_3.setVisibility(View.VISIBLE);
             form_4.setVisibility(View.VISIBLE);
+            layout_correlation.setVisibility(View.VISIBLE);
             form_4.setForm("关联监测位置",title2,true);
             form_5.setForm("时间",sdf.format(new Date(start))+"---"+sdf.format(new Date(end)),false);
-            form_option.setColorFilter(getResources().getColor(R.color.default_text_color));
             mTimer.start();
         }
     }
