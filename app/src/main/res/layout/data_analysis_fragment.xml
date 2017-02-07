@@ -7,6 +7,7 @@
     <LinearLayout
         android:id="@+id/layout_correlation"
         android:gravity="center"
+        android:visibility="invisible"
         android:layout_marginTop="10dp"
         android:orientation="vertical"
         android:layout_width="match_parent"
@@ -15,7 +16,6 @@
         <View
             android:layout_width="match_parent"
             android:id="@+id/divider2"
-            android:visibility="gone"
             android:layout_height="1dp"
             android:background="@color/default_color"/>
         <com.sxhxjy.roadmonitor.view.MyForm
@@ -44,7 +44,6 @@
         <View
             android:layout_width="match_parent"
             android:id="@+id/divider"
-            android:visibility="gone"
             android:layout_height="1dp"
             android:background="@color/default_color"/>
     </LinearLayout>
