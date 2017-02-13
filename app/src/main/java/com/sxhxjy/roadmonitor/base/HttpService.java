@@ -60,7 +60,6 @@ public interface HttpService {
     Observable<HttpResponse<List<Monitor>>> getMonitors(@Query("stationId") String stationId);
 
     @GET("stations/findStationByGroupId")
-//    @FormUrlEncoded
     Observable<HttpResponse<List<Station>>> getStations(@Query("groupId") String groupId);
 
 

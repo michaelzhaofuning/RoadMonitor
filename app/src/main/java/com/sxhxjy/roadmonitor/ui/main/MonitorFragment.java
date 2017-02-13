@@ -282,7 +282,7 @@ public class MonitorFragment extends BaseFragment implements View.OnClickListene
 //                codeId = filterTreeAdapter.mGroups.get(groupPosition).getList().get(childPosition).getId();
                 myPopupWindow.dismiss();
                 filterTreeAdapter.notifyDataSetChanged();
-                getLocation(groupPosition, childPosition);
+                getLocation(false, groupPosition, childPosition, null);
 
                 return true;
             }
@@ -526,14 +526,20 @@ public class MonitorFragment extends BaseFragment implements View.OnClickListene
     }
 
     //获得条件请求数据
-    private void getLocation(int groupPosition, int childPosition) {
+    private void getLocation(final boolean explicitMonitor, int groupPosition, int childPosition, final String monitorId) {
         getMessage(getHttpService().getPositions(filterTreeAdapter.mGroups.get(groupPosition).getList().get(childPosition).getId(), MyApplication.getMyApplication().getSharedPreference().getString("stationId", "")), new MySubscriber<List<MonitorPosition>>() {
             @Override
             protected void onMyNext(List<MonitorPosition> monitorPositions) {
                 mListLeft.clear();
                 int i = 0;
                 for (MonitorPosition position : monitorPositions) {
-                    SimpleItem simpleItem = new SimpleItem(position.getId(), position.getName(), i++ == 0);
+                    SimpleItem simpleItem;
+                    if (explicitMonitor) {
+                        simpleItem = new SimpleItem(position.getId(), position.getName(), monitorId.equals(position.getId()));
+                    } else {
+                        simpleItem = new SimpleItem(position.getId(), position.getName(), i++ == 0);
+                    }
+
                     simpleItem.setCode(position.code);
                     mListLeft.add(simpleItem);
                     if (simpleItem.isChecked()) mFilterTitleLeft.setText(simpleItem.getTitle());
@@ -547,10 +553,10 @@ public class MonitorFragment extends BaseFragment implements View.OnClickListene
 
 
     private void getTypeTree() {
-        getTypeTree(false, 0);
+        getTypeTree(false, 0, false, null);
     }
 
-    private void getTypeTree(final boolean explicitTheme, final int p) {
+    private void getTypeTree(final boolean explicitTheme, final int p, final boolean explicitMonitor, final String monitorId) {
         isFirstProgressDialog = true;
 
         getMessage(getHttpService().getMonitorTypeTree(MyApplication.getMyApplication().getSharedPreference().getString("stationId", "")), new MySubscriber<List<MonitorTypeTree>>() {
@@ -588,7 +594,11 @@ public class MonitorFragment extends BaseFragment implements View.OnClickListene
                     if (!explicitTheme) {
                         if (monitorTypeTree.getChildrenPoint() != null) {
                             for (MonitorTypeTree.ChildrenPointBean childrenPointBean : monitorTypeTree.getChildrenPoint()) { // first click
-                                list.add(new SimpleItem(childrenPointBean.getId(), childrenPointBean.getName(), i++ == 0));
+                                if (explicitMonitor) {
+                                    list.add(new SimpleItem(childrenPointBean.getId(), childrenPointBean.getName(), monitorId.equals(childrenPointBean.getId())));
+                                } else {
+                                    list.add(new SimpleItem(childrenPointBean.getId(), childrenPointBean.getName(), i++ == 0));
+                                }
                             }
                         }
                     } else {
@@ -607,7 +617,7 @@ public class MonitorFragment extends BaseFragment implements View.OnClickListene
                 for (int j = 0; j < groupsOfFilterTree.size(); j++) {
                     for (int k = 0; k < groupsOfFilterTree.get(j).getList().size(); k++) {
                         if (groupsOfFilterTree.get(j).getList().get(k).isChecked()) {
-                            getLocation(j, k); flag = true;
+                            getLocation(explicitMonitor, j, k, monitorId); flag = true;
                         }
                     }
                 }
@@ -632,7 +642,7 @@ public class MonitorFragment extends BaseFragment implements View.OnClickListene
         if (mTextViewCenter!=null)
             mTextViewCenter.setText(MyApplication.getMyApplication().getSharedPreference().getString("stationName", ""));
         groupsOfFilterTree.clear();
-        getTypeTree(true, position);
+        getTypeTree(true, position, false, null);
         /*
         if (groupsOfFilterTree != null && groupsOfFilterTree.size() == 0) return;
 

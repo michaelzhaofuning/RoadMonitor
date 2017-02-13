@@ -23,16 +23,11 @@ package com.sxhxjy.roadmonitor.base;
  * fresco:roundWithOverlayColor="@color/corner_color"
  * fresco:roundingBorderWidth="2dp"
  * fresco:roundingBorderColor="@color/border_color"
- *
+ *                                              freak
  * @author Michael Zhao
  */
 public class Test {
 
     public static void t() {
-
-
-
-
-
     }
 }

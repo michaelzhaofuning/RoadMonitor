@@ -100,7 +100,8 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
             case R.id.login:
                 OkHttpClient okHttpClient = new OkHttpClient.Builder().build();
                 Request request = new Request.Builder()
-                        .url("http://124.163.206.250:8080/ClearPro/web/webuser/appLogin?account="+mUser.getText().toString()+"&password="+MD5_X.md5(mPassword.getText().toString().getBytes()).toLowerCase())
+//                        .url("http://124.163.206.250:8080/ClearPro/web/webuser/appLogin?account="+mUser.getText().toString()+"&password="+MD5_X.md5(mPassword.getText().toString().getBytes()).toLowerCase())
+                        .url("http://192.168.1.172:8088/ClearPro/web/webuser/appLogin?account="+mUser.getText().toString()+"&password="+MD5_X.md5(mPassword.getText().toString().getBytes()).toLowerCase())
                         .get().build();
                 okHttpClient.newCall(request).enqueue(new Callback() {
                     @Override
@@ -134,7 +135,8 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                         LoginData loginData = JSON.parseObject(data, LoginData.class);
 
                         // init http
-                        MyApplication.BASE_IP = "http://"+loginData.getUser().getPriUserGroup().serverIp + ":" + loginData.getUser().getPriUserGroup().serverPort;
+                        MyApplication.BASE_IP = "http://"+"192.168.1.172:8088";
+//                        MyApplication.BASE_IP = "http://"+loginData.getUser().getPriUserGroup().serverIp + ":" + loginData.getUser().getPriUserGroup().serverPort;
                         MyApplication.ADDRESS = loginData.getUser().getPriUserGroup().serverIp;
                         MyApplication.getMyApplication().initHttp();
 

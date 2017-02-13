@@ -1,6 +1,7 @@
 package com.sxhxjy.roadmonitor.ui.main;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -16,6 +17,7 @@ import android.widget.TextView;
 
 import com.alibaba.fastjson.JSON;
 import com.google.gson.Gson;
+import com.squareup.picasso.Picasso;
 import com.sxhxjy.roadmonitor.R;
 import com.sxhxjy.roadmonitor.adapter.FilterTreeAdapter;
 import com.sxhxjy.roadmonitor.adapter.HomeAdapter;
@@ -24,11 +26,14 @@ import com.sxhxjy.roadmonitor.base.BaseFragment;
 import com.sxhxjy.roadmonitor.base.CacheManager;
 import com.sxhxjy.roadmonitor.base.HttpResponse;
 import com.sxhxjy.roadmonitor.base.MyApplication;
+import com.sxhxjy.roadmonitor.base.MySubscriber;
 import com.sxhxjy.roadmonitor.entity.GroupTree;
 import com.sxhxjy.roadmonitor.entity.HomeTheme;
 import com.sxhxjy.roadmonitor.entity.LoginData;
 import com.sxhxjy.roadmonitor.entity.SimpleItem;
+import com.sxhxjy.roadmonitor.entity.Station;
 import com.sxhxjy.roadmonitor.ui.main.picture.TakeNotesActivity;
+import com.sxhxjy.roadmonitor.view.MonitorMapView;
 import com.tencent.mapsdk.raster.model.BitmapDescriptorFactory;
 import com.tencent.mapsdk.raster.model.LatLng;
 import com.tencent.mapsdk.raster.model.Marker;
@@ -63,6 +68,7 @@ public class HomeFragment extends BaseFragment implements HomeAdapter.OnItemClic
      */
     private TextView hide;
     private MapView mapview;
+    private MonitorMapView monitorMapView;
     private String path= MyApplication.BASE_URL + "points/findAppRootPoint?groupId=4028812c57b6993b0157b6aca4410004";
     private OkHttpClient okHttpClient;
     private Request request;
@@ -73,6 +79,8 @@ public class HomeFragment extends BaseFragment implements HomeAdapter.OnItemClic
     private HomethemeAdapter adapter;
     private LoginData loginData;
     private TencentMap tencentMap;
+    private ArrayList<Station> stations = new ArrayList<>();
+
 
     private LinearLayout layout_theme;
     Handler handler=new Handler(){
@@ -110,17 +118,66 @@ public class HomeFragment extends BaseFragment implements HomeAdapter.OnItemClic
         initToolBar(view, "首页", false);
         init(view);
         getplace();
+        monitorMapView = (MonitorMapView) view.findViewById(R.id.monitor_map);
         mapview.onCreate(savedInstanceState);
         tencentMap = mapview.getMap();
         loginData = new Gson().fromJson(CacheManager.getInstance().get("login"), LoginData.class);
+
         if (loginData != null) {
-            for (LoginData.UserGroupsBean groupsBean : loginData.getUserGroups()) {
+            for (final LoginData.UserGroupsBean groupsBean : loginData.getUserGroups()) {
                 // root
                 if (groupsBean.getParentid().equals("0")) continue;
 
                 LatLng latLng = new LatLng(groupsBean.getLatitude(), groupsBean.getLongitude());
                 tencentMap.setCenter(latLng);
                 tencentMap.setZoom(6);
+                tencentMap.setOnMarkerClickListener(new TencentMap.OnMarkerClickListener() {
+                    @Override
+                    public boolean onMarkerClick(Marker marker) {
+                        // we show monitor map
+
+                        Picasso picasso = Picasso.with(getActivity());
+                        picasso.load(MyApplication.BASE_URL_Img+groupsBean.getJgwPic().replace('\\','/'))
+                                .config(Bitmap.Config.RGB_565)
+                                .into(monitorMapView, new com.squareup.picasso.Callback() {
+                            @Override
+                            public void onSuccess() {
+                                monitorMapView.setVisibility(View.VISIBLE);
+                                monitorMapView.animate()
+                                        .alpha(1f).start();
+                            }
+
+                            @Override
+                            public void onError() {
+                                showToastMsg("加载传感器实景图失败...");
+                            }
+                        });
+                        return false;
+                    }
+                });
+                tencentMap.setOnInfoWindowClickListener(new TencentMap.OnInfoWindowClickListener() {
+                    @Override
+                    public void onInfoWindowClick(Marker marker) {
+                        // we show monitor map
+
+                        Picasso picasso = Picasso.with(getActivity());
+                        picasso.load("https://ss3.bdstatic.com/70cFv8Sh_Q1YnxGkpoWK1HF6hhy/it/u=1492722388,3064739319&fm=23&gp=0.jpg")
+                                .config(Bitmap.Config.RGB_565)
+                                .into(monitorMapView, new com.squareup.picasso.Callback() {
+                                    @Override
+                                    public void onSuccess() {
+                                        monitorMapView.setVisibility(View.VISIBLE);
+                                        monitorMapView.animate()
+                                                .alpha(1f).start();
+                                    }
+
+                                    @Override
+                                    public void onError() {
+                                        showToastMsg("加载传感器实景图失败...");
+                                    }
+                                });
+                    }
+                });
 
                 Marker marker = tencentMap.addMarker(new MarkerOptions()
                         .position(latLng)
@@ -135,6 +192,26 @@ public class HomeFragment extends BaseFragment implements HomeAdapter.OnItemClic
         }
     }
 
+    public void getMonitors() {
+        getMessage(getHttpService().getStations(simpleItem.getId()), new MySubscriber<List<Station>>() {
+            @Override
+            protected void onMyNext(List<Station> stations) {
+                stations.clear();
+                HomeFragment.this.stations.addAll(stations);
+                monitorMapView.setMonitors(stations);
+            }
+        });
+
+    }
+
+
+
+
+
+
+
+
+
     public void getplace() {
         getHttpService().getGroups(MyApplication.getMyApplication().getSharedPreference().getString("gid","4")).subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
@@ -148,6 +225,9 @@ public class HomeFragment extends BaseFragment implements HomeAdapter.OnItemClic
                 .subscribe(new Subscriber<List<GroupTree>>() {
                     @Override
                     public void onCompleted() {
+                        // we get monitors by groupid
+                        getMonitors();
+
                     }
 
                     @Override
@@ -216,6 +296,8 @@ public class HomeFragment extends BaseFragment implements HomeAdapter.OnItemClic
 
             }
         }
+
+        getMonitors();
 
         adapter.setSeclection(position);
         adapter.notifyDataSetChanged();

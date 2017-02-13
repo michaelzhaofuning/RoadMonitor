@@ -37,7 +37,7 @@ public class MyApplication extends Application {
 
 
     public static String BASE_IP = "124.163.206.250:8080";
-//    public static String BASE_IP = "124.163.206.251:8088";
+//    public static String BASE_IP = "192.168.1.172:8088";
 
     public static String BASE_URL = "http://"+ BASE_IP + "/ClearPro/web/";
 
@@ -61,6 +61,10 @@ public class MyApplication extends Application {
     }
 
     public void initHttp() {
+        // refresh static field
+        BASE_URL = "http://"+ BASE_IP + "/ClearPro/web/";
+        BASE_URL_Img = "http://"+ BASE_IP+"/";
+
         HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
         logging.setLevel(HttpLoggingInterceptor.Level.BODY);
         OkHttpClient.Builder httpClient = new OkHttpClient.Builder();

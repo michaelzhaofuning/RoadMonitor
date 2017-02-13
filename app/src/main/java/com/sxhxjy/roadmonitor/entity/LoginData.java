@@ -929,6 +929,15 @@ public class LoginData {
         private Object childrenGroup;
         private Object parentGroup;
         private Object cityList;
+        private String jgwPic;
+
+        public String getJgwPic() {
+            return jgwPic;
+        }
+
+        public void setJgwPic(String jgwPic) {
+            this.jgwPic = jgwPic;
+        }
 
         public String getId() {
             return id;
