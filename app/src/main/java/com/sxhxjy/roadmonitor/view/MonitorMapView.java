@@ -133,5 +133,6 @@ public class MonitorMapView extends ImageView {
         final ViewGroup p = (ViewGroup) getParent();
         TextView monitorName = (TextView) p.findViewById(R.id.monitor_name);
         monitorName.setText(station.getName() + " (" + station.getCode() + ")");
+        p.findViewById(R.id.get_chart_data).setTag(station);
     }
 }

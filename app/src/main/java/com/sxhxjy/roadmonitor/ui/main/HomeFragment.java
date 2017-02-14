@@ -81,6 +81,7 @@ public class HomeFragment extends BaseFragment implements HomeAdapter.OnItemClic
     private LoginData loginData;
     private TencentMap tencentMap;
     private ArrayList<Station> stations = new ArrayList<>();
+    private LoginData.UserGroupsBean groupsBean = null; // marker group
 
 
     private LinearLayout layout_theme;
@@ -121,6 +122,26 @@ public class HomeFragment extends BaseFragment implements HomeAdapter.OnItemClic
         getplace();
         monitorMapView = (MonitorMapView) view.findViewById(R.id.monitor_map);
         monitorContainer = (LinearLayout) view.findViewById(R.id.monitor_container);
+
+        // get chart data by id
+        monitorContainer.findViewById(R.id.get_chart_data).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Station station = (Station) v.getTag();
+                if (station != null) {
+
+                    MonitorFragment monitorFragment = ((MonitorFragment) ((MainActivity)getActivity()).fragments.get(1));
+                    monitorFragment.cacheStation(groupsBean.getId(),groupsBean.getName());
+                    monitorFragment.setIsFirst(); // load once Not called
+                    monitorFragment.getChartDataById(station);
+                    ((MainActivity)getActivity()).selectedBar(1);
+
+
+                }
+
+
+            }
+        });
         mapview.onCreate(savedInstanceState);
         tencentMap = mapview.getMap();
         loginData = new Gson().fromJson(CacheManager.getInstance().get("login"), LoginData.class);
@@ -150,6 +171,7 @@ public class HomeFragment extends BaseFragment implements HomeAdapter.OnItemClic
                 @Override
                 public boolean onMarkerClick(Marker marker) {
                     final LoginData.UserGroupsBean groupsBean = (LoginData.UserGroupsBean) marker.getTag();
+                    HomeFragment.this.groupsBean = groupsBean;
                     // we show monitor map
                     getMessage(getHttpService().getStations(groupsBean.getId()), new MySubscriber<List<Station>>() {
                         @Override
@@ -184,6 +206,8 @@ public class HomeFragment extends BaseFragment implements HomeAdapter.OnItemClic
                 @Override
                 public void onInfoWindowClick(Marker marker) {
                     final LoginData.UserGroupsBean groupsBean = (LoginData.UserGroupsBean) marker.getTag();
+                    HomeFragment.this.groupsBean = groupsBean;
+
                     // we show monitor map
                     getMessage(getHttpService().getStations(groupsBean.getId()), new MySubscriber<List<Station>>() {
                         @Override

@@ -39,6 +39,7 @@ import com.sxhxjy.roadmonitor.entity.ComplexData;
 import com.sxhxjy.roadmonitor.entity.MonitorTypeTree;
 import com.sxhxjy.roadmonitor.entity.RealTimeData;
 import com.sxhxjy.roadmonitor.entity.SimpleItem;
+import com.sxhxjy.roadmonitor.entity.Station;
 import com.sxhxjy.roadmonitor.ui.main.picture.TakeNotesActivity;
 import com.sxhxjy.roadmonitor.util.ActivityUtil;
 import com.sxhxjy.roadmonitor.util.MyCountDownTimer;
@@ -294,6 +295,20 @@ public class MonitorFragment extends BaseFragment implements View.OnClickListene
             getView().findViewById(R.id.empty).setVisibility(View.GONE);
         }
 
+    }
+
+    public void getChartDataById(Station station) {
+        SimpleItem simpleItem = new SimpleItem(station.getId(), station.getName(), true);
+        simpleItem.setCode(station.getCode());
+        mFilterTitleLeft.setText(station.getName());
+
+        mListLeft.add(simpleItem);
+        stationId = MyApplication.getMyApplication().getSharedPreference().getString("stationId", "");
+        if (mTextViewCenter!=null)
+            mTextViewCenter.setText(MyApplication.getMyApplication().getSharedPreference().getString("stationName", ""));
+        groupsOfFilterTree.clear();
+
+        getChartData();
     }
 
     private void getChartData() {
