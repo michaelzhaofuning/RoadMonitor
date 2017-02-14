@@ -11,11 +11,11 @@ import android.graphics.drawable.BitmapDrawable;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.Toast;
+import android.widget.TextView;
 
 import com.sxhxjy.roadmonitor.R;
-import com.sxhxjy.roadmonitor.entity.Monitor;
 import com.sxhxjy.roadmonitor.entity.Station;
 
 import java.util.ArrayList;
@@ -30,7 +30,7 @@ import java.util.List;
 public class MonitorMapView extends ImageView {
     private Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
     private Bitmap backBitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.navigation_icon);
-    private ArrayList<Station> monitors = new ArrayList();
+    private ArrayList<Station> monitors = new ArrayList<>();
 
     public MonitorMapView(Context context) {
         super(context);
@@ -46,6 +46,7 @@ public class MonitorMapView extends ImageView {
     }
 
     public void setMonitors(List<Station> monitors) {
+        this.monitors.clear();
         this.monitors.addAll(monitors);
         invalidate();
     }
@@ -60,12 +61,17 @@ public class MonitorMapView extends ImageView {
 
         BitmapDrawable drawable = (BitmapDrawable) getDrawable();
         Bitmap bitmap = drawable.getBitmap();
+
+        if (monitors.size() == 0) return;
+
         for (Station monitor : monitors) {
-            int x = monitor.getPicLeft() / bitmap.getWidth() * getMeasuredWidth();
-            int y = monitor.getPicTop() / bitmap.getHeight() * getMaxHeight();
-            canvas.drawCircle(x, y, 50, paint);
-            canvas.drawText(monitor.getName(), x, y + 30f, paint);
+            float x = monitor.getPicLeft() * 1f / bitmap.getWidth() * getMeasuredWidth();
+            float y = monitor.getPicTop() * 1f / bitmap.getHeight() * getMeasuredHeight();
+            canvas.drawCircle(x, y, 8, paint);
+            canvas.drawText(monitor.getName(), x, y + 40f, paint);
         }
+
+        showMonitorInfo(monitors.get(0));
     }
 
     @Override
@@ -74,7 +80,8 @@ public class MonitorMapView extends ImageView {
         float y = event.getY();
         int action = event.getAction();
         if (x < 100 && y < 100 && action == MotionEvent.ACTION_UP) {
-            animate().alpha(0).setListener(new Animator.AnimatorListener() {
+            final View p = ((View)getParent());
+            p.animate().alpha(0).setListener(new Animator.AnimatorListener() {
                 @Override
                 public void onAnimationStart(Animator animation) {
 
@@ -83,8 +90,8 @@ public class MonitorMapView extends ImageView {
                 @Override
                 public void onAnimationEnd(Animator animation) {
                     // global
-                    if (getAlpha() == 0)
-                      setVisibility(GONE);
+                    if (p.getAlpha() == 0)
+                      p.setVisibility(GONE);
                 }
 
                 @Override
@@ -97,49 +104,34 @@ public class MonitorMapView extends ImageView {
 
                 }
             }).start();
+            return true;
         }
 
-        if (monitors.size() == 0) return true;
+        if (monitors.size() == 0 || action != MotionEvent.ACTION_UP) return true;
 
         BitmapDrawable drawable = (BitmapDrawable) getDrawable();
         Bitmap bitmap = drawable.getBitmap();
 
-        Station minx = monitors.get(0);
-        float mindx = 1000000f;
+        Station min = monitors.get(0);
+        float d = 1000000f;
         for (int i = 1; i < monitors.size(); i++) {
             Station monitor = monitors.get(i);
-            int a = monitor.getPicLeft() / bitmap.getWidth() * getMeasuredWidth();
-            if (Math.abs(x - a) < mindx) {
-                minx = monitor;
-                mindx = Math.abs(x - a);
+            float a = monitor.getPicLeft() * 1f / bitmap.getWidth() * getMeasuredWidth();
+            float b = monitor.getPicTop() * 1f / bitmap.getHeight() * getMeasuredHeight();
+            if (Math.abs(x - a) + Math.abs(y - b) < d) {
+                min = monitor;
+                d = Math.abs(x - a) + Math.abs(y - b);
             }
-
-
         }
 
-        Station miny = monitors.get(0);
-        float mindy = 1000000f;
-        for (int i = 1; i < monitors.size(); i++) {
-            Station monitor = monitors.get(i);
-            int b = monitor.getPicTop() / bitmap.getHeight() * getMaxHeight();
-            if (Math.abs(y - b) < mindy) {
-                miny = monitor;
-                mindy = Math.abs(y - b);
-            }
-
-
-        }
-
-        if (mindx > mindy) {
-            gotoMonitor(miny);
-        } else {
-            gotoMonitor(minx);
-        }
+        showMonitorInfo(min);
 
         return true;
     }
 
-    private void gotoMonitor(Station station) {
-        Toast.makeText(getContext(), station.getName(), Toast.LENGTH_LONG).show();
+    private void showMonitorInfo(Station station) {
+        final ViewGroup p = (ViewGroup) getParent();
+        TextView monitorName = (TextView) p.findViewById(R.id.monitor_name);
+        monitorName.setText(station.getName() + " (" + station.getCode() + ")");
     }
 }

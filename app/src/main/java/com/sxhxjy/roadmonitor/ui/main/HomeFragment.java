@@ -69,6 +69,7 @@ public class HomeFragment extends BaseFragment implements HomeAdapter.OnItemClic
     private TextView hide;
     private MapView mapview;
     private MonitorMapView monitorMapView;
+    private LinearLayout monitorContainer;
     private String path= MyApplication.BASE_URL + "points/findAppRootPoint?groupId=4028812c57b6993b0157b6aca4410004";
     private OkHttpClient okHttpClient;
     private Request request;
@@ -119,6 +120,7 @@ public class HomeFragment extends BaseFragment implements HomeAdapter.OnItemClic
         init(view);
         getplace();
         monitorMapView = (MonitorMapView) view.findViewById(R.id.monitor_map);
+        monitorContainer = (LinearLayout) view.findViewById(R.id.monitor_container);
         mapview.onCreate(savedInstanceState);
         tencentMap = mapview.getMap();
         loginData = new Gson().fromJson(CacheManager.getInstance().get("login"), LoginData.class);
@@ -131,86 +133,88 @@ public class HomeFragment extends BaseFragment implements HomeAdapter.OnItemClic
                 LatLng latLng = new LatLng(groupsBean.getLatitude(), groupsBean.getLongitude());
                 tencentMap.setCenter(latLng);
                 tencentMap.setZoom(6);
-                tencentMap.setOnMarkerClickListener(new TencentMap.OnMarkerClickListener() {
-                    @Override
-                    public boolean onMarkerClick(Marker marker) {
-                        // we show monitor map
 
-                        Picasso picasso = Picasso.with(getActivity());
-                        picasso.load(MyApplication.BASE_URL_Img+groupsBean.getJgwPic().replace('\\','/'))
-                                .config(Bitmap.Config.RGB_565)
-                                .into(monitorMapView, new com.squareup.picasso.Callback() {
-                            @Override
-                            public void onSuccess() {
-                                monitorMapView.setVisibility(View.VISIBLE);
-                                monitorMapView.animate()
-                                        .alpha(1f).start();
-                            }
-
-                            @Override
-                            public void onError() {
-                                showToastMsg("加载传感器实景图失败...");
-                            }
-                        });
-                        return false;
-                    }
-                });
-                tencentMap.setOnInfoWindowClickListener(new TencentMap.OnInfoWindowClickListener() {
-                    @Override
-                    public void onInfoWindowClick(Marker marker) {
-                        // we show monitor map
-
-                        Picasso picasso = Picasso.with(getActivity());
-                        picasso.load("https://ss3.bdstatic.com/70cFv8Sh_Q1YnxGkpoWK1HF6hhy/it/u=1492722388,3064739319&fm=23&gp=0.jpg")
-                                .config(Bitmap.Config.RGB_565)
-                                .into(monitorMapView, new com.squareup.picasso.Callback() {
-                                    @Override
-                                    public void onSuccess() {
-                                        monitorMapView.setVisibility(View.VISIBLE);
-                                        monitorMapView.animate()
-                                                .alpha(1f).start();
-                                    }
-
-                                    @Override
-                                    public void onError() {
-                                        showToastMsg("加载传感器实景图失败...");
-                                    }
-                                });
-                    }
-                });
 
                 Marker marker = tencentMap.addMarker(new MarkerOptions()
                         .position(latLng)
                         .snippet(groupsBean.getDescription())
                         .title(groupsBean.getName() + "\n")
                         .anchor(0.5f, 0.5f)
+                        .tag(groupsBean) // groupID
                         .icon(BitmapDescriptorFactory
                                 .defaultMarker())
                         .draggable(true));
                 marker.showInfoWindow();
             }
+            tencentMap.setOnMarkerClickListener(new TencentMap.OnMarkerClickListener() {
+                @Override
+                public boolean onMarkerClick(Marker marker) {
+                    final LoginData.UserGroupsBean groupsBean = (LoginData.UserGroupsBean) marker.getTag();
+                    // we show monitor map
+                    getMessage(getHttpService().getStations(groupsBean.getId()), new MySubscriber<List<Station>>() {
+                        @Override
+                        protected void onMyNext(List<Station> stations) {
+                            HomeFragment.this.stations.clear();
+                            HomeFragment.this.stations.addAll(stations);
+                            monitorMapView.setMonitors(stations);
+
+                            Picasso picasso = Picasso.with(getActivity());
+                            picasso.load(MyApplication.BASE_URL_Img+groupsBean.getJgwPic().replace('\\','/'))
+                                    .config(Bitmap.Config.RGB_565)
+                                    .into(monitorMapView, new com.squareup.picasso.Callback() {
+                                        @Override
+                                        public void onSuccess() {
+                                            monitorContainer.setVisibility(View.VISIBLE);
+                                            monitorContainer.animate()
+                                                    .alpha(1f).start();
+                                        }
+
+                                        @Override
+                                        public void onError() {
+                                            showToastMsg("加载传感器实景图失败...");
+                                        }
+                                    });
+                        }
+                    });
+
+                    return false;
+                }
+            });
+            tencentMap.setOnInfoWindowClickListener(new TencentMap.OnInfoWindowClickListener() {
+                @Override
+                public void onInfoWindowClick(Marker marker) {
+                    final LoginData.UserGroupsBean groupsBean = (LoginData.UserGroupsBean) marker.getTag();
+                    // we show monitor map
+                    getMessage(getHttpService().getStations(groupsBean.getId()), new MySubscriber<List<Station>>() {
+                        @Override
+                        protected void onMyNext(List<Station> stations) {
+                            HomeFragment.this.stations.clear();
+                            HomeFragment.this.stations.addAll(stations);
+                            monitorMapView.setMonitors(stations);
+
+                            Picasso picasso = Picasso.with(getActivity());
+                            picasso.load(MyApplication.BASE_URL_Img+groupsBean.getJgwPic().replace('\\','/'))
+                                    .config(Bitmap.Config.RGB_565)
+                                    .into(monitorMapView, new com.squareup.picasso.Callback() {
+                                        @Override
+                                        public void onSuccess() {
+                                            monitorContainer.setVisibility(View.VISIBLE);
+                                            monitorContainer.animate()
+                                                    .alpha(1f).start();
+                                        }
+
+                                        @Override
+                                        public void onError() {
+                                            showToastMsg("加载传感器实景图失败...");
+                                        }
+                                    });
+                        }
+                    });
+
+                }
+            });
         }
     }
-
-    public void getMonitors() {
-        getMessage(getHttpService().getStations(simpleItem.getId()), new MySubscriber<List<Station>>() {
-            @Override
-            protected void onMyNext(List<Station> stations) {
-                stations.clear();
-                HomeFragment.this.stations.addAll(stations);
-                monitorMapView.setMonitors(stations);
-            }
-        });
-
-    }
-
-
-
-
-
-
-
-
 
     public void getplace() {
         getHttpService().getGroups(MyApplication.getMyApplication().getSharedPreference().getString("gid","4")).subscribeOn(Schedulers.io())
@@ -225,8 +229,7 @@ public class HomeFragment extends BaseFragment implements HomeAdapter.OnItemClic
                 .subscribe(new Subscriber<List<GroupTree>>() {
                     @Override
                     public void onCompleted() {
-                        // we get monitors by groupid
-                        getMonitors();
+
 
                     }
 
@@ -296,8 +299,6 @@ public class HomeFragment extends BaseFragment implements HomeAdapter.OnItemClic
 
             }
         }
-
-        getMonitors();
 
         adapter.setSeclection(position);
         adapter.notifyDataSetChanged();

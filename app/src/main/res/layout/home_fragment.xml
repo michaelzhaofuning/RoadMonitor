@@ -44,16 +44,51 @@
 
         </com.tencent.tencentmap.mapsdk.map.MapView>
 
-        <com.sxhxjy.roadmonitor.view.MonitorMapView
+
+        <LinearLayout
             android:layout_width="match_parent"
-            android:id="@+id/monitor_map"
+            android:orientation="vertical"
             android:visibility="gone"
-            android:adjustViewBounds="true"
+            android:clickable="true"
             android:alpha="0"
-            android:background="@color/colorPrimaryTranslucent"
-            android:layout_height="wrap_content" />
+            android:id="@+id/monitor_container"
+            android:layout_height="match_parent">
+            <com.sxhxjy.roadmonitor.view.MonitorMapView
+                android:layout_width="match_parent"
+                android:id="@+id/monitor_map"
+                android:adjustViewBounds="true"
+
+                android:layout_height="wrap_content" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:id="@+id/info"
+                android:background="#3a000000"
+                android:orientation="horizontal"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:textSize="17sp"
+                    android:layout_marginLeft="20dp"
+
+                    android:textColor="#fff"
+                    android:id="@+id/monitor_name"
+                    android:layout_height="wrap_content" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:text="查看实时数据"
+                    android:padding="7dp"
+                    android:textColor="@color/colorPrimaryDark"
+                    android:textSize="17sp"
+                    android:id="@+id/get_chart_data"
+                    android:layout_marginLeft="50dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
+        </LinearLayout>
+
     </FrameLayout>
-
-
-
 </LinearLayout>
