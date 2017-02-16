@@ -114,7 +114,7 @@ public class MonitorMapView extends ImageView {
 
         Station min = monitors.get(0);
         float d = 1000000f;
-        for (int i = 1; i < monitors.size(); i++) {
+        for (int i = 0; i < monitors.size(); i++) {
             Station monitor = monitors.get(i);
             float a = monitor.getPicLeft() * 1f / bitmap.getWidth() * getMeasuredWidth();
             float b = monitor.getPicTop() * 1f / bitmap.getHeight() * getMeasuredHeight();
