@@ -14,6 +14,10 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 
 /**
+ *
+ * http://124.163.206.250:8080/road-monitor.apk
+ *
+ *
  * Extends application to add some methods
  *
  * //////////////////////////////////////////////////////////////////////////////
