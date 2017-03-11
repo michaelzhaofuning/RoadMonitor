@@ -128,6 +128,12 @@ public class AlertFragment extends BaseListFragment<AlertData> {
     }
 
     @Override
+    protected void afterInit() {
+        super.afterInit();
+        onRefresh();
+    }
+
+    @Override
     protected void init() {
         initToolBar(getView(), "警告", false);
         getActivity().getLayoutInflater().inflate(R.layout.filter_title_alert, mAboveList);

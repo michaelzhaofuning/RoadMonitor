@@ -50,8 +50,8 @@ public class FlashActivity extends Activity {
                     LoginData loginData = new Gson().fromJson(CacheManager.getInstance().get("login"), LoginData.class);
 
                     // init http
-//                    MyApplication.BASE_IP = loginData.getUser().getPriUserGroup().serverIp + ":" + loginData.getUser().getPriUserGroup().serverPort;
-                    MyApplication.BASE_IP = "192.168.1.172:8088";
+                    MyApplication.BASE_IP = loginData.getUser().getPriUserGroup().serverIp + ":" + loginData.getUser().getPriUserGroup().serverPort;
+//                    MyApplication.BASE_IP = "192.168.1.172:8088";
 
                     MyApplication.ADDRESS = loginData.getUser().getPriUserGroup().serverIp;
                     MyApplication.getMyApplication().initHttp();
