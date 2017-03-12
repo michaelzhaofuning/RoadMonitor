@@ -28,41 +28,47 @@
             android:layout_height="match_parent">
             <TextView
                 android:layout_width="wrap_content"
-                android:text="倾角 :  <0.5"
+                android:text="倾角 :          0.5"
                 android:layout_weight="1"
 
                 android:textColor="@color/colorPrimary"
-                android:layout_gravity="center"
                 android:gravity="center"
                 android:layout_height="wrap_content" />
             <TextView
                 android:layout_width="wrap_content"
-                android:text="风力： 疾风"
+                android:text="风力 :          疾风"
                 android:layout_weight="1"
 
                 android:textColor="@color/colorPrimary"
-                android:layout_gravity="center"
                 android:gravity="center"
                 android:layout_height="wrap_content" />
             <TextView
                 android:layout_width="wrap_content"
-                android:text="风向：东北风"
+                android:text="风向 :          东北风"
                 android:layout_weight="1"
 
                 android:textColor="@color/colorPrimary"
-                android:layout_gravity="center"
                 android:gravity="center"
                 android:layout_height="wrap_content" />
-
             <TextView
                 android:layout_width="wrap_content"
-                android:text="图片对比"
+                android:text="点击查看图片对比信息"
+                android:layout_weight="1"
+
+                android:textColor="@android:color/holo_blue_light"
+                android:gravity="center"
+                android:layout_height="wrap_content" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:text="点击查看图片对比信息"
                 android:clickable="true"
+
+                android:visibility="gone"
                 android:layout_margin="5dp"
                 android:layout_gravity="center"
                 android:padding="5dp"
-                android:textColor="#fff"
-                android:background="@drawable/button_selector"
+                android:textColor="@color/colorPrimary"
+
                 android:layout_height="wrap_content" />
         </LinearLayout>
 
