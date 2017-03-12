@@ -33,6 +33,7 @@ import com.sxhxjy.roadmonitor.entity.GroupTree;
 import com.sxhxjy.roadmonitor.entity.HomeTheme;
 import com.sxhxjy.roadmonitor.entity.LoginData;
 import com.sxhxjy.roadmonitor.entity.MonitorHome;
+import com.sxhxjy.roadmonitor.entity.MonitorTower;
 import com.sxhxjy.roadmonitor.entity.SimpleItem;
 import com.sxhxjy.roadmonitor.entity.Station;
 import com.sxhxjy.roadmonitor.ui.main.picture.TakeNotesActivity;
@@ -259,7 +260,20 @@ public class HomeFragment extends BaseFragment implements HomeAdapter.OnItemClic
             }
         });
 
-
+        final TableLayout tableLayoutTower = (TableLayout) view.findViewById(R.id.table_towers);
+        getMessage(getHttpService().getHomeTowers(MyApplication.getMyApplication().getSharedPreference().getString("stationId", "")
+        ), new MySubscriber<List<MonitorTower>>() {
+            @Override
+            protected void onMyNext(List<MonitorTower> monitorHomes) {
+                for (MonitorTower monitorHome : monitorHomes) {
+                    TableRow v = (TableRow) getActivity().getLayoutInflater().inflate(R.layout.table_item_tower,null);
+                    ((TextView)v.getChildAt(0)).setText(monitorHome.getTypeName());
+                    ((TextView)v.getChildAt(1)).setText(monitorHome.getTypeNum());
+                    ((TextView)v.getChildAt(2)).setText(monitorHome.getAlarmNum());
+                    tableLayoutTower.addView(v);
+                }
+            }
+        });
 
 
 

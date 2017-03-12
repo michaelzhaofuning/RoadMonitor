@@ -9,6 +9,7 @@ import com.sxhxjy.roadmonitor.entity.GroupTree;
 import com.sxhxjy.roadmonitor.entity.LoginData;
 import com.sxhxjy.roadmonitor.entity.Monitor;
 import com.sxhxjy.roadmonitor.entity.MonitorHome;
+import com.sxhxjy.roadmonitor.entity.MonitorTower;
 import com.sxhxjy.roadmonitor.entity.MonitorTypeTree;
 import com.sxhxjy.roadmonitor.entity.States;
 import com.sxhxjy.roadmonitor.entity.Station;
@@ -123,4 +124,9 @@ public interface HttpService {
     @FormUrlEncoded
     @POST("webstations/stationsClass")
     Observable<HttpResponse<List<MonitorHome>>> getHomeMonitors(@Field("search") String search, @Field("sid") String id);
+
+
+
+    @GET("webuserGroup/getTowerClassifyData")
+    Observable<HttpResponse<List<MonitorTower>>> getHomeTowers(@Query("orgId") String id);
 }
