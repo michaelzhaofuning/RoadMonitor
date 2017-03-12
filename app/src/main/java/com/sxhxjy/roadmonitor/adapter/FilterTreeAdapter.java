@@ -76,6 +76,12 @@ public class FilterTreeAdapter extends BaseExpandableListAdapter {
         TextView textView = (TextView) convertView.findViewById(R.id.title);
         textView.setText(mGroups.get(groupPosition).getGroupName());
 
+        if (mGroups.get(groupPosition).checked) {
+            textView.setTextColor(Color.YELLOW);
+        } else {
+            textView.setTextColor(Color.WHITE);
+        }
+
         return convertView;
     }
 
@@ -108,6 +114,8 @@ public class FilterTreeAdapter extends BaseExpandableListAdapter {
     public static class Group {
         List<SimpleItem> list;
         String groupName;
+        public String groupId;
+        public boolean checked;
 
         public Group(List<SimpleItem> list, String groupName) {
             this.list = list;

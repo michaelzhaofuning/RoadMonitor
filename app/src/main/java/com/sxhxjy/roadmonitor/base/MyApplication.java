@@ -40,10 +40,10 @@ public class MyApplication extends Application {
 //    public static final String ADDRESS = "124.163.206.251";
 
 
-    public static String BASE_IP = "124.163.206.250:8080";
+    public static String BASE_IP = "101.201.141.139:8170";
 //    public static String BASE_IP = "192.168.1.172:8088";
 
-    public static String BASE_URL = "http://"+ BASE_IP + "/ClearPro/web/";
+    public static String BASE_URL = "http://"+ BASE_IP + "/IronTowerPro/webapp/";
 
 //    public static String BASE_URL = "http://"+ BASE_IP + "/AirDefencePro/web/";
 
@@ -60,14 +60,14 @@ public class MyApplication extends Application {
         super.onCreate();
         app = this;
 //        Fresco.initialize(this);
-//        initHttp();
+        initHttp();
 
     }
 
     public void initHttp() {
         // refresh static field
-        BASE_URL = "http://"+ BASE_IP + "/ClearPro/web/";
-        BASE_URL_Img = "http://"+ BASE_IP+"/";
+//        BASE_URL = "http://"+ BASE_IP + "/ClearPro/web/";
+//        BASE_URL_Img = "http://"+ BASE_IP+"/";
 
         HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
         logging.setLevel(HttpLoggingInterceptor.Level.BODY);

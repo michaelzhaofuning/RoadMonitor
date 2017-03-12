@@ -78,6 +78,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,
             stationName = MyApplication.getMyApplication().getSharedPreference().getString("stationName", "");
         }
 
+        // TODO: notice
+        stationId = "4028812c57b6993b0157b6ab181f0002";
+        stationName = "太原市通信局";
+
         initView();
 
         fragments.add(new HomeFragment());

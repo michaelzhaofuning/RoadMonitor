@@ -13,6 +13,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.TableLayout;
+import android.widget.TableRow;
 import android.widget.TextView;
 
 import com.alibaba.fastjson.JSON;
@@ -30,6 +32,7 @@ import com.sxhxjy.roadmonitor.base.MySubscriber;
 import com.sxhxjy.roadmonitor.entity.GroupTree;
 import com.sxhxjy.roadmonitor.entity.HomeTheme;
 import com.sxhxjy.roadmonitor.entity.LoginData;
+import com.sxhxjy.roadmonitor.entity.MonitorHome;
 import com.sxhxjy.roadmonitor.entity.SimpleItem;
 import com.sxhxjy.roadmonitor.entity.Station;
 import com.sxhxjy.roadmonitor.ui.main.picture.TakeNotesActivity;
@@ -119,7 +122,7 @@ public class HomeFragment extends BaseFragment implements HomeAdapter.OnItemClic
         super.onViewCreated(view, savedInstanceState);
         initToolBar(view, "首页", false);
         init(view);
-        getplace();
+//        getplace();
         monitorMapView = (MonitorMapView) view.findViewById(R.id.monitor_map);
         monitorContainer = (LinearLayout) view.findViewById(R.id.monitor_container);
 
@@ -167,7 +170,7 @@ public class HomeFragment extends BaseFragment implements HomeAdapter.OnItemClic
                         .draggable(true));
                 marker.showInfoWindow();
             }
-            tencentMap.setOnMarkerClickListener(new TencentMap.OnMarkerClickListener() {
+           /* tencentMap.setOnMarkerClickListener(new TencentMap.OnMarkerClickListener() {
                 @Override
                 public boolean onMarkerClick(Marker marker) {
                     final LoginData.UserGroupsBean groupsBean = (LoginData.UserGroupsBean) marker.getTag();
@@ -201,7 +204,7 @@ public class HomeFragment extends BaseFragment implements HomeAdapter.OnItemClic
 
                     return false;
                 }
-            });
+            });*/
             tencentMap.setOnInfoWindowClickListener(new TencentMap.OnInfoWindowClickListener() {
                 @Override
                 public void onInfoWindowClick(Marker marker) {
@@ -238,6 +241,39 @@ public class HomeFragment extends BaseFragment implements HomeAdapter.OnItemClic
                 }
             });
         }
+
+
+        final TableLayout tableLayoutMonitor = (TableLayout) view.findViewById(R.id.table_monitors);
+        getMessage(getHttpService().getHomeMonitors("", MyApplication.getMyApplication().getSharedPreference().getString("stationId", "")
+        ), new MySubscriber<List<MonitorHome>>() {
+            @Override
+            protected void onMyNext(List<MonitorHome> monitorHomes) {
+                for (MonitorHome monitorHome : monitorHomes) {
+                    TableRow v = (TableRow) getActivity().getLayoutInflater().inflate(R.layout.table_item_monitor,null);
+                    ((TextView)v.getChildAt(0)).setText(monitorHome.getCname());
+                    ((TextView)v.getChildAt(1)).setText(monitorHome.getCount());
+                    ((TextView)v.getChildAt(2)).setText(monitorHome.getAlarmCount());
+                    ((TextView)v.getChildAt(3)).setText(monitorHome.getRunHour());
+                    tableLayoutMonitor.addView(v);
+                }
+            }
+        });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     }
 
     public void getplace() {

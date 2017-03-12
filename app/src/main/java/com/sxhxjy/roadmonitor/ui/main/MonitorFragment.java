@@ -288,6 +288,20 @@ public class MonitorFragment extends BaseFragment implements View.OnClickListene
                 return true;
             }
         });
+        expandableListView.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
+            @Override
+            public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
+                for (FilterTreeAdapter.Group group : groupsOfFilterTree) {
+                    group.checked = false;
+                }
+                groupsOfFilterTree.get(groupPosition).checked = true;
+                getLocation(false, groupPosition, 0, null);
+                myPopupWindow.dismiss();
+                filterTreeAdapter.notifyDataSetChanged();
+                return false;
+            }
+        });
+        expandableListView.setGroupIndicator(null);
 
         if (mChartsContainer.getChildCount() == 0) {
             getView().findViewById(R.id.empty).setVisibility(View.VISIBLE);
@@ -542,7 +556,7 @@ public class MonitorFragment extends BaseFragment implements View.OnClickListene
 
     //获得条件请求数据
     private void getLocation(final boolean explicitMonitor, int groupPosition, int childPosition, final String monitorId) {
-        getMessage(getHttpService().getPositions(filterTreeAdapter.mGroups.get(groupPosition).getList().get(childPosition).getId(), MyApplication.getMyApplication().getSharedPreference().getString("stationId", "")), new MySubscriber<List<MonitorPosition>>() {
+        getMessage(getHttpService().getPositions(filterTreeAdapter.mGroups.get(groupPosition).groupId, MyApplication.getMyApplication().getSharedPreference().getString("stationId", "")), new MySubscriber<List<MonitorPosition>>() {
             @Override
             protected void onMyNext(List<MonitorPosition> monitorPositions) {
                 mListLeft.clear();
@@ -624,6 +638,7 @@ public class MonitorFragment extends BaseFragment implements View.OnClickListene
                         }
                     }
                     FilterTreeAdapter.Group group = new FilterTreeAdapter.Group(list, monitorTypeTree.getName());
+                    group.groupId = monitorTypeTree.getId();
                     groupsOfFilterTree.add(group);
                 }
                 filterTreeAdapter.notifyDataSetChanged();

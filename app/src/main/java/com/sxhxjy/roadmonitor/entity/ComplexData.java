@@ -27,7 +27,7 @@ public class ComplexData {
     private double zmin;
     private double xmin;
     private double xmax;
-    private List<RealTimeData> content;
+    private List<RealTimeData> content_line;
 
     public double getYmin() {
         return ymin;
@@ -86,11 +86,11 @@ public class ComplexData {
     }
 
     public List<RealTimeData> getContent() {
-        return content;
+        return content_line;
     }
 
     public void setContent(List<RealTimeData> content) {
-        this.content = content;
+        this.content_line = content;
     }
 
     public static class ContentBean {

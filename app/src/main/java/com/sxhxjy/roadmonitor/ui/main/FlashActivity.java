@@ -46,15 +46,6 @@ public class FlashActivity extends Activity {
                     overridePendingTransition(-1, -1);
                     finish();
                 } else {
-                    // we init http first !
-                    LoginData loginData = new Gson().fromJson(CacheManager.getInstance().get("login"), LoginData.class);
-
-                    // init http
-                    MyApplication.BASE_IP = loginData.getUser().getPriUserGroup().serverIp + ":" + loginData.getUser().getPriUserGroup().serverPort;
-//                    MyApplication.BASE_IP = "192.168.1.172:8088";
-
-                    MyApplication.ADDRESS = loginData.getUser().getPriUserGroup().serverIp;
-                    MyApplication.getMyApplication().initHttp();
 
                     ActivityUtil.startActivityForResult(FlashActivity.this, MainActivity.class, null, -100, android.R.anim.fade_in, android.R.anim.fade_out);
                     finish();
