@@ -160,26 +160,35 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,
                 mViewPager.setCurrentItem(0, false);
                 textViewBar0.setTextColor(getResources().getColor(R.color.colorPrimary));
                 imageViewBar0.setImageResource(R.drawable.bar01);
+                imageViewBar0.setColorFilter(getResources().getColor(R.color.colorPrimaryDark));
                 break;
             case 1:
                 mViewPager.setCurrentItem(1, false);
                 textViewBar1.setTextColor(getResources().getColor(R.color.colorPrimary));
                 imageViewBar1.setImageResource(R.drawable.bar11);
+                imageViewBar1.setColorFilter(getResources().getColor(R.color.colorPrimaryDark));
+
                 break;
             case 2:
                 imageViewBar2.setImageResource(R.drawable.bar21);
                 mViewPager.setCurrentItem(2, false);
                 textViewBar2.setTextColor(getResources().getColor(R.color.colorPrimary));
+                imageViewBar2.setColorFilter(getResources().getColor(R.color.colorPrimaryDark));
+
                 break;
             case 3:
                 imageViewBar3.setImageResource(R.drawable.bar31);
                 mViewPager.setCurrentItem(3, false);
                 textViewBar3.setTextColor(getResources().getColor(R.color.colorPrimary));
+                imageViewBar3.setColorFilter(getResources().getColor(R.color.colorPrimaryDark));
+
                 break;
             case 4:
                 imageViewBar4.setImageResource(R.drawable.bar41);
                 mViewPager.setCurrentItem(4, false);
                 textViewBar4.setTextColor(getResources().getColor(R.color.colorPrimary));
+                imageViewBar4.setColorFilter(getResources().getColor(R.color.colorPrimaryDark));
+
                 break;
             default:
         }
@@ -191,6 +200,12 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,
         imageViewBar2.setImageResource(R.drawable.bar20);
         imageViewBar3.setImageResource(R.drawable.bar30);
         imageViewBar4.setImageResource(R.drawable.bar40);
+
+        imageViewBar0.setColorFilter(getResources().getColor(R.color.default_text_color));
+        imageViewBar1.setColorFilter(getResources().getColor(R.color.default_text_color));
+        imageViewBar2.setColorFilter(getResources().getColor(R.color.default_text_color));
+        imageViewBar3.setColorFilter(getResources().getColor(R.color.default_text_color));
+        imageViewBar4.setColorFilter(getResources().getColor(R.color.default_text_color));
 
         textViewBar0.setTextColor(getResources().getColor(R.color.default_color));
         textViewBar1.setTextColor(getResources().getColor(R.color.default_color));

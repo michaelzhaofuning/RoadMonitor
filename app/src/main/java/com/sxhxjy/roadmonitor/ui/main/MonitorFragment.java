@@ -143,6 +143,7 @@ public class MonitorFragment extends BaseFragment implements View.OnClickListene
             mAdapter.notifyDataSetChanged();
         }
     };
+    private boolean firstClickChart = true;
 
     @Nullable
     @Override
@@ -162,8 +163,7 @@ public class MonitorFragment extends BaseFragment implements View.OnClickListene
     @Override
     protected void loadOnce() {
         super.loadOnce();
-        // * entrance *
-        getTypeTree(); // getTypeTree
+
     }
 
     public void setIsFirst() {
@@ -192,6 +192,51 @@ public class MonitorFragment extends BaseFragment implements View.OnClickListene
         initToolBar(getView(), getArguments().getString("stationName"), false);
         stationId = getArguments().getString("stationId");
         cacheStation(stationId, getArguments().getString("stationName"));
+
+        final TextView tabPic = (TextView) getView().findViewById(R.id.tab_pic);
+        final TextView tabChart = (TextView) getView().findViewById(R.id.tab_chart);
+        getView().findViewById(R.id.global).setVisibility(View.GONE);
+        getView().findViewById(R.id.toolbar_left).setVisibility(View.GONE);
+
+        tabPic.setTextColor(getResources().getColor(R.color.colorPrimary));
+        tabChart.setTextColor(getResources().getColor(R.color.default_text_color));
+        tabPic.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getView().findViewById(R.id.layout_pic).setVisibility(View.VISIBLE);
+                tabPic.setTextColor(getResources().getColor(R.color.colorPrimary));
+                tabChart.setTextColor(getResources().getColor(R.color.default_text_color));
+                getView().findViewById(R.id.global).setVisibility(View.GONE);
+                mToolbar.hideOverflowMenu();
+                getView().findViewById(R.id.toolbar_left).setVisibility(View.GONE);
+
+            }
+        });
+
+        tabChart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getView().findViewById(R.id.layout_pic).setVisibility(View.GONE);
+                tabChart.setTextColor(getResources().getColor(R.color.colorPrimary));
+                tabPic.setTextColor(getResources().getColor(R.color.default_text_color));
+                getView().findViewById(R.id.global).setVisibility(View.VISIBLE);
+                mToolbar.showOverflowMenu();
+                getView().findViewById(R.id.toolbar_left).setVisibility(View.VISIBLE);
+                // * entrance *
+                if (firstClickChart) {
+                    getTypeTree(); // getTypeTree
+                    firstClickChart = false;
+                }
+
+
+            }
+        });
+
+
+
+
+
+
 
 
         mTextViewCenter = (TextView) getView().findViewById(R.id.toolbar_title);
@@ -257,14 +302,14 @@ public class MonitorFragment extends BaseFragment implements View.OnClickListene
         Button confirm = (Button) myPopupWindow.getContentView().findViewById(R.id.confirm);
         Button reset = (Button) myPopupWindow.getContentView().findViewById(R.id.reset);
         TextView pic = (TextView) myPopupWindow.getContentView().findViewById(R.id.pic);
-        pic.setVisibility(View.VISIBLE);
+    /*    pic.setVisibility(View.VISIBLE);
         pic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 ActivityUtil.startActivityForResult(getActivity(), TakeNotesActivity.class);
                 myPopupWindow.dismiss();
             }
-        });
+        });*/
 
 
         confirm.setVisibility(View.GONE);
