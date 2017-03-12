@@ -311,6 +311,7 @@ public class MonitorFragment extends BaseFragment implements View.OnClickListene
             getView().findViewById(R.id.empty).setVisibility(View.GONE);
         }
 
+        // top
         ImageView imageView = (ImageView) view.findViewById(R.id.pic);
         Picasso picasso = Picasso.with(getActivity());
 
@@ -647,12 +648,18 @@ public class MonitorFragment extends BaseFragment implements View.OnClickListene
                     }
                     FilterTreeAdapter.Group group = new FilterTreeAdapter.Group(list, monitorTypeTree.getName());
                     group.groupId = monitorTypeTree.getId();
+                    group.checked = (i++ == 0);
                     groupsOfFilterTree.add(group);
                 }
                 filterTreeAdapter.notifyDataSetChanged();
 
                 boolean flag = false;
                 for (int j = 0; j < groupsOfFilterTree.size(); j++) {
+                    if (groupsOfFilterTree.get(j).checked) {
+                        getLocation(explicitMonitor, j, 0, monitorId);
+                        flag = true;
+                    }
+
                     for (int k = 0; k < groupsOfFilterTree.get(j).getList().size(); k++) {
                         if (groupsOfFilterTree.get(j).getList().get(k).isChecked()) {
                             getLocation(explicitMonitor, j, k, monitorId); flag = true;

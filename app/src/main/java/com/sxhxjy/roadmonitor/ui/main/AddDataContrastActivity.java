@@ -143,6 +143,8 @@ public class AddDataContrastActivity extends BaseActivity {
                 protected void onMyNext(List<MonitorTypeTree> monitorTypeTrees) {
                     mTypeList.clear();
                     for (MonitorTypeTree monitorTypeTree : monitorTypeTrees) {
+                        mTypeList.add(new SimpleItem(monitorTypeTree.getId(), monitorTypeTree.getName(), false));
+
                         if (monitorTypeTree.getChildrenPoint() != null) {
                             for (MonitorTypeTree.ChildrenPointBean childrenPointBean : monitorTypeTree.getChildrenPoint()) {
                                 mTypeList.add(new SimpleItem(childrenPointBean.getId(), childrenPointBean.getName(), false));

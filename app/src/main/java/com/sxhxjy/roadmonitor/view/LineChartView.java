@@ -845,7 +845,7 @@ public class LineChartView extends View {
 
         ArrayList<MyPoint> points = new ArrayList<>(list.size());
         for (RealTimeData realTimeData : list) {
-            points.add(0, new MyPoint(realTimeData.getSaveTime(), (float) realTimeData.getX()));
+            points.add(new MyPoint(realTimeData.getSaveTime(), (float) realTimeData.getX()));
         }
         if (!isRight)
              yAxisName = list.get(0).getXColName() + "/ " + list.get(0).getTypeUnit();
@@ -858,7 +858,7 @@ public class LineChartView extends View {
 
         ArrayList<MyPoint> points = new ArrayList<>();
         for (RealTimeData realTimeData : list) {
-            points.add(0, new MyPoint(realTimeData.getSaveTime(), (float) realTimeData.getY()));
+            points.add(new MyPoint(realTimeData.getSaveTime(), (float) realTimeData.getY()));
         }
         if (!isRight)
             yAxisName = list.get(0).getYColName() + "/ " + list.get(0).getTypeUnit();
@@ -870,7 +870,7 @@ public class LineChartView extends View {
 
         ArrayList<MyPoint> points = new ArrayList<>();
         for (RealTimeData realTimeData : list) {
-            points.add(0, new MyPoint(realTimeData.getSaveTime(), (float) realTimeData.getZ()));
+            points.add(new MyPoint(realTimeData.getSaveTime(), (float) realTimeData.getZ()));
         }
         if (!isRight)
             yAxisName = list.get(0).getZColName() + "/ " + list.get(0).getTypeUnit();
