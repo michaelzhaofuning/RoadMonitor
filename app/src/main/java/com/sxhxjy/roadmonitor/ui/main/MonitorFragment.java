@@ -5,6 +5,7 @@ import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -26,6 +27,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
+import com.squareup.picasso.Picasso;
 import com.sxhxjy.roadmonitor.R;
 import com.sxhxjy.roadmonitor.adapter.FilterTreeAdapter;
 import com.sxhxjy.roadmonitor.adapter.SimpleListAdapter;
@@ -308,6 +310,12 @@ public class MonitorFragment extends BaseFragment implements View.OnClickListene
         } else {
             getView().findViewById(R.id.empty).setVisibility(View.GONE);
         }
+
+        ImageView imageView = (ImageView) view.findViewById(R.id.pic);
+        Picasso picasso = Picasso.with(getActivity());
+
+        picasso.load("http://101.201.141.139:8787/img/%E4%B8%89%E7%AE%A1%E5%A1%94.jpg").config(Bitmap.Config.RGB_565).into(imageView);
+
 
     }
 
