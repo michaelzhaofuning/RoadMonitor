@@ -260,7 +260,7 @@ public class HomeFragment extends BaseFragment implements HomeAdapter.OnItemClic
         });
 
         final TableLayout tableLayoutTower = (TableLayout) view.findViewById(R.id.table_towers);
-        getMessage(getHttpService().getHomeTowers(MyApplication.getMyApplication().getSharedPreference().getString("stationId", "")
+        getMessage(getHttpService().getHomeTowers(loginData.getUser().getGid()
         ), new MySubscriber<List<MonitorTower>>() {
             @Override
             protected void onMyNext(List<MonitorTower> monitorHomes) {

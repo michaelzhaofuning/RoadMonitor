@@ -4,6 +4,16 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
+    <TextView
+        android:layout_width="match_parent"
+        android:background="@color/colorPrimaryDark"
+        android:text="x趋势图"
+        android:padding="5dp"
+        android:drawablePadding="5dp"
+        android:drawableLeft="@drawable/chart"
+
+        android:textColor="@color/white"
+        android:layout_height="wrap_content" />
     <com.sxhxjy.towermonitor.view.LineChartView
         android:layout_width="match_parent"
         android:id="@+id/chart"
@@ -153,7 +163,7 @@
                 android:layout_width="match_parent"
                 android:orientation="horizontal"
 
-                android:background="@color/white"
+                android:background="#e5e7f7"
                 android:layout_height="wrap_content">
                 <View
                     android:layout_width="1dp"
@@ -166,13 +176,8 @@
                     android:paddingTop="3dp"
                     android:paddingBottom="3dp"
                     android:paddingRight="28dp"
-                    android:background="@color/colorPrimaryTranslucent"
-                    android:textColor="@color/colorPrimaryDark"
                     android:layout_height="wrap_content" />
-                <View
-                    android:layout_width="1dp"
-                    android:layout_height="match_parent"
-                    android:background="@color/colorPrimary"/>
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_weight="1"
@@ -195,7 +200,7 @@
                 android:layout_width="match_parent"
                 android:orientation="horizontal"
 
-                android:background="@color/white"
+                android:background="#fdfbe2"
                 android:layout_height="wrap_content">
                 <View
                     android:layout_width="1dp"
@@ -208,13 +213,8 @@
                     android:paddingTop="3dp"
                     android:paddingBottom="3dp"
                     android:paddingRight="28dp"
-                    android:background="@color/colorPrimaryTranslucent"
-                    android:textColor="@color/colorPrimaryDark"
                     android:layout_height="wrap_content" />
-                <View
-                    android:layout_width="1dp"
-                    android:layout_height="match_parent"
-                    android:background="@color/colorPrimary"/>
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_weight="1"
@@ -237,7 +237,7 @@
                 android:layout_width="match_parent"
                 android:orientation="horizontal"
 
-                android:background="@color/white"
+                android:background="#fde7e5"
                 android:layout_height="wrap_content">
                 <View
                     android:layout_width="1dp"
@@ -250,13 +250,8 @@
                     android:paddingTop="3dp"
                     android:paddingBottom="3dp"
                     android:paddingRight="28dp"
-                    android:background="@color/colorPrimaryTranslucent"
-                    android:textColor="@color/colorPrimaryDark"
                     android:layout_height="wrap_content" />
-                <View
-                    android:layout_width="1dp"
-                    android:layout_height="match_parent"
-                    android:background="@color/colorPrimary"/>
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_weight="1"
@@ -265,10 +260,7 @@
                     android:layout_marginStart="30dp"
                     android:layout_marginLeft="30dp"
                     android:id="@+id/threshold3" />
-                <View
-                    android:layout_width="1dp"
-                    android:layout_height="match_parent"
-                    android:background="@color/colorPrimary"/>
+
             </LinearLayout>
 
             <View
@@ -279,7 +271,7 @@
                 android:layout_width="match_parent"
                 android:orientation="horizontal"
 
-                android:background="@color/white"
+                android:background="#2899f8"
                 android:layout_height="wrap_content">
                 <View
                     android:layout_width="1dp"
@@ -292,8 +284,6 @@
                     android:paddingTop="3dp"
                     android:paddingBottom="3dp"
                     android:paddingRight="28dp"
-                    android:background="@color/colorPrimaryTranslucent"
-                    android:textColor="@color/colorPrimaryDark"
                     android:layout_height="wrap_content" />
                 <View
                     android:layout_width="1dp"
