@@ -18,6 +18,8 @@ import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.sxhxjy.towermonitor.R;
@@ -240,6 +242,12 @@ public class LineChartView extends View {
             mPaint.setColor(Color.GRAY);
             float width = mPaint.measureText(emptyHint);
             canvas.drawText(emptyHint, getMeasuredWidth() / 2 - width / 2, getMeasuredHeight() / 2, mPaint);
+            try {
+                ((TextView)((ViewGroup)getParent()).getChildAt(0)).setVisibility(GONE);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
             return;
         }
 

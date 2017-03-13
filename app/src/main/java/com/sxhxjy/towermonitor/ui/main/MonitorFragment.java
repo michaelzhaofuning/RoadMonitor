@@ -552,6 +552,7 @@ public class MonitorFragment extends BaseFragment implements View.OnClickListene
                                     if (realTimeDatas.get(0).getName().equals(myLine.name)) {
                                         // we found the line to add
                                         myLine.points.addAll(lineChartView0.convert(realTimeDatas, false));
+                                        ((TextView)mChartsContainer.getChildAt(0).findViewById(R.id.indicator)).setText("x方向趋势图");
                                         handled = true;
                                     }
                                 }
@@ -570,6 +571,7 @@ public class MonitorFragment extends BaseFragment implements View.OnClickListene
                                     if (mChartsContainer.getChildAt(1) == null)
                                         getActivity().getLayoutInflater().inflate(R.layout.chart_layout, mChartsContainer);
                                     LineChartView lineChartView1 = (LineChartView) mChartsContainer.getChildAt(1).findViewById(R.id.chart);
+                                    ((TextView)mChartsContainer.getChildAt(1).findViewById(R.id.indicator)).setText("y方向趋势图");
 
 
                                     handled = false;
@@ -596,6 +598,7 @@ public class MonitorFragment extends BaseFragment implements View.OnClickListene
                                     if (mChartsContainer.getChildAt(2) == null)
                                         getActivity().getLayoutInflater().inflate(R.layout.chart_layout, mChartsContainer);
                                     LineChartView lineChartView2 = (LineChartView) mChartsContainer.getChildAt(2).findViewById(R.id.chart);
+                                    ((TextView)mChartsContainer.getChildAt(2).findViewById(R.id.indicator)).setText("z方向趋势图");
 
 
                                     handled = false;
