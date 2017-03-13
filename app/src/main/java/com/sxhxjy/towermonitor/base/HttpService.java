@@ -11,8 +11,12 @@ import com.sxhxjy.towermonitor.entity.Monitor;
 import com.sxhxjy.towermonitor.entity.MonitorHome;
 import com.sxhxjy.towermonitor.entity.MonitorTower;
 import com.sxhxjy.towermonitor.entity.MonitorTypeTree;
+import com.sxhxjy.towermonitor.entity.PictureBean;
+import com.sxhxjy.towermonitor.entity.RecordResult;
 import com.sxhxjy.towermonitor.entity.States;
 import com.sxhxjy.towermonitor.entity.Station;
+import com.sxhxjy.towermonitor.entity.WeatherParam;
+import com.sxhxjy.towermonitor.ui.main.picture.PicBean;
 
 import java.util.List;
 
@@ -129,4 +133,15 @@ public interface HttpService {
 
     @GET("webuserGroup/getTowerClassifyData")
     Observable<HttpResponse<List<MonitorTower>>> getHomeTowers(@Query("orgId") String id);
+
+
+    @GET("websxtinfo/findSxtinfoByFilters")
+    Observable<HttpResponse<List<PictureBean>>> getOldpic(@Query("devCode") String code);
+
+    @GET("webpicCompare/pageList")
+    Observable<HttpResponse<PicBean>> getNewpic(@Query("devCode") String code, @Query("timeState") int state);
+
+    @FormUrlEncoded
+    @POST("webstations/stationsFsFx")
+    Observable<WeatherParam> getWeatherParams(@Field("sid") String id);
 }

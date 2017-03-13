@@ -22,7 +22,10 @@ import android.widget.Toast;
 
 import com.sxhxjy.towermonitor.R;
 import com.sxhxjy.towermonitor.entity.RealTimeData;
+import com.sxhxjy.towermonitor.entity.RecordResult;
 import com.sxhxjy.towermonitor.ui.main.ChartFullscreenActivity;
+import com.sxhxjy.towermonitor.ui.main.MonitorFragment;
+import com.sxhxjy.towermonitor.ui.main.picture.PicBean;
 
 import java.io.Serializable;
 import java.text.NumberFormat;
@@ -876,16 +879,31 @@ public class LineChartView extends View {
             yAxisNameRight = list.get(0).getZColName() + "/ " + list.get(0).getTypeUnit();        return points;
     }
 
-    public  ArrayList<MyPoint> convertPic(List<RealTimeData> list) {
+    public void convertAndAddPicX(List<PicBean.LineContentBean> list) {
 
-        ArrayList<MyPoint> points = new ArrayList<>();
-        for (RealTimeData realTimeData : list) {
-            points.add(new MyPoint(realTimeData.getSaveTime(), (float) realTimeData.getZ()));
+        ArrayList<MyPoint> points1 = new ArrayList<>();
+        ArrayList<MyPoint> points2 = new ArrayList<>();
+        for (PicBean.LineContentBean realTimeData : list) {
+            points1.add(new MyPoint(realTimeData.getSaveTime(), (float) realTimeData.getX1Change()));
+            points2.add(new MyPoint(realTimeData.getSaveTime(), (float) realTimeData.getX2Change()));
         }
 
-        yAxisName = list.get(0).getZColName() + "/ " + list.get(0).getTypeUnit();
+        yAxisName = "x方向位移";
+        addPoints(points1, "x1", MonitorFragment.colors[2], false);
+        addPoints(points2, "x2", MonitorFragment.colors[3], false);
+    }
+    public void convertAndAddPicY(List<PicBean.LineContentBean> list) {
 
-       return points;
+        ArrayList<MyPoint> points1 = new ArrayList<>();
+        ArrayList<MyPoint> points2 = new ArrayList<>();
+        for (PicBean.LineContentBean realTimeData : list) {
+            points1.add(new MyPoint(realTimeData.getSaveTime(), (float) realTimeData.getY1Change()));
+            points2.add(new MyPoint(realTimeData.getSaveTime(), (float) realTimeData.getY2Change()));
+        }
+
+        yAxisName = "y方向位移";
+        addPoints(points1, "y1", MonitorFragment.colors[4], false);
+        addPoints(points2, "y2", MonitorFragment.colors[5], false);
     }
 
     public ArrayList<MyLine> getLines() {

@@ -328,6 +328,7 @@ public class LoginData {
             private Object roleIds;
             private Object childrenGroup;
             private Object parentGroup;
+            public String cameraCode;
             private Object cityList;
 
             public String getId() {

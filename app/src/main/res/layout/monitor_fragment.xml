@@ -86,8 +86,20 @@
                     android:layout_height="1px"
                     android:layout_marginTop="10dp"
                     android:background="@color/colorPrimary"/>
-                <TableLayout
+                <TextView
+                    android:layout_width="match_parent"
+                    android:textColor="#fff"
+                    android:text="健康指数"
+                    android:paddingTop="3dp"
+                    android:paddingBottom="3dp"
+                    android:paddingLeft="9dp"
+                    android:background="@color/colorPrimaryTranslucent"
 
+                    android:layout_height="wrap_content" />
+                <View android:layout_height="1px" android:layout_width="match_parent" android:background="@color/colorPrimaryDark"/>
+
+                <TableLayout
+                    android:id="@+id/weather"
                     android:layout_width="match_parent"
                     android:showDividers="middle"
                     android:divider="@color/colorPrimary"
@@ -104,7 +116,7 @@
                             android:background="@color/colorPrimaryTranslucent"
                             android:padding="3dp"                 android:gravity="center"
 
-                            android:text="风速"
+                            android:text="倾角"
                             />
 
                         <TextView
@@ -112,7 +124,7 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:gravity="center"
-
+                            android:id="@+id/angle"
                             android:padding="3dp"
                             android:text="12m/s"
                             />
@@ -125,7 +137,7 @@
                             android:background="@color/colorPrimaryTranslucent"
                             android:padding="3dp"                 android:gravity="center"
 
-                            android:text="风力"
+                            android:text="土岩位移"
                             />
 
                         <TextView
@@ -133,6 +145,7 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:gravity="center"
+                            android:id="@+id/shift"
 
                             android:padding="3dp"
                             android:text="疾风"
@@ -151,7 +164,7 @@
                             android:background="@color/colorPrimaryTranslucent"
                             android:padding="3dp"                 android:gravity="center"
                             android:textColor="@color/colorPrimaryDark"
-                            android:text="倾角"
+                            android:text="风向"
                             />
 
                         <TextView
@@ -159,6 +172,7 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:gravity="center"
+                            android:id="@+id/wind_direction"
 
                             android:padding="3dp"
                             android:text="1 rad"
@@ -172,7 +186,7 @@
                             android:background="@color/colorPrimaryTranslucent"
                             android:padding="3dp"                 android:gravity="center"
 
-                            android:text="风向"
+                            android:text="风力"
                             />
 
                         <TextView
@@ -180,6 +194,7 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:gravity="center"
+                            android:id="@+id/wind_power"
 
                             android:padding="3dp"
                             android:text="东北"
@@ -205,14 +220,15 @@
                         android:layout_width="150dp"
                         android:id="@+id/pic"
                         android:scaleType="centerCrop"
+                        android:layout_marginRight="15dp"
                         android:layout_height="match_parent" />
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:orientation="vertical"
+                        android:id="@+id/piclayout"
                         android:layout_height="match_parent">
                         <TextView
                             android:layout_width="wrap_content"
-                            android:text="点1坐标：x 80 y 60"
                             android:layout_weight="1"
 
                             android:textColor="@color/colorPrimary"
@@ -220,7 +236,6 @@
                             android:layout_height="wrap_content" />
                         <TextView
                             android:layout_width="wrap_content"
-                            android:text="点1增量： x无变化  y无变化"
                             android:layout_weight="1"
 
                             android:textColor="@color/colorPrimary"
@@ -228,7 +243,6 @@
                             android:layout_height="wrap_content" />
                         <TextView
                             android:layout_width="wrap_content"
-                            android:text="点2坐标： x 120 y 673"
                             android:layout_weight="1"
 
                             android:textColor="@color/colorPrimary"
@@ -236,10 +250,9 @@
                             android:layout_height="wrap_content" />
                         <TextView
                             android:layout_width="wrap_content"
-                            android:text="点2增量： x无变化  y无变化"
                             android:layout_weight="1"
 
-                            android:textColor="@android:color/holo_blue_light"
+                            android:textColor="@color/colorPrimary"
                             android:gravity="center"
                             android:layout_height="wrap_content" />
                         <TextView
@@ -257,24 +270,22 @@
                     </LinearLayout>
 
                 </LinearLayout>
-                <com.github.mikephil.charting.charts.LineChart
+                <com.sxhxjy.towermonitor.view.LineChartView
                     android:layout_width="match_parent"
                     android:layout_marginTop="@dimen/activity_vertical_margin"
                     android:id="@+id/line_chart_x"
                     android:layout_height="200dp"
-                    android:layout_margin="15dp"
                     android:layout_marginBottom="10dp">
 
-                </com.github.mikephil.charting.charts.LineChart>
-                <com.github.mikephil.charting.charts.LineChart
+                </com.sxhxjy.towermonitor.view.LineChartView>
+                <com.sxhxjy.towermonitor.view.LineChartView
                     android:layout_width="match_parent"
                     android:layout_marginTop="@dimen/activity_vertical_margin"
                     android:id="@+id/line_chart_y"
                     android:layout_height="200dp"
-                    android:layout_margin="15dp"
                     android:layout_marginBottom="10dp">
 
-                </com.github.mikephil.charting.charts.LineChart>
+                </com.sxhxjy.towermonitor.view.LineChartView>
             </LinearLayout>
         </ScrollView>
 

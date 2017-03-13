@@ -35,14 +35,15 @@ public class NewPic_Activity extends BaseActivity {
         initToolBar("对比图", true);
         TextView toolbarRight = (TextView) mToolbar.findViewById(R.id.toolbar_right);
         toolbarRight.setText("查看图表");
+        toolbarRight.setVisibility(View.GONE);
         toolbarRight.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent=new Intent(NewPic_Activity.this, ChartActivity.class);
-                Bundle bundle = new Bundle();
-                bundle.putSerializable("data",contentBean);
-                intent.putExtras(bundle);
-                startActivity(intent);
+//                Intent intent=new Intent(NewPic_Activity.this, ChartActivity.class);
+//                Bundle bundle = new Bundle();
+//                bundle.putSerializable("data",contentBean);
+//                intent.putExtras(bundle);
+//                startActivity(intent);
             }
         });
         list=contentBean.getNewPicList();

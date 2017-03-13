@@ -24,28 +24,43 @@ import android.widget.DatePicker;
 import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TableLayout;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
+import com.alibaba.fastjson.JSON;
+import com.google.gson.Gson;
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.JsonHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
 import com.squareup.picasso.Picasso;
 import com.sxhxjy.towermonitor.R;
 import com.sxhxjy.towermonitor.adapter.FilterTreeAdapter;
 import com.sxhxjy.towermonitor.adapter.SimpleListAdapter;
 import com.sxhxjy.towermonitor.base.BaseActivity;
 import com.sxhxjy.towermonitor.base.BaseFragment;
+import com.sxhxjy.towermonitor.base.CacheManager;
 import com.sxhxjy.towermonitor.base.MonitorPosition;
 import com.sxhxjy.towermonitor.base.MyApplication;
 import com.sxhxjy.towermonitor.base.MySubscriber;
 import com.sxhxjy.towermonitor.base.ParamInfo;
 import com.sxhxjy.towermonitor.entity.ComplexData;
+import com.sxhxjy.towermonitor.entity.LoginData;
 import com.sxhxjy.towermonitor.entity.MonitorTypeTree;
+import com.sxhxjy.towermonitor.entity.PictureBean;
 import com.sxhxjy.towermonitor.entity.RealTimeData;
+import com.sxhxjy.towermonitor.entity.RecordResult;
 import com.sxhxjy.towermonitor.entity.SimpleItem;
 import com.sxhxjy.towermonitor.entity.Station;
+import com.sxhxjy.towermonitor.ui.main.picture.NewPic_Activity;
+import com.sxhxjy.towermonitor.ui.main.picture.PicBean;
+import com.sxhxjy.towermonitor.ui.main.picture.TakeNotesActivity;
 import com.sxhxjy.towermonitor.util.ActivityUtil;
 import com.sxhxjy.towermonitor.util.MyCountDownTimer;
 import com.sxhxjy.towermonitor.view.LineChartView;
 import com.sxhxjy.towermonitor.view.MyPopupWindow;
+
+import org.json.JSONObject;
 
 import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
@@ -55,6 +70,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Random;
+
+import cz.msebera.android.httpclient.Header;
 
 /**
  * 2016/9/26
@@ -88,6 +105,7 @@ public class MonitorFragment extends BaseFragment implements View.OnClickListene
     private LinearLayout mChartsContainer;
     private String positionId;
     private boolean paramsGeted;
+    private boolean isChartViewshow;
     private boolean isFirstProgressDialog = true;
     public static final long interval = 60000 * 30;
     public static int[] colors;
@@ -145,6 +163,7 @@ public class MonitorFragment extends BaseFragment implements View.OnClickListene
     private boolean firstClickChart = true;
     private TextView tabChart;
     private TextView tabPic;
+    private RecordResult.DataBean.ContentBean picsData;
 
     @Nullable
     @Override
@@ -194,10 +213,11 @@ public class MonitorFragment extends BaseFragment implements View.OnClickListene
         stationId = getArguments().getString("stationId");
         cacheStation(stationId, getArguments().getString("stationName"));
 
-
+        getWeatherParam();
         tabPic = (TextView) getView().findViewById(R.id.tab_pic);
         tabChart = (TextView) getView().findViewById(R.id.tab_chart);
         getView().findViewById(R.id.global).setVisibility(View.GONE);
+        getView().findViewById(R.id.toolbar_left).setVisibility(View.VISIBLE);
 
         tabPic.setTextColor(getResources().getColor(R.color.colorPrimary));
         tabChart.setTextColor(getResources().getColor(R.color.default_text_color));
@@ -209,10 +229,11 @@ public class MonitorFragment extends BaseFragment implements View.OnClickListene
                 tabChart.setTextColor(getResources().getColor(R.color.default_text_color));
                 getView().findViewById(R.id.global).setVisibility(View.GONE);
                 mToolbar.hideOverflowMenu();
-                getView().findViewById(R.id.toolbar_left).setVisibility(View.GONE);
-
+                isChartViewshow = false;
             }
         });
+
+
 
         tabChart.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -222,12 +243,12 @@ public class MonitorFragment extends BaseFragment implements View.OnClickListene
                 tabPic.setTextColor(getResources().getColor(R.color.default_text_color));
                 getView().findViewById(R.id.global).setVisibility(View.VISIBLE);
                 mToolbar.showOverflowMenu();
-                getView().findViewById(R.id.toolbar_left).setVisibility(View.VISIBLE);
                 // * entrance *
                 if (firstClickChart) {
                     getTypeTree(); // getTypeTree
-                    firstClickChart = false;
+
                 }
+                isChartViewshow = true;
 
 
             }
@@ -283,6 +304,14 @@ public class MonitorFragment extends BaseFragment implements View.OnClickListene
         mToolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
+                if (!isChartViewshow) {
+                    getView().findViewById(R.id.layout_pic).setVisibility(View.GONE);
+                    tabChart.setTextColor(getResources().getColor(R.color.colorPrimary));
+                    tabPic.setTextColor(getResources().getColor(R.color.default_text_color));
+                    getView().findViewById(R.id.global).setVisibility(View.VISIBLE);
+                    mToolbar.showOverflowMenu();
+                    isChartViewshow = true;
+                }
                 if (groupsOfFilterTree.isEmpty()) getTypeTree();
                 myPopupWindow.show();
 
@@ -356,12 +385,64 @@ public class MonitorFragment extends BaseFragment implements View.OnClickListene
             getView().findViewById(R.id.empty).setVisibility(View.GONE);
         }
 
-        // top
-        ImageView imageView = (ImageView) view.findViewById(R.id.pic);
-        Picasso picasso = Picasso.with(getActivity());
 
-        picasso.load("http://101.201.141.139:8787/img/%E4%B8%89%E7%AE%A1%E5%A1%94.jpg").config(Bitmap.Config.RGB_565).into(imageView);
 
+
+    }
+
+    private void getWeatherParam() {
+
+        RequestParams rp = new RequestParams();
+        rp.put("sid", MyApplication.getMyApplication().getSharedPreference().getString("stationId", ""));
+        new AsyncHttpClient().post(getActivity(), MyApplication.BASE_URL + "webstations/stationsFsFx", rp, new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                if (statusCode != 200) return;
+                TableLayout w = (TableLayout) getView().findViewById(R.id.weather);
+                ((TextView)w.findViewById(R.id.wind_direction)).setText(response.optString("fxdata").replace("&nbsp;", " "));
+                ((TextView)w.findViewById(R.id.wind_power)).setText(response.optString("fsdata").replace("&nbsp;", " "));
+                ((TextView)w.findViewById(R.id.angle)).setText(response.optString("qjdata"));
+                ((TextView)w.findViewById(R.id.shift)).setText(response.optString("tydata"));
+            }
+        });
+        LoginData loginData = loginData = new Gson().fromJson(CacheManager.getInstance().get("login"), LoginData.class);
+        getMessage(getHttpService().getNewpic(loginData.getUser().getPriUserGroup().cameraCode,2), new MySubscriber<PicBean>() {
+            @Override
+            protected void onMyNext(PicBean d) {
+                LineChartView lineChartViewX = (LineChartView) getView().findViewById(R.id.line_chart_x);
+                LineChartView lineChartViewY = (LineChartView) getView().findViewById(R.id.line_chart_y);
+                lineChartViewX.getLines().clear();
+                lineChartViewY.getLines().clear();
+                lineChartViewX.convertAndAddPicX(d.getLineContent());
+                lineChartViewY.convertAndAddPicY(d.getLineContent());
+                picsData = new RecordResult.DataBean.ContentBean();
+                List<RecordResult.DataBean.ContentBean.NewPicListBean> listBeen = new ArrayList<RecordResult.DataBean.ContentBean.NewPicListBean>();
+                for (PicBean.LineContentBean b : d.getLineContent()) {
+                    listBeen.add(JSON.parseObject(JSON.toJSONString(b), RecordResult.DataBean.ContentBean.NewPicListBean.class));
+                }
+                picsData.setNewPicList(listBeen);
+                picsData.setOldPicDetail(JSON.parseObject(JSON.toJSONString(d.getOldPic()), RecordResult.DataBean.ContentBean.OldPicDetailBean.class));
+
+
+                ImageView imageView = (ImageView) getView().findViewById(R.id.pic);
+                Picasso picasso = Picasso.with(getActivity());
+                final String rawOld = d.getOldPic().getPicDirFilename().replace('\\','/');
+                final String urlOld = MyApplication.BASE_URL_Img + "uploadPhotos"+rawOld.substring(rawOld.indexOf('/', 6));
+                picasso.load(urlOld).config(Bitmap.Config.RGB_565).into(imageView);
+                LinearLayout linearLayout = (LinearLayout) getView().findViewById(R.id.piclayout);
+                ((TextView)linearLayout.getChildAt(0)).setText("点1坐标X： " + d.getOldPic().getMoniter1X());
+                ((TextView)linearLayout.getChildAt(1)).setText("点1坐标Y： " + d.getOldPic().getMoniter1Y());
+                ((TextView)linearLayout.getChildAt(2)).setText("点2坐标X： "+ d.getOldPic().getMoniter2X());
+                ((TextView)linearLayout.getChildAt(3)).setText("点2坐标Y： "+ d.getOldPic().getMoniter2Y());
+            }
+        });
+  /*      getMessage(getHttpService().getOldpic(loginData.getUser().getPriUserGroup().cameraCode), new MySubscriber<PictureBean>() {
+
+            @Override
+            protected void onMyNext(PictureBean pictureBean) {
+
+            }
+        });*/
 
     }
 
@@ -385,7 +466,7 @@ public class MonitorFragment extends BaseFragment implements View.OnClickListene
         tabPic.setTextColor(getResources().getColor(R.color.default_text_color));
         getView().findViewById(R.id.global).setVisibility(View.VISIBLE);
         mToolbar.showOverflowMenu();
-        getView().findViewById(R.id.toolbar_left).setVisibility(View.VISIBLE);
+        isChartViewshow = true;
 
         isFirstProgressDialog = true;
         paramsGeted = false;
@@ -643,7 +724,7 @@ public class MonitorFragment extends BaseFragment implements View.OnClickListene
 
 
     private void getTypeTree() {
-        getTypeTree(false, 0, false, null);
+        getTypeTree(false, 0, false, null); firstClickChart = false;
     }
 
     private void getTypeTree(final boolean explicitTheme, final int p, final boolean explicitMonitor, final String monitorId) {
@@ -763,7 +844,7 @@ public class MonitorFragment extends BaseFragment implements View.OnClickListene
 
                 if (mChartsContainer.getChildAt(0) != null) {
                     View view = mChartsContainer.getChildAt(0);
-                    ((TextView) view.findViewById(R.id.position)).setText(paramInfo.getName());
+//                    ((TextView) view.findViewById(R.id.position)).setText(paramInfo.getName());
 
                     ((TextView) view.findViewById(R.id.threshold1)).setText(paramInfo.getxOneThreshold());
                     ((TextView) view.findViewById(R.id.threshold2)).setText(paramInfo.getxTwoThreshold());
@@ -773,7 +854,7 @@ public class MonitorFragment extends BaseFragment implements View.OnClickListene
 
                 if (mChartsContainer.getChildAt(1) != null) {
                     View view = mChartsContainer.getChildAt(1);
-                    ((TextView) view.findViewById(R.id.position)).setText(paramInfo.getName());
+//                    ((TextView) view.findViewById(R.id.position)).setText(paramInfo.getName());
 //                    ((TextView) view.findViewById(R.id.min)).setText(paramInfo.getYmin() + "");
 //                    ((TextView) view.findViewById(R.id.max)).setText(paramInfo.getYmax() + "");
                     ((TextView) view.findViewById(R.id.threshold1)).setText(paramInfo.getyOneThreshold());
@@ -784,7 +865,7 @@ public class MonitorFragment extends BaseFragment implements View.OnClickListene
 
                 if (mChartsContainer.getChildAt(2) != null) {
                     View view = mChartsContainer.getChildAt(2);
-                    ((TextView) view.findViewById(R.id.position)).setText(paramInfo.getName());
+//                    ((TextView) view.findViewById(R.id.position)).setText(paramInfo.getName());
 //                    ((TextView) view.findViewById(R.id.min)).setText(paramInfo.getZmin() + "");
 //                    ((TextView) view.findViewById(R.id.max)).setText(paramInfo.getZmax() + "");
                     ((TextView) view.findViewById(R.id.threshold1)).setText(paramInfo.getzOneThreshold());
@@ -805,6 +886,7 @@ public class MonitorFragment extends BaseFragment implements View.OnClickListene
             cacheStation(stationId, data.getStringExtra("stationName"));
             groupsOfFilterTree.clear();
             getTypeTree();
+            getWeatherParam();
         }
     }
 
@@ -817,7 +899,19 @@ public class MonitorFragment extends BaseFragment implements View.OnClickListene
                 startActivityForResult(intent, StationListActivity.REQUEST_CODE);
                 break;
             case R.id.toolbar_left:
-                ActivityUtil.startActivityForResult(getActivity(), RealTimeDataListActivity.class);
+                if (isChartViewshow)
+                    ActivityUtil.startActivityForResult(getActivity(), RealTimeDataListActivity.class);
+                else {
+
+                    RecordResult.DataBean.ContentBean rc = picsData;
+                    if (picsData!=null) {
+                        Intent a = new Intent(getActivity(), NewPic_Activity.class);
+                        Bundle bundle = new Bundle();
+                        bundle.putSerializable("data", rc);
+                        a.putExtras(bundle);
+                        startActivity(a);
+                    }
+                }
                 break;
 
             case R.id.filter_left:

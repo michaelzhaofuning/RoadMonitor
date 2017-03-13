@@ -33,7 +33,7 @@ public class TakeNotesActivity extends BaseActivity {
     private TextView tv;
     private GridView lv;
 //    public String getPath= "http://124.163.206.251:8088/AirDefencePro/web/picCompare/findChanges";
-    public String getPath= MyApplication.BASE_URL+"picCompare/findChanges";
+    public String getPath= MyApplication.BASE_URL+"webpicCompare/pageList";
     private OldAdapter adapter;
     private String result;
     private List<RecordResult.DataBean.ContentBean> data;
