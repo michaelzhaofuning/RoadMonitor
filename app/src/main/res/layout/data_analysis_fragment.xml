@@ -18,26 +18,26 @@
             android:id="@+id/divider2"
             android:layout_height="1dp"
             android:background="@color/default_color"/>
-        <com.sxhxjy.roadmonitor.view.MyForm
+        <com.sxhxjy.towermonitor.view.MyForm
             android:id="@+id/form_1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
-        <com.sxhxjy.roadmonitor.view.MyForm
+        <com.sxhxjy.towermonitor.view.MyForm
             android:id="@+id/form_2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
 
-        <com.sxhxjy.roadmonitor.view.MyForm
+        <com.sxhxjy.towermonitor.view.MyForm
             android:id="@+id/form_3"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
 
-        <com.sxhxjy.roadmonitor.view.MyForm
+        <com.sxhxjy.towermonitor.view.MyForm
             android:id="@+id/form_4"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
 
-        <com.sxhxjy.roadmonitor.view.MyForm
+        <com.sxhxjy.towermonitor.view.MyForm
             android:id="@+id/form_5"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>

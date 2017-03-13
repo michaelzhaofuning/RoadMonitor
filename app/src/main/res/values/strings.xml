@@ -1,4 +1,4 @@
 <resources>
-    <string name="app_name">路网监测</string>
+    <string name="app_name">铁塔监测</string>
     <string name="rf_app_name">人防监测</string>
 </resources>

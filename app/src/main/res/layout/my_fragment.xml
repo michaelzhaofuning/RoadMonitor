@@ -30,16 +30,17 @@
             android:layout_height="wrap_content" />
     </FrameLayout>
 
-    <com.sxhxjy.roadmonitor.view.MyLinearLayout
+    <com.sxhxjy.towermonitor.view.MyLinearLayout
         android:layout_width="match_parent"
         android:layout_marginTop="@dimen/activity_vertical_margin"
         app:titleOfMyLinearLayout="查看当前设备状态"
         android:onClick="look_state"
         app:expandedOfMyLinearLayout="true"
+        android:visibility="gone"
         app:decoratedDrawableOfMyLinearLayout="@mipmap/statedevice"
         android:layout_height="wrap_content">
-    </com.sxhxjy.roadmonitor.view.MyLinearLayout>
-    <com.sxhxjy.roadmonitor.view.MyLinearLayout
+    </com.sxhxjy.towermonitor.view.MyLinearLayout>
+    <com.sxhxjy.towermonitor.view.MyLinearLayout
         android:layout_width="match_parent"
         app:titleOfMyLinearLayout="Change IP"
         android:onClick="changeIp"
@@ -47,16 +48,16 @@
         app:expandedOfMyLinearLayout="true"
         android:layout_height="wrap_content">
 
-    </com.sxhxjy.roadmonitor.view.MyLinearLayout>
-    <com.sxhxjy.roadmonitor.view.MyLinearLayout
+    </com.sxhxjy.towermonitor.view.MyLinearLayout>
+    <com.sxhxjy.towermonitor.view.MyLinearLayout
         android:layout_width="match_parent"
         app:titleOfMyLinearLayout="意见反馈"
         android:onClick="FeedBack"
         android:visibility="gone"
         app:expandedOfMyLinearLayout="true"
         android:layout_height="wrap_content">
-    </com.sxhxjy.roadmonitor.view.MyLinearLayout>
-    <com.sxhxjy.roadmonitor.view.MyLinearLayout
+    </com.sxhxjy.towermonitor.view.MyLinearLayout>
+    <com.sxhxjy.towermonitor.view.MyLinearLayout
         android:layout_width="match_parent"
         app:titleOfMyLinearLayout="修改密码"
         android:visibility="gone"
@@ -64,9 +65,9 @@
         app:expandedOfMyLinearLayout="true"
         android:layout_height="wrap_content">
 
-    </com.sxhxjy.roadmonitor.view.MyLinearLayout>
+    </com.sxhxjy.towermonitor.view.MyLinearLayout>
 
-    <com.sxhxjy.roadmonitor.view.MyLinearLayout
+    <com.sxhxjy.towermonitor.view.MyLinearLayout
         android:layout_width="match_parent"
         android:id="@+id/version"
         app:decoratedDrawableOfMyLinearLayout="@mipmap/version"
@@ -74,9 +75,9 @@
         android:layout_marginBottom="@dimen/activity_vertical_margin"
         android:layout_height="wrap_content">
 
-    </com.sxhxjy.roadmonitor.view.MyLinearLayout>
+    </com.sxhxjy.towermonitor.view.MyLinearLayout>
 
-    <com.sxhxjy.roadmonitor.view.MyLinearLayout
+    <com.sxhxjy.towermonitor.view.MyLinearLayout
         android:layout_width="match_parent"
         app:expandedOfMyLinearLayout="true"
         app:titleOfMyLinearLayout="退出登录"
@@ -84,7 +85,7 @@
         app:decoratedDrawableOfMyLinearLayout="@mipmap/logout"
         android:layout_height="wrap_content">
 
-    </com.sxhxjy.roadmonitor.view.MyLinearLayout>
+    </com.sxhxjy.towermonitor.view.MyLinearLayout>
 
 
 </LinearLayout>

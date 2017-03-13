@@ -153,7 +153,6 @@
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_marginTop="10dp"
 
         android:layout_height="match_parent">
         <com.tencent.tencentmap.mapsdk.map.MapView
@@ -174,7 +173,7 @@
             android:alpha="0"
             android:id="@+id/monitor_container"
             android:layout_height="match_parent">
-            <com.sxhxjy.roadmonitor.view.MonitorMapView
+            <com.sxhxjy.towermonitor.view.MonitorMapView
                 android:layout_width="match_parent"
                 android:id="@+id/monitor_map"
                 android:adjustViewBounds="true"

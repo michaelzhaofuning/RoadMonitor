@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
     <include layout="@layout/toolbar_layout"/>
-    <com.sxhxjy.roadmonitor.view.MyLinearLayout
+    <com.sxhxjy.towermonitor.view.MyLinearLayout
         app:dividerShowOfMyLinearLayout="true"
         android:id="@+id/station"
         android:layout_width="match_parent"
@@ -16,9 +16,9 @@
         android:visibility="gone"
         android:layout_height="wrap_content">
 
-    </com.sxhxjy.roadmonitor.view.MyLinearLayout>
+    </com.sxhxjy.towermonitor.view.MyLinearLayout>
 
-    <com.sxhxjy.roadmonitor.view.MyLinearLayout
+    <com.sxhxjy.towermonitor.view.MyLinearLayout
         android:layout_width="match_parent"
         app:titleOfMyLinearLayout="监测因素"
         app:expandedOfMyLinearLayout="true"
@@ -28,9 +28,9 @@
 
         android:layout_height="wrap_content">
 
-    </com.sxhxjy.roadmonitor.view.MyLinearLayout>
+    </com.sxhxjy.towermonitor.view.MyLinearLayout>
 
-    <com.sxhxjy.roadmonitor.view.MyLinearLayout
+    <com.sxhxjy.towermonitor.view.MyLinearLayout
         android:layout_width="match_parent"
         app:titleOfMyLinearLayout="监测位置"
         app:decoratedDrawableOfMyLinearLayout="@mipmap/location"
@@ -38,7 +38,7 @@
         android:onClick="monitorLocation"
         android:layout_height="wrap_content">
 
-    </com.sxhxjy.roadmonitor.view.MyLinearLayout>
+    </com.sxhxjy.towermonitor.view.MyLinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -47,7 +47,7 @@
         android:visibility="gone"
         android:orientation="vertical">
 
-        <com.sxhxjy.roadmonitor.view.MyLinearLayout
+        <com.sxhxjy.towermonitor.view.MyLinearLayout
             android:layout_width="match_parent"
             app:titleOfMyLinearLayout="开始时间"
             app:decoratedDrawableOfMyLinearLayout="@mipmap/time"
@@ -56,9 +56,9 @@
             android:onClick="timeStart"
             android:layout_height="wrap_content">
 
-        </com.sxhxjy.roadmonitor.view.MyLinearLayout>
+        </com.sxhxjy.towermonitor.view.MyLinearLayout>
 
-        <com.sxhxjy.roadmonitor.view.MyLinearLayout
+        <com.sxhxjy.towermonitor.view.MyLinearLayout
             android:layout_width="match_parent"
             app:titleOfMyLinearLayout="结束时间"
             app:expandedOfMyLinearLayout="true"
@@ -68,7 +68,7 @@
 
             android:layout_height="wrap_content">
 
-        </com.sxhxjy.roadmonitor.view.MyLinearLayout>
+        </com.sxhxjy.towermonitor.view.MyLinearLayout>
 
     </LinearLayout>
 
