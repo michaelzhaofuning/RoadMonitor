@@ -197,6 +197,8 @@ public class DataAnalysisFragment extends BaseFragment {
         LineChartView lineChartView0 = (LineChartView) mChartsContainer.getChildAt(0).findViewById(R.id.chart);
         mChartsContainer.getChildAt(0).findViewById(R.id.param_info).setVisibility(View.GONE);
         lineChartView0.addPoints(lineChartView0.convert(realTimeDatas, isRight), simpleItem.getTitle(), simpleItem.getColor(), isRight);
+        ((TextView)mChartsContainer.getChildAt(0).findViewById(R.id.indicator)).setText("x方向趋势图");
+        ((TextView)mChartsContainer.getChildAt(0).findViewById(R.id.indicator)).setVisibility(View.VISIBLE);
 
 
         if (realTimeDatas.get(0).getTypeCode() != 1) {
@@ -206,6 +208,7 @@ public class DataAnalysisFragment extends BaseFragment {
             lineChartView1.mIsSimpleDraw = false;
             mChartsContainer.getChildAt(1).findViewById(R.id.param_info).setVisibility(View.GONE);
             lineChartView1.addPoints(lineChartView1.convertY(realTimeDatas, isRight), simpleItem.getTitle(), simpleItem.getColor(), isRight);
+            ((TextView)mChartsContainer.getChildAt(1).findViewById(R.id.indicator)).setText("y方向趋势图");
 
 
         }
@@ -215,6 +218,8 @@ public class DataAnalysisFragment extends BaseFragment {
             LineChartView lineChartView2 = (LineChartView) mChartsContainer.getChildAt(2).findViewById(R.id.chart);
             mChartsContainer.getChildAt(2).findViewById(R.id.param_info).setVisibility(View.GONE);
             lineChartView2.addPoints(lineChartView2.convertZ(realTimeDatas, isRight), simpleItem.getTitle(), simpleItem.getColor(), isRight);
+            ((TextView)mChartsContainer.getChildAt(2).findViewById(R.id.indicator)).setText("z方向趋势图");
+
         }
 
     }
@@ -346,7 +351,8 @@ public class DataAnalysisFragment extends BaseFragment {
                                     mChartsContainer.getChildAt(0).findViewById(R.id.param_info).setVisibility(View.GONE);
                                     lineChartView0.mIsSimpleDraw = true;
                                     lineChartView0.addPoints(lineChartView0.convert(realTimeDatas, false), s, Color.argb(255, random.nextInt(256), random.nextInt(256), random.nextInt(256)), false);
-
+                                    ((TextView)mChartsContainer.getChildAt(0).findViewById(R.id.indicator)).setText("x方向趋势图");
+                                    ((TextView)mChartsContainer.getChildAt(0).findViewById(R.id.indicator)).setVisibility(View.VISIBLE);
 
                                     if (realTimeDatas.get(0).getTypeCode() != 1) {
                                         if (mChartsContainer.getChildAt(1) == null)
@@ -356,7 +362,7 @@ public class DataAnalysisFragment extends BaseFragment {
                                         lineChartView1.mIsSimpleDraw = true;
 
                                         lineChartView1.addPoints(lineChartView1.convertY(realTimeDatas, false), s, Color.argb(255, random.nextInt(256), random.nextInt(256), random.nextInt(256)), false);
-
+                                        ((TextView)mChartsContainer.getChildAt(1).findViewById(R.id.indicator)).setText("y方向趋势图");
 
                                     }
                                     if (realTimeDatas.get(0).getTypeCode() == 2) {
@@ -365,6 +371,7 @@ public class DataAnalysisFragment extends BaseFragment {
                                         LineChartView lineChartView2 = (LineChartView) mChartsContainer.getChildAt(2).findViewById(R.id.chart);
                                         mChartsContainer.getChildAt(2).findViewById(R.id.param_info).setVisibility(View.GONE);
                                         lineChartView2.mIsSimpleDraw = true;
+                                        ((TextView)mChartsContainer.getChildAt(2).findViewById(R.id.indicator)).setText("z方向趋势图");
 
                                         lineChartView2.addPoints(lineChartView2.convertZ(realTimeDatas, false), s, Color.argb(255, random.nextInt(256), random.nextInt(256), random.nextInt(256)), false);
                                     }

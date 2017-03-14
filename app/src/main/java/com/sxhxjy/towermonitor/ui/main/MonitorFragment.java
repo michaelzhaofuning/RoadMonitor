@@ -553,6 +553,8 @@ public class MonitorFragment extends BaseFragment implements View.OnClickListene
                                         // we found the line to add
                                         myLine.points.addAll(lineChartView0.convert(realTimeDatas, false));
                                         ((TextView)mChartsContainer.getChildAt(0).findViewById(R.id.indicator)).setText("x方向趋势图");
+                                        ((TextView)mChartsContainer.getChildAt(0).findViewById(R.id.indicator)).setVisibility(View.VISIBLE);
+
                                         handled = true;
                                     }
                                 }
@@ -1010,3 +1012,4 @@ public class MonitorFragment extends BaseFragment implements View.OnClickListene
         showToastMsg("请选择开始时间");
     }
 }
+// 这个类可能有点乱，慢慢加的功能，时间又急，耐心看就好，就是很简单的逻辑
